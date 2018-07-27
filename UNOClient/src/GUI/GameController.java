@@ -43,8 +43,12 @@ import javafx.scene.text.Text;
 import serverInterfaces.serverInterface;
 
 public class GameController extends UnicastRemoteObject implements gameControllerInterface{
+<<<<<<< HEAD
+	private String path = "D:\\Google Drive\\School\\2017-2018\\1e Semester\\Gedistribueerde Systemen\\Opdracht UNO\\GIT_UNO\\UNOClient\\picture\\";
+=======
 	private String path = "C:\\Users\\wouter\\Documents\\school\\GedistribueerdeSystemen\\UNO-game\\UNOClient\\picture\\";
 	
+>>>>>>> cf47b343858ac6b5f28f011156fa0e65fe390586
 	//class variables
 	private String username;
 	private serverInterface server;
