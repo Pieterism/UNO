@@ -60,13 +60,13 @@ public class serverInterfaceImpl extends UnicastRemoteObject implements serverIn
     }
 
     @Override
-    public boolean register(String username, String password) throws RemoteException {
+    public String register(String username, String password) throws RemoteException {
         if (!db.checkUsername(username)) {
-            return false;
+            return null;
         } else {
             db.addUser(username, password);
             tellClients(username + " has succesfully connected to UNO room and your id is: ");
-            return true;
+            return "ok";
         }
     }
 
@@ -78,22 +78,17 @@ public class serverInterfaceImpl extends UnicastRemoteObject implements serverIn
     }
 
     @Override
-    public boolean login(String username, String password) throws RemoteException {
+    public String login(String username, String password) throws RemoteException {
 		if (db.checkUsername(username)) {
-			return false;
+			return null;
 		} else {
 			if (db.loginUser(username, password)) {
-				return true;
+				return "ok";
 			} else {
-				return false;
+				return null;
 			}
 		}
 	}
-
-    @Override
-    public String JWT() throws RemoteException {
-        return null;
-    }
 
     @Override
     public void startNewGame(String name, String description, int aantalSpelers) throws RemoteException {
@@ -114,16 +109,6 @@ public class serverInterfaceImpl extends UnicastRemoteObject implements serverIn
     public void playCard(Card card) {
         // TODO Auto-generated method stub
 
-    }
-
-    @Override
-    public void startGame(int id) throws RemoteException {
-        System.out.println("startgame");
-        try {
-			games.get(id).play();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
     }
 
     @Override
@@ -162,7 +147,7 @@ public class serverInterfaceImpl extends UnicastRemoteObject implements serverIn
 	}
 
 	@Override
-	public void addPlayer(gameControllerInterface gameController, int gameID, String username) throws RemoteException, IllegalStateException {
+	public void joinGame(gameControllerInterface gameController, int gameID, String username) throws RemoteException, IllegalStateException {
         UnoGame game = games.get(gameID);
         try {
 			game.addPlayer(username, gameController);
