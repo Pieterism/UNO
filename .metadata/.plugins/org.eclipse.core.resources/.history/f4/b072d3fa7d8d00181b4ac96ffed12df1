@@ -1,0 +1,51 @@
+package UNO;
+
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+import clientInterfaces.gameControllerInterface;
+
+/**
+ *
+ * @author Pieter Vanderhaegen
+ */
+public class Player {
+	private String name;
+	private gameControllerInterface gameController;
+	private List<Card> cards;
+	private int score;
+	
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public gameControllerInterface getGameController() {
+		return gameController;
+	}
+	public void setGameController(gameControllerInterface gameController) {
+		this.gameController = gameController;
+	}
+	public List<Card> getCards() {
+		return cards;
+	}
+	public void setCards(List<Card> cards) {
+		this.cards = cards;
+	}
+	public int getScore() {
+		return score;
+	}
+	public void setScore(int score) {
+		this.score = score;
+	}
+	
+	
+}
+

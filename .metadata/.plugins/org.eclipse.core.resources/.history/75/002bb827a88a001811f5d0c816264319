@@ -1,0 +1,171 @@
+package GUI;
+
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import UNO.Card;
+import UNO.UnoGame;
+import clientInterfaces.gameControllerInterface;
+import clientInterfaces.lobbyInterface;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
+import serverInterfaces.serverInterface;
+
+public class GameController extends UnicastRemoteObject implements gameControllerInterface{
+	
+	//class variables
+	private String username;
+	private serverInterface server;
+    private ObservableList data = FXCollections.observableArrayList();
+    private ListView scoreBoard;
+    private List<Card> cardsList;
+    private Map<String, Integer> players;
+    private int gameID;
+    
+    //fxml variables
+    @FXML
+    private Button btn_playcard, btn_getcard;
+    
+    @FXML
+    private  TextField user1name, user2name, user3name;
+    
+    @FXML
+    private TextField user1amount, user2amount, user3amount;
+    
+    @FXML
+    private ImageView image_lastcard;
+    
+    @FXML
+    private AnchorPane pn_scoreboard, pn_cards;
+    
+    //chat variables
+    @FXML
+    private TextField chat_input;
+    
+    @FXML
+    private TextArea chat_output;
+    
+	public GameController(String username, serverInterface server, int gameID) throws RemoteException {
+		this.username = username;
+		this.server = server;
+		cardsList = new ArrayList<>();
+		players = new HashMap<>();
+		this.gameID = gameID;
+	}
+	
+	public void initialize() throws RemoteException {
+	    scoreBoard = new ListView(data);
+		scoreBoard.setItems(data);
+        scoreBoard.setEditable(false);
+        pn_scoreboard.getChildren().add(scoreBoard);
+        scoreBoard.prefWidthProperty().bind(pn_scoreboard.widthProperty());
+        scoreBoard.prefHeightProperty().bind(pn_scoreboard.heightProperty());
+        
+	}
+	
+	@FXML
+	public void sendMsg() throws RemoteException {
+		server.sendGameMsg(chat_input.getText(), gameID, username);
+		chat_input.setText("");
+	}
+
+	@Override
+	public void setMsg(String msg) throws RemoteException {
+		String message = chat_output.getText() + msg + "\n";
+		chat_output.setText(message);
+	}
+
+	@Override
+	public void setScoreboard(List<String> scoreboard) throws RemoteException {
+		data.clear();
+		data.addAll(scoreboard);
+		scoreBoard.setItems(data);
+	}
+
+	// add player in de lijst van spelers in het spel
+	@Override
+	public void addPlayer(String username, int aantal) throws RemoteException {
+		players.put(username, aantal);
+	}
+
+	// add cards in lijst van kaarten van de speler
+	@Override
+	public void addCards(List<Card> cards) throws RemoteException {
+		this.cardsList.addAll(cards);
+	}
+
+	@Override
+	public Card getCard() throws RemoteException {
+		return null;
+		//return selected card
+	}
+
+	@Override
+	public List<Card> getCards() throws RemoteException {
+		return this.cardsList;
+	}
+
+	@Override
+	public void setPlayers(List<String> players) throws RemoteException {
+		if (players.size() == 2) {
+			for (String player : players) {
+				if (!player.equals(username)) {
+					user2name.setText(player);
+				}
+			}
+		}
+		
+	}
+
+	@Override
+	public void setNextPlayer(String username) throws RemoteException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void addPile(Card card) throws RemoteException {
+		// TODO Auto-generated method stub
+		
+	}
+}
+
+class opponent {
+	String name;
+	int amountCards;
+	
+	public opponent (String name, int amountCards) {
+		this.name = name;
+		this.amountCards = amountCards;
+	}
+	
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public int getAmountCards() {
+		return amountCards;
+	}
+
+	public void setAmountCards(int amountCards) {
+		this.amountCards = amountCards;
+	}
+}
