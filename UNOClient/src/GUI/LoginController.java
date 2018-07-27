@@ -81,7 +81,7 @@ public class LoginController {
     //login in account
     @FXML
     private void Login() throws RemoteException, NotBoundException {
-        if (server.login(loginUsername.getText(), loginPassword.getText())) {
+        if (server.login(loginUsername.getText(), loginPassword.getText())!=null) {
         	username = loginUsername.getText();
             startLobby();
             Stage stage = (Stage) btn_Login.getScene().getWindow();
@@ -106,7 +106,7 @@ public class LoginController {
 
             if (password1.getText().equals(password2.getText())) {
                 username = registerUsername.getText();
-                if (server.register(registerUsername.getText(), password1.getText())) {
+                if (server.register(registerUsername.getText(), password1.getText())!= null) {
                     startLobby();
                     Stage stage = (Stage) btn_Login.getScene().getWindow();
                     stage.close();

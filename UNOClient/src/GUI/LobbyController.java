@@ -182,7 +182,7 @@ public class LobbyController extends UnicastRemoteObject implements lobbyInterfa
             stage.setTitle("Game");
             stage.setScene(new Scene(root1));
             stage.show();
-            server.addPlayer(controller, gameID, username);
+            server.joinGame(controller, gameID, username);
         } catch (Exception e) {
             e.printStackTrace();
         }

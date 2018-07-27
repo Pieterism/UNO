@@ -44,6 +44,7 @@ import serverInterfaces.serverInterface;
 
 public class GameController extends UnicastRemoteObject implements gameControllerInterface{
 	private String path = "C:\\Users\\wouter\\Documents\\school\\GedistribueerdeSystemen\\UNO-game\\UNOClient\\picture\\";
+	
 	//class variables
 	private String username;
 	private serverInterface server;

@@ -12,21 +12,19 @@ import clientInterfaces.lobbyInterface;
 
 public interface serverInterface extends Remote {
 	//user authentication methods
-    public boolean register(String username, String password) throws RemoteException;
-    public boolean login(String username, String password) throws RemoteException;	
+    public String register(String username, String password) throws RemoteException;
+    public String login(String username, String password) throws RemoteException;	
 
     //lobby calls
     public void startNewGame(String name, String description, int aantalSpelers) throws RemoteException;
-    public void startGame(int id) throws RemoteException;
 	public void giveLobby(lobbyInterface lobbyController) throws RemoteException;
 	public void exit(clientInterface client, lobbyInterface lobbyController) throws RemoteException;
-	public void addPlayer(gameControllerInterface gameController, int gameID, String username) throws RemoteException;
+	public void joinGame(gameControllerInterface gameController, int gameID, String username) throws RemoteException;
 
 
 	//start game
 	public void giveGameController(gameControllerInterface gcInterface) throws RemoteException;
     public void readyToStart(int gameId, String username) throws RemoteException;
-    public String JWT() throws RemoteException;
 
 
     public List<String> getGames() throws RemoteException;
