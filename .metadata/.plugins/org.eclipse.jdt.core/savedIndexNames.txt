@@ -1,0 +1,4 @@
+INDEX VERSION 1.130+C:\Users\wouter\Documents\school\GedistribueerdeSystemen\UNO-game\.metadata\.plugins\org.eclipse.jdt.core
+3922522662.index
+2266595078.index
+4211617752.index
