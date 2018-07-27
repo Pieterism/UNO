@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="450.0" prefWidth="600.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.LoginController">
+   <children>
+      <AnchorPane layoutX="10.0" layoutY="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="800.0" style="-fx-background-color: #961900;" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="25.0">
+         <children>
+            <AnchorPane layoutX="7.0" prefHeight="400.0" prefWidth="150.0" style="-fx-background-color: #ffffff;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <Button fx:id="btn_SignIn" layoutY="110.0" mnemonicParsing="false" onAction="#SignInUp" prefHeight="39.0" prefWidth="150.0" text="Sign In" textFill="#e80a0a" />
+                  <Button fx:id="btn_SignUp" layoutY="172.0" mnemonicParsing="false" onAction="#SignUpUp" prefHeight="39.0" prefWidth="150.0" text="Sign Up" textFill="#e80a0a">
+                  </Button>
+                  <AnchorPane prefHeight="200.0" prefWidth="200.0" />
+               </children>
+            </AnchorPane>
+            <AnchorPane layoutX="149.0" prefHeight="400.0" prefWidth="346.0" style="-fx-background-color: #E80A0A;" AnchorPane.bottomAnchor="-25.0" AnchorPane.topAnchor="-25.0">
+               <children>
+                  <Label layoutX="92.0" layoutY="90.0" text="Welkom bij UNO!" textFill="WHITE">
+                     <font>
+                        <Font size="21.0" />
+                     </font>
+                  </Label>
+                  <ImageView fitHeight="177.0" fitWidth="200.0" layoutX="71.0" layoutY="166.0">
+                     <image>
+                        <Image url="@../../../UnoLogo.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </AnchorPane>
+            <AnchorPane fx:id="pn_Login" layoutX="600.0" prefHeight="400.0" prefWidth="305.0" style="-fx-background-color: #ffffff;" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <TextField fx:id="loginUsername" layoutX="53.0" layoutY="141.0" prefHeight="25.0" prefWidth="211.0" promptText="username" />
+                  <PasswordField fx:id="loginPassword" layoutX="53.0" layoutY="200.0" prefHeight="25.0" prefWidth="211.0" promptText="password" />
+                  <Button fx:id="btn_Login" layoutX="127.0" layoutY="283.0" mnemonicParsing="false" onAction="#Login" text="Sign in" textFill="#e80a0a" />
+                  <Label fx:id="errorLogin" contentDisplay="CENTER" layoutX="53.0" layoutY="99.0" prefHeight="17.0" prefWidth="211.0" textFill="#e80a0a">
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                  </Label>
+               </children>
+            </AnchorPane>
+            <AnchorPane fx:id="pn_Register" prefHeight="400.0" prefWidth="305.0" style="-fx-background-color: #ffffff;" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <TextField fx:id="registerUsername" layoutX="54.0" layoutY="139.0" prefHeight="25.0" prefWidth="211.0" promptText="username" />
+                  <DatePicker fx:id="birthdate" layoutX="54.0" layoutY="188.0" prefHeight="39.0" prefWidth="211.0" promptText="age" />
+                  <PasswordField fx:id="password1" layoutX="54.0" layoutY="250.0" prefHeight="25.0" prefWidth="211.0" promptText="Password" />
+                  <PasswordField fx:id="password2" layoutX="54.0" layoutY="298.0" prefHeight="25.0" prefWidth="211.0" promptText="Retype Password" />
+                  <Button fx:id="btn_SingUp" layoutX="127.0" layoutY="350.0" mnemonicParsing="false" onAction="#Register" text="Sign up" textFill="#e80a0a" />
+                  <Label fx:id="errorRegister" contentDisplay="CENTER" layoutX="53.0" layoutY="93.0" prefHeight="17.0" prefWidth="211.0" textFill="#e80a0a" AnchorPane.leftAnchor="53.0" AnchorPane.rightAnchor="41.0">
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                  </Label>
+               </children>
+            </AnchorPane>
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>
