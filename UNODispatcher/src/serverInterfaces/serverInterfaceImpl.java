@@ -1,15 +1,6 @@
 package serverInterfaces;
 
 
-import UNO.UnoGame;
-import clientInterfaces.clientInterface;
-import clientInterfaces.gameControllerInterface;
-import clientInterfaces.lobbyInterface;
-import dbInterfaces.dbInterface;
-import UNO.Card;
-import UNO.Player;
-
-import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -17,6 +8,16 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import UNO.Card;
+import UNO.Player;
+import UNO.UnoGame;
+import clientInterfaces.clientInterface;
+import clientInterfaces.gameControllerInterface;
+import clientInterfaces.lobbyInterface;
+import dbInterfaces.dbInterface;
+
+import static security.JWTUtils.generateApiSecret;
 
 public class serverInterfaceImpl extends UnicastRemoteObject implements serverInterface {
 
@@ -26,6 +27,7 @@ public class serverInterfaceImpl extends UnicastRemoteObject implements serverIn
     private List<clientInterface> clients;
     private List<lobbyInterface> lobbies;
     private HashMap<String, clientInterface> map;
+    public String secret;
     
 
     public serverInterfaceImpl(int dbPortnumber) throws RemoteException {
@@ -42,6 +44,10 @@ public class serverInterfaceImpl extends UnicastRemoteObject implements serverIn
 //        } catch (Exception e) {
 //            e.printStackTrace();
 //        }
+        
+        if (secret == null) {
+        	secret = generateApiSecret(50);
+        }
         System.out.println("server has started");
         setdb(dbPortnumber);
     }

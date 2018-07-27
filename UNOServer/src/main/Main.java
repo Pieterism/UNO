@@ -1,9 +1,10 @@
 package main;
 
-import Interfaces.serverInterfaceImpl;
 import java.rmi.Remote;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+
+import serverInterfaces.serverInterfaceImpl;
 
 public class Main {
 

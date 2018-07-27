@@ -1,10 +1,11 @@
 package Interfaces;
 
 
-import UNO.Card;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.List;
+
+import javax.smartcardio.Card;
 
 
 public interface serverInterface extends Remote {
