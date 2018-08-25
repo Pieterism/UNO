@@ -3,6 +3,8 @@ package GUI;
 import java.rmi.RemoteException;
 import java.util.Observable;
 
+import com.sun.net.httpserver.Authenticator.Success;
+
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -14,6 +16,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
 import serverInterfaces.serverInterface;
+import services.NewGameService;
 
 public class PopupNewGameController {
 	private String username;
@@ -41,33 +44,39 @@ public class PopupNewGameController {
 	public void startGame() throws RemoteException {
 		String gameName= name.getText();
 		String gameDescription = description.getText();
-		int aantal;
-		if (playerAmount.getText().equals("")) {
-			aantal = 2;
+		int aantal = 2;
+		if (playerAmount!=null) {
+			try {
+				aantal = Integer.parseInt(playerAmount.getText());
+				if (aantal >= 4) aantal = 4;
+				if (aantal <= 2) aantal = 2;
+			} catch (NumberFormatException nfe) {
+			}
 		}
-		else {
-			aantal = Integer.parseInt(playerAmount.getText());
-			if (aantal >= 4) aantal = 4;
-			if (aantal <= 2) aantal = 2;
-		}
-		
-		if (gameName.equals("")) {
+		if (gameName == null) {
 			gameName = username + "'s game"; 
 		}
-		else {
-			
-			if (description.getText() == null) {
-				gameDescription = "A game made by " + username;
-			}
-			else {
-				server.startNewGame(gameName, gameDescription, aantal);
-				exit();
-			}
-
-			
+		
+		if (gameDescription == null) {
+			gameDescription = "A game made by " + username;
 		}
+		
+		NewGameService newGameService = new NewGameService(gameName, gameDescription, aantal, server);
+		newGameService.setOnSucceeded(Success ->{
+			System.out.println("new game started!");
+			
+		});
+		newGameService.start();
+		exit();	
 	}
-	
+    
+	private void popUpAlert(String string) {
+    	Alert errorAlert = new Alert(AlertType.ERROR);
+    	errorAlert.setHeaderText("Input not valid");
+    	errorAlert.setContentText(string);
+    	errorAlert.showAndWait();		
+	}
+    
 	@FXML
 	public void cancel() {
 		exit();

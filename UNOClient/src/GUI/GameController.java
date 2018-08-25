@@ -2,7 +2,11 @@ package GUI;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.lang.invoke.MethodHandles.Lookup;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -44,9 +48,9 @@ import serverInterfaces.serverInterface;
 
 public class GameController extends UnicastRemoteObject implements gameControllerInterface{
 
-	private String path = "D:\\Google Drive\\School\\2017-2018\\1e Semester\\Gedistribueerde Systemen\\Opdracht UNO\\GIT_UNO\\UNOClient\\picture\\";
+	//private String path = "D:\\Google Drive\\School\\2017-2018\\1e Semester\\Gedistribueerde Systemen\\Opdracht UNO\\GIT_UNO\\UNOClient\\picture\\";
 
-	//private String path = "C:\\Users\\wouter\\Documents\\school\\GedistribueerdeSystemen\\UNO-game\\UNOClient\\picture\\";
+	private String path = "C:\\Users\\wouter\\Documents\\school\\GedistribueerdeSystemen\\UNO-game\\UNOClient\\picture\\";
 
 	//class variables
 	private String username;
@@ -124,6 +128,12 @@ public class GameController extends UnicastRemoteObject implements gameControlle
 			try {
 				System.out.println("pressed!");
 				if(!readyToStart) {
+					Registry registry = LocateRegistry.getRegistry("localhost", 1200);
+					try {
+						server = (serverInterface) registry.lookup("UNOserver");
+					} catch (NotBoundException e) {
+						e.printStackTrace();
+					}
 					server.readyToStart(gameID, username);
 					readyToStart = true;
 				}
@@ -289,58 +299,59 @@ public class GameController extends UnicastRemoteObject implements gameControlle
 		}
 	}
 
-	private synchronized void setMyCards() throws FileNotFoundException {
+	private void setMyCards() throws FileNotFoundException {
+		ImageView imageView;
+		Image image;
+		for (Card card : cardsList) {
+			try {
+				image = new Image(new FileInputStream(path + card.cardName));
+				imageView = new ImageView(image);
+				imageView.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+					for (int i = 0; i < userBox.getChildren().size(); i++) {
+						if (userBox.getChildren().get(i) == event.getTarget()) {
+							selectedCard = cardsList.get(i);
+							break;
+						}
+					}
+					System.out.println(selectedCard.cardName);
+					event.consume();
+				});
+				imageView.setFocusTraversable(true);
+				imageView.setFitHeight(125);
+				imageView.setPreserveRatio(true);
+				userBox.getChildren().add(imageView);
+				System.out.println(card.cardName);
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			}
+
+		}
+
+	}
+
+	// add cards in lijst van kaarten van de speler
+	@Override
+	public void addCards(List<Card> cards) throws RemoteException {
+		
 		Platform.runLater(new Runnable() {
-			
 			@Override
 			public void run() {
-				ImageView imageView;
-				Image image;
-				for (Card card: cardsList) {
-					try {
-						image = new Image(new FileInputStream(path + card.cardName));
-						imageView = new ImageView(image);
-						imageView.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
-					         for(int i = 0; i<userBox.getChildren().size(); i++) {
-					        	 if(userBox.getChildren().get(i)==event.getTarget()) {
-					        		 selectedCard = cardsList.get(i);
-					        		 break;
-					        	 }
-					         }
-					         System.out.println(selectedCard.cardName);
-					         event.consume();
-					     });
-						imageView.setFocusTraversable(true);
-						imageView.setFitHeight(125);
-						imageView.setPreserveRatio(true);
-						userBox.getChildren().add(imageView);
-						System.out.println(card.cardName);
-					} catch (FileNotFoundException e) {
-						e.printStackTrace();
-					}
-					
+				cardsList.addAll(cards);
+				try {
+					setMyCards();
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
 			}
 		});
 		
 	}
 
-	// add cards in lijst van kaarten van de speler
-	@Override
-	public void addCards(List<Card> cards) throws RemoteException {
-		this.cardsList.addAll(cards);
-		try {
-			setMyCards();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
 	//return the selected card in GUI
 	@Override
-	public synchronized Card getCard() throws RemoteException {
+	public Card getCard() throws RemoteException {
 		selectedCard = null;
 		while (selectedCard == null || !selectedCard.canPlayOn(topCard)) {
 

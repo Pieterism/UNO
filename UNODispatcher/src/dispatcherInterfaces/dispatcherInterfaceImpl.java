@@ -32,7 +32,8 @@ public class dispatcherInterfaceImpl extends UnicastRemoteObject implements disp
     private Map<Integer, Integer> serverStatus;
     private List<Integer> unfilledServers;
     private List<Integer> fullServers;
-    private String uri = "D:\\Google Drive\\School\\2017-2018\\1e Semester\\Gedistribueerde Systemen\\Opdracht UNO\\GIT_UNO\\uno.db";
+    private String uri = "C:\\Users\\wouter\\Documents\\school\\GedistribueerdeSystemen\\UNO-game\\uno.db";
+    //private String uri = "D:\\Google Drive\\School\\2017-2018\\1e Semester\\Gedistribueerde Systemen\\Opdracht UNO\\GIT_UNO\\uno.db";
     
     private Map<Integer, Integer> serverToDB;
     

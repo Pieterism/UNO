@@ -23,7 +23,7 @@ public interface clientInterface extends Remote {
 
     public void giveCards(List<Card> cards) throws RemoteException;
 
-    public Card getCard() throws RemoteException;
+    public void getCard() throws RemoteException;
 
     public List<Card> getCards() throws RemoteException;
 

@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import org.omg.IOP.TAG_MULTIPLE_COMPONENTS;
+
 import UNO.Card;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -69,14 +71,12 @@ public class clientInterfaceImpl extends UnicastRemoteObject implements clientIn
     }
 
     @Override
-    public Card getCard() throws RemoteException {
-        for (Card card : cards) {
-            if (card.canPlayOn(topCard)) {
-                cards.remove(card);
-                return card;
-            }
-        }
-        return null;
+    public void getCard() throws RemoteException {
+    	Card temp = null;
+    	for (Card card : cards) {
+    		if (card.canPlayOn(topCard)) temp = card;
+    	}
+    	server.playCard(temp);
     }
 
     @Override
