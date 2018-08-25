@@ -16,6 +16,7 @@ import clientInterfaces.clientInterface;
 import clientInterfaces.gameControllerInterface;
 import clientInterfaces.lobbyInterface;
 import dbInterfaces.dbInterface;
+import javafx.application.Platform;
 
 import static security.JWTUtils.generateApiSecret;
 
@@ -179,6 +180,16 @@ public class serverInterfaceImpl extends UnicastRemoteObject implements serverIn
 	}
 	
 	@Override
+	public List<Card> getCards(String username, int gameID) {
+		for (Player player : games.get(gameID).getPlayers()) {
+			if (player.getName().equals(username)) {
+				return player.getCards();
+			}
+		}
+		return null;
+	}
+	
+	@Override
 	public void readyToStart(int gameId, String username ) throws RemoteException {
 		System.out.println("ready to start executed!");
 		boolean start = true;
@@ -192,15 +203,20 @@ public class serverInterfaceImpl extends UnicastRemoteObject implements serverIn
 			}
 		}
 		if (start) {
-			try {
-				games.get(gameId).play();
-			} catch (RemoteException e) {
-				e.printStackTrace();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
+			Thread thread = new Thread(new Runnable() {
+				
+				@Override
+				public void run() {
+					try {
+						games.get(gameId).play();
+					} catch (RemoteException e) {
+						e.printStackTrace();
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+			});
+			thread.start();
 		}
-			
 	}
-
 }

@@ -12,7 +12,6 @@ public interface clientInterface extends Remote {
 	// message broadcast naar clients
     public void tell(String s) throws RemoteException;
 
-    
     public void updatePile(Card card) throws RemoteException;
 
     public void drawCards(List<Card> cards) throws RemoteException;

@@ -1,6 +1,7 @@
 package UNO;
 
 
+import java.awt.print.Printable;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -107,7 +108,13 @@ public class UnoGame {
     public void dealCards() throws RemoteException {
 
     	for (Player player : players) {
-            player.getGameController().addCards(draw(7));
+    		List<String>strings = new ArrayList<>();
+    		List<Card> cards = new ArrayList<>();
+    		cards = draw(7);
+    		for (Card card : cards) {
+    			strings.add(card.cardName);
+    		}
+            player.getGameController().addCards(strings);
         }
 
         // turn over the top card
@@ -127,12 +134,15 @@ public class UnoGame {
     public String playTurn() throws RemoteException {
     	Player player = players.get(currentPlayer);
 
+    	print(player);
     	
         // the current player chooses a card to play
         Card card = player.getGameController().getCard();
         if (card == null) {
             // they cannot play, so draw a card
-        	player.getGameController().addCards(draw(1));
+        	List <String> strings = new ArrayList<>();
+        	strings.add(draw(1).get(0).cardName);
+        	player.getGameController().addCards(strings);
         	updateCardAmountPlayer(player);
         } else {
             // play the card
@@ -152,7 +162,13 @@ public class UnoGame {
         return null;
     }
     
-    public void updateCardAmountPlayer(Player player) throws RemoteException {
+    private void print(Player player) {
+		System.out.println(player.getName());
+		System.out.println(player.getCards());
+		
+	}
+
+	public void updateCardAmountPlayer(Player player) throws RemoteException {
     	for (Player iter : players) {
             iter.getGameController().setCardAmountPlayer(player.getName(), player.getCards().size());;
         }
@@ -176,7 +192,6 @@ public class UnoGame {
     	
         dealCards();
         
-        Thread.currentThread().sleep(1000000L);
         String winner = playTurn();
         while (winner== null) {
         	winner = playTurn();
@@ -189,7 +204,12 @@ public class UnoGame {
     }
 
     public void draw(gameControllerInterface nextPlayer, int nDraw) throws RemoteException {
-        nextPlayer.addCards(draw(nDraw));
+    	List<Card> cards = draw(nDraw);
+    	List<String> strings = new ArrayList<>();
+    	for(Card card: cards) {
+    		strings.add(card.cardName);
+    	}
+    	nextPlayer.addCards(strings);
     }
 
     public String getName() {
