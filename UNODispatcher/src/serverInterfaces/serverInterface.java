@@ -3,6 +3,7 @@ package serverInterfaces;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.util.Collection;
 import java.util.List;
 
 import UNO.Card;
@@ -40,5 +41,6 @@ public interface serverInterface extends Remote {
     public void giveClient(String s, clientInterface client) throws RemoteException;
 	public void sendGameMsg(String msg, int gameID, String username) throws RemoteException;
 	public boolean ping() throws RemoteException;
+	public List<Card> getCards(String username, int gameID) throws RemoteException;
 
 }

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 INDEX VERSION 1.131+D:\Google Drive\School\2017-2018\1e Semester\Gedistribueerde Systemen\Opdracht UNO\GIT_UNO\.metadata\.plugins\org.eclipse.jdt.core
 4289135590.index
 1455593261.index
@@ -27,3 +28,31 @@ INDEX VERSION 1.131+D:\Google Drive\School\2017-2018\1e Semester\Gedistribueerde
 2773834657.index
 398058497.index
 1870878615.index
+=======
+INDEX VERSION 1.130+C:\Users\wouter\Documents\UNO\.metadata\.plugins\org.eclipse.jdt.core
+1295027826.index
+2033839043.index
+1921432459.index
+3075621779.index
+2546076573.index
+2451833951.index
+756006386.index
+1929933281.index
+1589284461.index
+2672315831.index
+2266595078.index
+565899265.index
+4211617752.index
+3188099249.index
+1721714348.index
+2825787128.index
+3922522662.index
+2050050858.index
+4266428024.index
+2248337861.index
+136936140.index
+1312586118.index
+2349671270.index
+2936170451.index
+3272802299.index
+>>>>>>> ecdb757a9cbb5f2053cfbc63f8d095df8ca10181

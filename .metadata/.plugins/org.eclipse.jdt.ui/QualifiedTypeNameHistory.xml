@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
+<<<<<<< HEAD
 <fullyQualifiedTypeName name="dbInterfaces.dbInterfaceImpl"/>
 <fullyQualifiedTypeName name="dbInterfaces.dbInterface"/>
 <fullyQualifiedTypeName name="clientInterfaces.clientInterface"/>
@@ -8,6 +9,8 @@
 <fullyQualifiedTypeName name="com.sun.glass.ui.Application"/>
 <fullyQualifiedTypeName name="GUI.GameController"/>
 <fullyQualifiedTypeName name="javafx.fxml.FXMLLoader"/>
+=======
+>>>>>>> ecdb757a9cbb5f2053cfbc63f8d095df8ca10181
 <fullyQualifiedTypeName name="javafx.application.Application"/>
 <fullyQualifiedTypeName name="java.util.ArrayList"/>
 <fullyQualifiedTypeName name="GUI.Opponent"/>
@@ -17,7 +20,6 @@
 <fullyQualifiedTypeName name="javafx.scene.image.ImageView"/>
 <fullyQualifiedTypeName name="javafx.scene.image.Image"/>
 <fullyQualifiedTypeName name="java.io.FileInputStream"/>
-<fullyQualifiedTypeName name="UNO.Card"/>
 <fullyQualifiedTypeName name="UNO.ReverseCard"/>
 <fullyQualifiedTypeName name="UNO.DrawCard"/>
 <fullyQualifiedTypeName name="UNO.SkipCard"/>
@@ -30,6 +32,7 @@
 <fullyQualifiedTypeName name="java.lang.IllegalStateException"/>
 <fullyQualifiedTypeName name="javafx.scene.layout.HBox"/>
 <fullyQualifiedTypeName name="com.sun.javafx.tk.Toolkit.Task"/>
+<<<<<<< HEAD
 <fullyQualifiedTypeName name="javafx.application.Platform"/>
 <fullyQualifiedTypeName name="java.lang.Runnable"/>
 <fullyQualifiedTypeName name="UNO.Player"/>
@@ -60,4 +63,45 @@
 <fullyQualifiedTypeName name="java.rmi.registry.Registry"/>
 <fullyQualifiedTypeName name="java.rmi.registry.LocateRegistry"/>
 <fullyQualifiedTypeName name="clientInterfaces.clientInterfaceImpl"/>
+=======
+<fullyQualifiedTypeName name="java.lang.Long"/>
+<fullyQualifiedTypeName name="javafx.scene.input.MouseEvent"/>
+<fullyQualifiedTypeName name="io.jsonwebtoken.SignatureAlgorithm"/>
+<fullyQualifiedTypeName name="java.awt.List"/>
+<fullyQualifiedTypeName name="java.security.PrivilegedAction"/>
+<fullyQualifiedTypeName name="game.Card"/>
+<fullyQualifiedTypeName name="dispatcherInterfaces.dispatcherInterface"/>
+<fullyQualifiedTypeName name="com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ"/>
+<fullyQualifiedTypeName name="com.sun.swing.internal.plaf.metal.resources.metal"/>
+<fullyQualifiedTypeName name="java.lang.Boolean"/>
+<fullyQualifiedTypeName name="java.security.Provider.Service"/>
+<fullyQualifiedTypeName name="javafx.concurrent.Service"/>
+<fullyQualifiedTypeName name="javafx.concurrent.Task"/>
+<fullyQualifiedTypeName name="services.LoginService"/>
+<fullyQualifiedTypeName name="GUI.LobbyController"/>
+<fullyQualifiedTypeName name="services.RegisterService"/>
+<fullyQualifiedTypeName name="java.lang.NumberFormatException"/>
+<fullyQualifiedTypeName name="services.NewGameService"/>
+<fullyQualifiedTypeName name="java.lang.Integer"/>
+<fullyQualifiedTypeName name="com.sun.net.httpserver.Authenticator.Success"/>
+<fullyQualifiedTypeName name="java.lang.Void"/>
+<fullyQualifiedTypeName name="java.rmi.registry.Registry"/>
+<fullyQualifiedTypeName name="java.rmi.registry.LocateRegistry"/>
+<fullyQualifiedTypeName name="GUI.GameController"/>
+<fullyQualifiedTypeName name="java.lang.invoke.MethodHandles.Lookup"/>
+<fullyQualifiedTypeName name="org.omg.IOP.TAG_MULTIPLE_COMPONENTS"/>
+<fullyQualifiedTypeName name="java.awt.print.Printable"/>
+<fullyQualifiedTypeName name="java.rmi.RemoteException"/>
+<fullyQualifiedTypeName name="java.lang.Override"/>
+<fullyQualifiedTypeName name="java.util.List"/>
+<fullyQualifiedTypeName name="java.lang.String"/>
+<fullyQualifiedTypeName name="UNO.UnoGame"/>
+<fullyQualifiedTypeName name="UNO.Player"/>
+<fullyQualifiedTypeName name="javafx.application.Platform"/>
+<fullyQualifiedTypeName name="java.lang.Runnable"/>
+<fullyQualifiedTypeName name="java.lang.Thread"/>
+<fullyQualifiedTypeName name="clientInterfaces.gameControllerInterface"/>
+<fullyQualifiedTypeName name="UNO.Card"/>
+<fullyQualifiedTypeName name="serverInterfaces.serverInterface"/>
+>>>>>>> ecdb757a9cbb5f2053cfbc63f8d095df8ca10181
 </qualifiedTypeNameHistroy>

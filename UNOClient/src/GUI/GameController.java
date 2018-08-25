@@ -331,12 +331,34 @@ public class GameController extends UnicastRemoteObject implements gameControlle
 
 	// add cards in lijst van kaarten van de speler
 	@Override
-	public void addCards(List<Card> cards) throws RemoteException {
+	public void addCards(List<String> cards) throws RemoteException {
+
+		for (String card : cards) {
+			System.out.println(card);
+		}
+//		Platform.runLater(new Runnable() {
+//			@Override
+//			public void run() {
+//				cardsList.addAll(cards);
+//				try {
+//					setMyCards();
+//				} catch (FileNotFoundException e) {
+//					e.printStackTrace();
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		});
 		
+	}
+	
+	@Override
+	public void addCards() throws RemoteException {
+		cardsList.addAll(server.getCards(this.username, this.gameID));
 		Platform.runLater(new Runnable() {
+			
 			@Override
 			public void run() {
-				cardsList.addAll(cards);
 				try {
 					setMyCards();
 				} catch (FileNotFoundException e) {
