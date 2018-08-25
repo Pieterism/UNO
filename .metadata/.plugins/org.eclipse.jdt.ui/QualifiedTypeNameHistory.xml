@@ -1,20 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
-<fullyQualifiedTypeName name="main.TestMain"/>
-<fullyQualifiedTypeName name="com.sun.xml.internal.ws.wsdl.writer.document.Port"/>
-<fullyQualifiedTypeName name="Interfaces.serverInterface"/>
-<fullyQualifiedTypeName name="serverInterfaces.serverInterface"/>
-<fullyQualifiedTypeName name="java.lang.Integer"/>
-<fullyQualifiedTypeName name="java.util.HashMap"/>
-<fullyQualifiedTypeName name="java.rmi.registry.Registry"/>
-<fullyQualifiedTypeName name="sun.font.CreatedFontTracker"/>
 <fullyQualifiedTypeName name="dbInterfaces.dbInterfaceImpl"/>
-<fullyQualifiedTypeName name="java.rmi.registry.LocateRegistry"/>
 <fullyQualifiedTypeName name="dbInterfaces.dbInterface"/>
 <fullyQualifiedTypeName name="clientInterfaces.clientInterface"/>
 <fullyQualifiedTypeName name="GUI.opponent"/>
-<fullyQualifiedTypeName name="clientInterfaces.gameControllerInterface"/>
-<fullyQualifiedTypeName name="java.util.Arrays"/>
 <fullyQualifiedTypeName name="javafx.scene.text.Text"/>
 <fullyQualifiedTypeName name="com.sun.glass.ui.Application"/>
 <fullyQualifiedTypeName name="GUI.GameController"/>
@@ -41,12 +30,34 @@
 <fullyQualifiedTypeName name="java.lang.IllegalStateException"/>
 <fullyQualifiedTypeName name="javafx.scene.layout.HBox"/>
 <fullyQualifiedTypeName name="com.sun.javafx.tk.Toolkit.Task"/>
-<fullyQualifiedTypeName name="javafx.concurrent.Task"/>
 <fullyQualifiedTypeName name="javafx.application.Platform"/>
 <fullyQualifiedTypeName name="java.lang.Runnable"/>
 <fullyQualifiedTypeName name="UNO.Player"/>
 <fullyQualifiedTypeName name="java.lang.Long"/>
 <fullyQualifiedTypeName name="javafx.scene.input.MouseEvent"/>
-<fullyQualifiedTypeName name="java.rmi.RemoteException"/>
 <fullyQualifiedTypeName name="java.lang.Override"/>
+<fullyQualifiedTypeName name="java.rmi.server.UnicastRemoteObject"/>
+<fullyQualifiedTypeName name="java.rmi.Remote"/>
+<fullyQualifiedTypeName name="dbInterfaces.LoginInterface"/>
+<fullyQualifiedTypeName name="serverInterfaces.serverInterfaceImpl"/>
+<fullyQualifiedTypeName name="java.rmi.RemoteException"/>
+<fullyQualifiedTypeName name="UNO.User"/>
+<fullyQualifiedTypeName name="Database.Database"/>
+<fullyQualifiedTypeName name="javafx.concurrent.Service"/>
+<fullyQualifiedTypeName name="javafx.concurrent.Task"/>
+<fullyQualifiedTypeName name="main.TestMain"/>
+<fullyQualifiedTypeName name="serverInterfaces.serverInterface"/>
+<fullyQualifiedTypeName name="clientInterfaces.lobbyInterface"/>
+<fullyQualifiedTypeName name="clientInterfaces.gameControllerInterface"/>
+<fullyQualifiedTypeName name="security.JWTUtils"/>
+<fullyQualifiedTypeName name="java.util.Arrays"/>
+<fullyQualifiedTypeName name="java.util.Base64"/>
+<fullyQualifiedTypeName name="java.security.KeyStore.PrivateKeyEntry"/>
+<fullyQualifiedTypeName name="java.lang.String"/>
+<fullyQualifiedTypeName name="com.sun.javafx.fxml.expression.Expression.Parser.Token"/>
+<fullyQualifiedTypeName name="com.sun.org.apache.xpath.internal.operations.Bool"/>
+<fullyQualifiedTypeName name="java.lang.Boolean"/>
+<fullyQualifiedTypeName name="java.rmi.registry.Registry"/>
+<fullyQualifiedTypeName name="java.rmi.registry.LocateRegistry"/>
+<fullyQualifiedTypeName name="clientInterfaces.clientInterfaceImpl"/>
 </qualifiedTypeNameHistroy>

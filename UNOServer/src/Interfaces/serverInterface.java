@@ -7,6 +7,9 @@ import java.util.List;
 
 import javax.smartcardio.Card;
 
+import clientInterfaces.gameControllerInterface;
+import clientInterfaces.lobbyInterface;
+
 
 public interface serverInterface extends Remote {
 

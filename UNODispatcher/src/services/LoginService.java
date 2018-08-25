@@ -2,6 +2,8 @@ package services;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.Arrays;
+import java.util.Base64;
 
 import Database.Database;
 import UNO.User;
@@ -26,13 +28,11 @@ public class LoginService extends UnicastRemoteObject implements LoginInterface 
 	}
 
 	// controleert of er geldige username-password combinatie is en geeft Token
-	// terug indien
-	// dit het geval is.
+	// terug indien dit het geval is.
 	@Override
 	public String getToken(String username, String password) throws RemoteException {
-		// TODO checken of user bestaat in databank
-		if (db.checkUsername(username)) {
 
+		if (db.checkUsername(username) && db.loginUser(username, password)) {
 			String token = JWTUtils.createJWT(username, null, username, timeToLive, server.secret);
 			return token;
 		}

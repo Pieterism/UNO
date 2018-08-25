@@ -12,8 +12,8 @@ import clientInterfaces.lobbyInterface;
 
 public interface serverInterface extends Remote {
 	//user authentication methods
-    public String register(String username, String password) throws RemoteException;
-    public String login(String username, String password) throws RemoteException;	
+    public boolean register(String username, String password) throws RemoteException;
+    public boolean login(String username, String password) throws RemoteException;	
 
     //lobby calls
     public void startNewGame(String name, String description, int aantalSpelers) throws RemoteException;
