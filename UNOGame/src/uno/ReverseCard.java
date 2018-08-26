@@ -25,7 +25,7 @@ public class ReverseCard extends Card implements Serializable{
 
     @Override
 	public boolean canPlayOn(Card card) {
-        return (card.getColour() == this.getColour());
+        return (card.getColour() == this.getColour() || card.getSymbol().equals(this.getSymbol()));
     }
 
     @Override

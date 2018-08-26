@@ -4,6 +4,7 @@ package uno;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 import interfaces.gameControllerInterface;
@@ -102,7 +103,8 @@ public class UnoGame {
     public void dealCards() throws RemoteException {
 
     	for (Player player : players) {
-            player.getGameController().addCards(draw(7));
+    		player.getCards().addAll(draw(7));
+            player.getGameController().addCards(player.getCards());
         }
 
         // turn over the top card
@@ -113,8 +115,13 @@ public class UnoGame {
             player.getGameController().addPile(card);
         }
 
+
         currentPlayer = 0;
         myPlayDirection = 1;
+        
+        if (card.getClass()==WildCard.class || card.getClass()==WildDrawCard.class) {
+        	card.myColour = Card.COLOUR_BLUE;
+        }
 
     }
 
@@ -128,14 +135,22 @@ public class UnoGame {
         Card card = player.getGameController().getCard();
         if (card == null) {
             // they cannot play, so draw a card
-        	player.getGameController().addCards(draw(1));
+        	List<Card> draw = draw(1);
+        	getNextPlayer(0).getGameController().addCards(draw);
+        	getNextPlayer(0).getCards().addAll(draw);
         	updateCardAmountPlayer(player);
-        } else {
-            // play the card
-            pile.add(0, card);
-            playCard(player, card);
-            card.play(this);
-        }
+        	goToNextPlayer();
+        	System.out.println();
+        	return null;
+        } 
+        if (!card.canPlayOn(pile.get(0))){
+        	return playTurn();
+        } 
+        
+        // play the card
+        pile.add(0, card);
+        card.play(this);
+        playCard(player, card);
 
         // If that was their last card, then they win
         if (player.getCards().size() == 0) {
@@ -161,13 +176,24 @@ public class UnoGame {
     }
     
     public void playCard(Player player, Card card) throws RemoteException {
-    	if (player.removeCard(card)) {
+    	boolean valid = false;
+    	Iterator<Card> newIterator = player.getCards().iterator();
+    	while (newIterator.hasNext()){
+    		Card c = newIterator.next();
+    		if (c.cardName.equals(card.cardName)) {
+    			valid = true;
+    			player.getCards().remove(c);
+    			break;
+    		}
+    	}
+    	if (valid) {
         	for (Player iter : players) {
         		iter.getGameController().addPile(card);
                 iter.getGameController().setCardAmountPlayer(player.getName(), player.getCards().size());;
             }
     	}
     	else {
+    		player.getGameController().addCards(draw(1));
     		System.out.println("An error occured (a card was played when it was not part of the player's hand)");
     	}
 
@@ -175,9 +201,12 @@ public class UnoGame {
 
     //speel een volledig spel en geef identiteit van winnaar terug
     public String play() throws RemoteException, InterruptedException {
-    	
         dealCards();
-        
+        for (Player player : players) {
+        	for (Player player2 : players) {
+            	player.getGameController().setCardAmountPlayer(player2.getName(), player2.getCards().size());
+        	}
+        }
         String winner = playTurn();
         while (winner== null) {
         	winner = playTurn();
@@ -185,7 +214,9 @@ public class UnoGame {
         return winner;
     }
 
-    public int getId() {
+
+
+	public int getId() {
         return this.gameId;
     }
 

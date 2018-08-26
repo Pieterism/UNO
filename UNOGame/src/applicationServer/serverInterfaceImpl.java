@@ -36,13 +36,13 @@ public class serverInterfaceImpl extends UnicastRemoteObject implements serverIn
 		map = new HashMap<>();
 		gameCounter = 0;
 		playerCounter = 0;
-//        try {
-//            Registry registry = LocateRegistry.getRegistry("localhost", 1100);
-//            this.db = (dbInterface) registry.lookup("UNO");
-//            System.out.println("connected to db");
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
+		// try {
+		// Registry registry = LocateRegistry.getRegistry("localhost", 1100);
+		// this.db = (dbInterface) registry.lookup("UNO");
+		// System.out.println("connected to db");
+		// } catch (Exception e) {
+		// e.printStackTrace();
+		// }
 
 		if (secret == null) {
 			secret = generateApiSecret(50);
@@ -161,7 +161,19 @@ public class serverInterfaceImpl extends UnicastRemoteObject implements serverIn
 				@Override
 				public void run() {
 					try {
+						ArrayList<String> info = new ArrayList<>();
+						for (Player player : games.get(gameId).getPlayers()) {
+							info.add(player.getName());
+						}
+						for (Player player : games.get(gameId).getPlayers()) {
+							player.getGameController().sendPlayerInfo(info);
+						}
+
 						games.get(gameId).play();
+						for (Player player : games.get(gameId).getPlayers()) {
+							player.setReady(false);
+							player.getGameController().setReady(false);
+						}
 					} catch (RemoteException e) {
 						e.printStackTrace();
 					} catch (InterruptedException e) {

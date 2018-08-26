@@ -47,7 +47,13 @@ public class Card  implements Serializable{
         cardName = mySymbol + "_" + COLOUR_NAMES[colour] + ".png";
     }
 
-    public int getColour() {
+    public Card(Card selectedCard) {
+		this.cardName = selectedCard.cardName;
+		this.myColour = selectedCard.myColour;
+		this.mySymbol = selectedCard.mySymbol;
+	}
+
+	public int getColour() {
         return myColour;
     }
 
