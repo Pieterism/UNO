@@ -73,7 +73,8 @@ public class Card  implements Serializable{
         // Default
     }
 
-    public String toString() {
+    @Override
+	public String toString() {
         String result;
 
         result = COLOUR_NAMES[myColour];

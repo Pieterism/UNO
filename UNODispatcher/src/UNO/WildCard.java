@@ -3,7 +3,6 @@ package UNO;
 
 import java.io.Serializable;
 import java.util.Random;
-import java.util.Scanner;
 
 /**
  *

@@ -2,11 +2,7 @@ package services;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.Arrays;
-import java.util.Base64;
-
 import Database.Database;
-import UNO.User;
 import dbInterfaces.LoginInterface;
 import serverInterfaces.serverInterfaceImpl;
 import security.JWTUtils;

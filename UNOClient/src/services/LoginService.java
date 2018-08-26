@@ -1,13 +1,7 @@
 package services;
 
-import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
-
-import com.sun.org.apache.xpath.internal.operations.Bool;
-
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
-import main.GUIMain;
 import serverInterfaces.serverInterface;
 
 public class LoginService extends Service<Boolean>{

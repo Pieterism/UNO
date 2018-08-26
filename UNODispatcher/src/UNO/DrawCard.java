@@ -33,7 +33,8 @@ public class DrawCard extends Card implements Serializable{
 //        return (card.myColour == myColour);
 //    }
     //Volgende speler moet nDraw aantal kaarten trekken en beurt wordt overgeslaan. 
-    public void play(UnoGame game) {
+    @Override
+	public void play(UnoGame game) {
         try {
             game.draw(game.getNextPlayer(1).getGameController(), nDraw);
         } catch (RemoteException e) {

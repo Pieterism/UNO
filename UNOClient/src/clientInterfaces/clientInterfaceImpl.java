@@ -5,13 +5,7 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
-
-import org.omg.IOP.TAG_MULTIPLE_COMPONENTS;
-
 import UNO.Card;
-import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import serverInterfaces.serverInterface;
 
 public class clientInterfaceImpl extends UnicastRemoteObject implements clientInterface {

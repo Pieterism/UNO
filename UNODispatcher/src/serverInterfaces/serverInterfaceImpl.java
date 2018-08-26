@@ -15,8 +15,6 @@ import clientInterfaces.clientInterface;
 import clientInterfaces.gameControllerInterface;
 import clientInterfaces.lobbyInterface;
 import dbInterfaces.dbInterface;
-import javafx.application.Platform;
-
 import static security.JWTUtils.generateApiSecret;
 
 public class serverInterfaceImpl extends UnicastRemoteObject implements serverInterface {
@@ -183,6 +181,7 @@ public class serverInterfaceImpl extends UnicastRemoteObject implements serverIn
 		// TODO
 	}
 
+	@Override
 	public List<Card> getCards(String username, int gameID) {
 		for (Player player : games.get(gameID).getPlayers()) {
 			if (player.getName().equals(username)) {

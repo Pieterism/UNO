@@ -4,7 +4,6 @@ package UNO;
 import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.Random;
-import java.util.Scanner;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -48,7 +47,8 @@ public class WildDrawCard extends Card implements Serializable{
         return true;
     }
 
-    public void play(UnoGame game) {
+    @Override
+	public void play(UnoGame game) {
         try {
 			game.draw(game.getNextPlayer(1).getGameController(), nDraw);
 		} catch (RemoteException e) {

@@ -6,12 +6,6 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
-import java.util.concurrent.ExecutionException;
-
-import com.sun.net.httpserver.Authenticator.Success;
-import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
-import com.sun.swing.internal.plaf.metal.resources.metal;
-
 import clientInterfaces.clientInterfaceImpl;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -26,8 +20,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
-import javafx.stage.Window;
 import serverInterfaces.serverInterface;
 import services.LoginService;
 import services.RegisterService;

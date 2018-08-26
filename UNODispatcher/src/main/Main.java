@@ -11,7 +11,7 @@ public class Main {
     private void startServer() {
         try {
             Registry registry = LocateRegistry.createRegistry(1099);
-            registry.rebind("UNOdispatcher", (Remote) new dispatcherInterfaceImpl());
+            registry.rebind("UNOdispatcher", new dispatcherInterfaceImpl());
         } catch (Exception e) {
             e.printStackTrace();
         }

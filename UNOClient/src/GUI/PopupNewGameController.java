@@ -1,17 +1,9 @@
 package GUI;
 
 import java.rmi.RemoteException;
-import java.util.Observable;
-
-import com.sun.net.httpserver.Authenticator.Success;
-
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;

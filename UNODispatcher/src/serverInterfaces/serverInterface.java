@@ -3,7 +3,6 @@ package serverInterfaces;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
-import java.util.Collection;
 import java.util.List;
 
 import UNO.Card;

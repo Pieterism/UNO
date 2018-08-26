@@ -2,7 +2,6 @@ package dispatcherInterfaces;
 
 
 import java.rmi.AlreadyBoundException;
-import java.rmi.NotBoundException;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -14,18 +13,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.sun.xml.internal.ws.wsdl.writer.document.Port;
-
-import clientInterfaces.clientInterface;
 import dbInterfaces.dbInterfaceImpl;
 import dispatcherInterfaces.dispatcherInterface;
-import serverInterfaces.serverInterface;
 import serverInterfaces.serverInterfaceImpl;
-import sun.font.CreatedFontTracker;
-
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 
 public class dispatcherInterfaceImpl extends UnicastRemoteObject implements dispatcherInterface {
 
@@ -88,7 +78,7 @@ public class dispatcherInterfaceImpl extends UnicastRemoteObject implements disp
         Registry registry;
 		try {
 			registry = LocateRegistry.createRegistry(portnumber);
-	        registry.bind("UNOserver", (Remote) new serverInterfaceImpl(dbPortnumber));
+	        registry.bind("UNOserver", new serverInterfaceImpl(dbPortnumber));
 	        unfilledServers.add(portnumber);
 	        serverStatus.put(portnumber, 0);
 			return registry;
@@ -109,7 +99,7 @@ public class dispatcherInterfaceImpl extends UnicastRemoteObject implements disp
 		Registry registry;
 		try {
 			registry = LocateRegistry.createRegistry(portnumber);
-	        registry.bind("UNOdatabase", (Remote) new dbInterfaceImpl(uri));
+	        registry.bind("UNOdatabase", new dbInterfaceImpl(uri));
 			return registry;
 		} 
 		catch (RemoteException e) {	

@@ -1,7 +1,6 @@
 package UNO;
 
 import java.io.Serializable;
-import java.rmi.RemoteException;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -34,7 +33,8 @@ public class DrawCard extends Card implements Serializable{
         return nDraw;
     }
 
-    public boolean canPlayOn(Card card) {
+    @Override
+	public boolean canPlayOn(Card card) {
         return (card.myColour == myColour);
     }
 }

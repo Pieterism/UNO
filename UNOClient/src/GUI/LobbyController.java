@@ -4,18 +4,11 @@ package GUI;
 import UNO.Player;
 import clientInterfaces.clientInterfaceImpl;
 import clientInterfaces.lobbyInterface;
-import dispatcherInterfaces.dispatcherInterface;
-
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
-import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Scanner;
-
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -24,23 +17,13 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
-import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.cell.ComboBoxListCell;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
-import javafx.util.Callback;
 import serverInterfaces.serverInterface;
 
 public class LobbyController extends UnicastRemoteObject implements lobbyInterface{
@@ -87,6 +70,7 @@ public class LobbyController extends UnicastRemoteObject implements lobbyInterfa
         games.getSelectionModel().selectedItemProperty().addListener(
                 new ChangeListener<String>() {
 
+			@Override
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
 				List<String> temp = Arrays.asList(newValue.split("\t"));
 				gameID = Integer.parseInt(temp.get(0));
@@ -96,7 +80,8 @@ public class LobbyController extends UnicastRemoteObject implements lobbyInterfa
         
         users.getSelectionModel().selectedItemProperty().addListener(
                 new ChangeListener<String>() {
-            public void changed(ObservableValue<? extends String> ov,
+            @Override
+			public void changed(ObservableValue<? extends String> ov,
                     String old_val, String new_val) {
                 selectedUser = new_val;
             }

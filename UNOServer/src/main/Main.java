@@ -12,7 +12,7 @@ public class Main {
         try {
             Registry registry = LocateRegistry.createRegistry(1200);
             //TODO: poortnummer
-            registry.rebind("UNO", (Remote) new serverInterfaceImpl(1100));
+            registry.rebind("UNO", new serverInterfaceImpl(1100));
         } catch (Exception e) {
             e.printStackTrace();
         }

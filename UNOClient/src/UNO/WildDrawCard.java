@@ -1,9 +1,6 @@
 package UNO;
 
 import java.io.Serializable;
-import java.rmi.RemoteException;
-import java.util.Random;
-import java.util.Scanner;
 
 
 

@@ -2,8 +2,6 @@ package clientInterfaces;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
-import java.util.List;
-
 import dispatcherInterfaces.dispatcherInterface;
 
 public interface clientInterface extends Remote {
