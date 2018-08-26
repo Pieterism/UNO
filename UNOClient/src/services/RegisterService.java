@@ -4,7 +4,7 @@ import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import serverInterfaces.serverInterface;
 
-public class RegisterService extends Service<String>{
+public class RegisterService extends Service<Boolean>{
 
 	private String username, password;
 	private serverInterface server;
@@ -16,10 +16,10 @@ public class RegisterService extends Service<String>{
 	}
 
 	@Override
-	protected Task<String> createTask() {
-		return new Task<String>() {
+	protected Task<Boolean> createTask() {
+		return new Task<Boolean>() {
 			@Override
-			protected String call() throws Exception {
+			protected Boolean call() throws Exception {
 				return server.register(username, password);
 			}
 		};

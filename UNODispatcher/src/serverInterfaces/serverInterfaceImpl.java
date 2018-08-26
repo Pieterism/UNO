@@ -175,13 +175,14 @@ public class serverInterfaceImpl extends UnicastRemoteObject implements serverIn
 
 	@Override
 	public void giveGameController(gameControllerInterface gcInterface) throws RemoteException {
-
+		//TODO
 	}
 
 	@Override
-<<<<<<< HEAD
 	public void readyToStart(int gameId, String username) throws RemoteException {
-=======
+		// TODO
+	}
+
 	public List<Card> getCards(String username, int gameID) {
 		for (Player player : games.get(gameID).getPlayers()) {
 			if (player.getName().equals(username)) {
@@ -190,40 +191,5 @@ public class serverInterfaceImpl extends UnicastRemoteObject implements serverIn
 		}
 		return null;
 	}
-	
-	@Override
-	public void readyToStart(int gameId, String username ) throws RemoteException {
->>>>>>> ecdb757a9cbb5f2053cfbc63f8d095df8ca10181
-		System.out.println("ready to start executed!");
-		boolean start = true;
-		for (Player player : games.get(gameId).getPlayers()) {
-			if (player.getName().contains(username) && !player.getReady()) {
-				player.setReady(true);
-				sendGameMsg("is ready to play!", gameId, player.getName());
-			}
-			if (!player.getReady() && games.get(gameId).getPlayerCount() == games.get(gameId).getPlayers().size()) {
-				start = false;
-			}
-		}
-		if (start) {
-			Thread thread = new Thread(new Runnable() {
-				
-				@Override
-				public void run() {
-					try {
-						games.get(gameId).play();
-					} catch (RemoteException e) {
-						e.printStackTrace();
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-				}
-			});
-			thread.start();
-		}
-<<<<<<< HEAD
 
-=======
->>>>>>> ecdb757a9cbb5f2053cfbc63f8d095df8ca10181
-	}
 }

@@ -1,4 +1,8 @@
-/clientInterfaces/
 /GUI/
+/UNO/
+/clientInterfaces/
+/dispatcherInterfaces/
+/images/
+/main/
 /serverInterfaces/
 /services/

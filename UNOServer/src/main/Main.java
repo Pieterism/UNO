@@ -11,7 +11,8 @@ public class Main {
     private void startServer() {
         try {
             Registry registry = LocateRegistry.createRegistry(1200);
-            registry.rebind("UNO", (Remote) new serverInterfaceImpl());
+            //TODO: poortnummer
+            registry.rebind("UNO", (Remote) new serverInterfaceImpl(1100));
         } catch (Exception e) {
             e.printStackTrace();
         }
