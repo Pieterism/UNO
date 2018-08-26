@@ -15,6 +15,7 @@ import interfaces.dbInterface;
 import interfaces.gameControllerInterface;
 import interfaces.lobbyInterface;
 import interfaces.serverInterface;
+import security.PasswordHashing;
 import uno.Card;
 import uno.Player;
 import uno.UnoGame;
@@ -68,7 +69,7 @@ public class serverInterfaceImpl extends UnicastRemoteObject implements serverIn
 		if (!db.checkUsername(username)) {
 			return false;
 		} else {
-			db.addUser(username, password);
+			db.addUser(username, PasswordHashing.hashPassword(password));
 			tellClients(username + " has succesfully connected to UNO room and your id is: ");
 			return true;
 		}

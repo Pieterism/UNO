@@ -41,7 +41,9 @@ public class Database {
 
 			String sql = "CREATE TABLE IF NOT EXISTS Users (\n"
 					+ "	user_id     INTEGER     PRIMARY KEY         AUTOINCREMENT,\n"
-					+ "	username    VARCHAR     NOT NULL,\n" + "	password    VARCHAR     NOT NULL \n" + ");";
+					+ "	username    VARCHAR     NOT NULL,\n" 
+					+ "	password    VARCHAR     NOT NULL \n" 
+					+ ");";
 
 			connection = DriverManager.getConnection("jdbc:sqlite:" + uri);
 			statement = connection.createStatement();

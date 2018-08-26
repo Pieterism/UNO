@@ -5,6 +5,8 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
+import interfaces.AuthenticationInterface;
+
 import client.clientInterfaceImpl;
 import interfaces.dispatcherInterface;
 import interfaces.serverInterface;
