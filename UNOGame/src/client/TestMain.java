@@ -20,10 +20,10 @@ public class TestMain {
             
         	registry = LocateRegistry.getRegistry("localhost", port);
         	server = (serverInterface) registry.lookup("UNOserver");
-
-        	if(server.ping()) {
-        		System.out.println("connection established!");
-        	}
+//
+//        	if(server.ping()) {
+//        		System.out.println("connection established!");
+//        	}
         	
         	server.startNewGame("myNewGame", "myNewDespription", 2);
         	

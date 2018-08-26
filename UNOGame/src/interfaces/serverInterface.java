@@ -8,11 +8,6 @@ import java.util.List;
 import uno.Card;
 
 public interface serverInterface extends Remote {
-	//user authentication methods
-    public boolean register(String username, String password) throws RemoteException;
-    public boolean login(String username, String password) throws RemoteException;	
-    public boolean getLoginToken(String username, String password) throws RemoteException;
-    public boolean LoginToken(String token) throws RemoteException; 
 
     //lobby calls
     public void startNewGame(String name, String description, int aantalSpelers) throws RemoteException;
@@ -38,7 +33,6 @@ public interface serverInterface extends Remote {
 
     public void giveClient(String s, clientInterface client) throws RemoteException;
 	public void sendGameMsg(String msg, int gameID, String username) throws RemoteException;
-	public boolean ping() throws RemoteException;
 	public List<Card> getCards(String username, int gameID) throws RemoteException;
 
 }

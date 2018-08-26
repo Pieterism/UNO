@@ -1,18 +1,17 @@
 package services;
 
-import interfaces.serverInterface;
+import controller.AuthenticationInterfaceImpl;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 
 public class LoginService2 extends Service<Boolean>{
 
 	private String username, password;
-	private serverInterface server;
+	private AuthenticationInterfaceImpl server;
 	
-	public LoginService2(String username, String password, serverInterface server) {
+	public LoginService2(String username, String password) {
 		this.username = username;
 		this.password = password;
-		this.server = server;
 	}
 
 	@Override

@@ -1,18 +1,17 @@
 package services;
 
-import interfaces.serverInterface;
+import interfaces.AuthenticationInterface;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 
-public class RegisterService extends Service<Boolean>{
+public class RegisterService extends Service<Boolean> {
 
 	private String username, password;
-	private serverInterface server;
-	
-	public RegisterService(String username, String password, serverInterface server) {
+	private AuthenticationInterface auth;
+
+	public RegisterService(String username, String password) {
 		this.username = username;
 		this.password = password;
-		this.server = server;
 	}
 
 	@Override
@@ -20,10 +19,9 @@ public class RegisterService extends Service<Boolean>{
 		return new Task<Boolean>() {
 			@Override
 			protected Boolean call() throws Exception {
-				return server.register(username, password);
+				return auth.register(username, password);
 			}
 		};
 	}
-	
 
 }

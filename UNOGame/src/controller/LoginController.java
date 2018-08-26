@@ -5,8 +5,6 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
-import interfaces.AuthenticationInterface;
-
 import client.clientInterfaceImpl;
 import interfaces.dispatcherInterface;
 import interfaces.serverInterface;
@@ -78,7 +76,7 @@ public class LoginController {
 	@FXML
 	private void Login() throws RemoteException, NotBoundException {
 		if (loginUsername.getText().length() != 0 && loginPassword.getText().length() != 0) {
-			LoginService2 loginService = new LoginService2(loginUsername.getText(), loginPassword.getText(), server);
+			LoginService2 loginService = new LoginService2(loginUsername.getText(), loginPassword.getText());
 			loginService.setOnSucceeded(Success -> {
 				boolean succes = Success.getSource().getValue() != null;
 				if (succes) {
@@ -115,7 +113,7 @@ public class LoginController {
 				if (username.length() <= 6) {
 					popUpAlert("The size of the username must be at least 6 characters long.");
 				} else {
-					RegisterService registerService = new RegisterService(username, password1.getText(), server);
+					RegisterService registerService = new RegisterService(username, password1.getText());
 					registerService.setOnSucceeded(Success -> {
 						boolean succes = Success.getSource().getValue() != null;
 						if (succes) {

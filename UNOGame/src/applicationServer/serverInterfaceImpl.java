@@ -15,7 +15,6 @@ import interfaces.dbInterface;
 import interfaces.gameControllerInterface;
 import interfaces.lobbyInterface;
 import interfaces.serverInterface;
-import security.PasswordHashing;
 import uno.Card;
 import uno.Player;
 import uno.UnoGame;
@@ -62,37 +61,6 @@ public class serverInterfaceImpl extends UnicastRemoteObject implements serverIn
 		} catch (Exception e) {
 		}
 
-	}
-
-	@Override
-	public boolean register(String username, String password) throws RemoteException {
-		if (!db.checkUsername(username)) {
-			return false;
-		} else {
-			db.addUser(username, PasswordHashing.hashPassword(password));
-			tellClients(username + " has succesfully connected to UNO room and your id is: ");
-			return true;
-		}
-	}
-
-	private void tellClients(String msg) throws RemoteException {
-		for (clientInterface client : clients) {
-			client.tell(msg);
-		}
-
-	}
-
-	@Override
-	public boolean login(String username, String password) throws RemoteException {
-		if (!db.checkUsername(username)) {
-			return false;
-		} else {
-			if (db.loginUser(username, password)) {
-				return true;
-			} else {
-				return false;
-			}
-		}
 	}
 
 	@Override
@@ -170,31 +138,26 @@ public class serverInterfaceImpl extends UnicastRemoteObject implements serverIn
 	}
 
 	@Override
-	public boolean ping() throws RemoteException {
-		return true;
-	}
-
-	@Override
 	public void giveGameController(gameControllerInterface gcInterface) throws RemoteException {
-		//TODO
+		// TODO
 	}
 
 	@Override
-	public void readyToStart(int gameId, String username ) throws RemoteException {
+	public void readyToStart(int gameId, String username) throws RemoteException {
 		System.out.println("ready to start executed!");
 		boolean start = true;
 		for (Player player : games.get(gameId).getPlayers()) {
-			if(player.getName().contains(username)&& !player.getReady() ) {
+			if (player.getName().contains(username) && !player.getReady()) {
 				player.setReady(true);
 				sendGameMsg("is ready to play!", gameId, player.getName());
 			}
-			if (!player.getReady()&& games.get(gameId).getPlayerCount() == games.get(gameId).getPlayers().size()) {
+			if (!player.getReady() && games.get(gameId).getPlayerCount() == games.get(gameId).getPlayers().size()) {
 				start = false;
 			}
 		}
 		if (start) {
 			Thread thread = new Thread(new Runnable() {
-				
+
 				@Override
 				public void run() {
 					try {
@@ -220,16 +183,12 @@ public class serverInterfaceImpl extends UnicastRemoteObject implements serverIn
 		return null;
 	}
 
-	@Override
-	public boolean getLoginToken(String username, String password) throws RemoteException {
-		// TODO Auto-generated method stub
-		return false;
+	public dbInterface getDb() {
+		return db;
 	}
 
-	@Override
-	public boolean LoginToken(String token) throws RemoteException {
-		// TODO Auto-generated method stub
-		return false;
+	public List<clientInterface> getClients() {
+		return clients;
 	}
 
 }

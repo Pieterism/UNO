@@ -9,20 +9,16 @@
 		<item value="1161" key="dialogWidth"/>
 		<list key="textEntries">
 			<item value="2"/>
-			<item value="1"/>
 		</list>
 		<list key="orderedElements">
 			<item value="org.eclipse.ui.preferencePages.Views"/>
-			<item value="search.in.help"/>
 		</list>
 		<list key="orderedProviders">
 			<item value="org.eclipse.ui.preferences"/>
-			<item value="org.eclipse.ui.actions"/>
 		</list>
 		<list key="textArray">
-			<item value="theme"/>
 			<item value="dark "/>
-			<item value="dark theme"/>
+			<item value="theme"/>
 		</list>
 	</section>
 	<section name="NewWizardAction">
