@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <launchConfiguration type="org.eclipse.jdt.launching.localJavaApplication">
 <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
-<listEntry value="/UNOClient/src/main/TestMain.java"/>
+<listEntry value="/UNOGame/src/client/TestMain.java"/>
 </listAttribute>
 <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
 <listEntry value="1"/>
 </listAttribute>
-<stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="main.TestMain"/>
-<stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="UNOClient"/>
+<stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="client.TestMain"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="UNOGame"/>
 </launchConfiguration>
