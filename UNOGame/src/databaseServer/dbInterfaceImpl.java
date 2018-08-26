@@ -1,7 +1,19 @@
 package databaseServer;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.security.InvalidKeyException;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.PrivateKey;
+import java.security.Signature;
+import java.security.SignatureException;
+import java.security.UnrecoverableKeyException;
+import java.security.cert.CertificateException;
 import java.sql.Blob;
 import java.sql.SQLException;
 
@@ -14,18 +26,20 @@ public class dbInterfaceImpl extends UnicastRemoteObject implements dbInterface 
 	serverInterface server;
 
 	// constructor
-	public dbInterfaceImpl(String uri) throws RemoteException, SQLException {
+	public dbInterfaceImpl(String uri) throws SQLException, KeyStoreException, NoSuchAlgorithmException,
+			CertificateException, IOException, UnrecoverableKeyException {
 		db = new Database(uri);
 		db.createUserTable();
 		db.createPlayerHandTable();
 		db.createGameTable();
 		db.createGameTurnTable();
 		db.createImagesTable();
+		
 	}
 
 	// Gebruiker toevoegen aan de databank
 	@Override
-	public void addUser(String username, String password) {
+	public void addUser(String username, String password) throws InvalidKeyException, SignatureException {
 		db.insertUser(username, password);
 	}
 
@@ -37,9 +51,10 @@ public class dbInterfaceImpl extends UnicastRemoteObject implements dbInterface 
 
 	// username en password van een bepaalde user verifieren in databank
 	@Override
-	public boolean loginUser(String username, String password) throws RemoteException {
+	public boolean loginUser(String username, String password) throws RemoteException, InvalidKeyException, SignatureException {
 		return db.loginUser(username, password);
 	}
+
 
 	@Override
 	public String getAllUsers() {
@@ -110,6 +125,17 @@ public class dbInterfaceImpl extends UnicastRemoteObject implements dbInterface 
 	@Override
 	public void insertImage(int card_color, int card_value, Blob image) throws RemoteException {
 		db.insertImage(card_color, card_value, image);
+	}
+
+	@Override
+	public String getToken(String username) throws RemoteException, SQLException {
+		return db.getToken(username);
+		
+	}
+
+	@Override
+	public boolean validateToken(String username, String token) {
+		return db.validateToken(username, token);
 	}
 
 }

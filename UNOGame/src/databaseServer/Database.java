@@ -1,6 +1,18 @@
 package databaseServer;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.security.InvalidKeyException;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.PrivateKey;
+import java.security.Signature;
+import java.security.SignatureException;
+import java.security.UnrecoverableKeyException;
+import java.security.cert.CertificateException;
 import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -8,15 +20,22 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
+
+import security.PasswordHashing;
 
 public class Database {
 
 	private Connection connection;
 	private Statement statement;
 	String uri;
+	String filepath = "D:\\Google Drive\\School\\2017-2018\\1e Semester\\Gedistribueerde Systemen\\Opdracht UNO\\GIT_UNO\\keystore.jks";
+	Signature signature;
+	PrivateKey privateKey;
 
 	// Database aanmaken indien ze nog niet bestaat
-	public Database(String uri) throws SQLException {
+	public Database(String uri) throws SQLException, KeyStoreException, NoSuchAlgorithmException, CertificateException,
+			IOException, UnrecoverableKeyException {
 		this.uri = uri;
 		File dbName = new File(uri);
 		if (dbName.exists()) {
@@ -25,13 +44,19 @@ public class Database {
 		} else {
 			try (Connection conn = DriverManager.getConnection("jdbc:sqlite:" + uri)) {
 				if (conn != null) {
+
 					System.out.println("UNO database has been created.");
 				}
-
 			} catch (SQLException e) {
 				System.out.println(e.getMessage());
 			}
 		}
+		KeyStore keystore = KeyStore.getInstance("JKS");
+		FileInputStream fileInputStream = new FileInputStream(filepath);
+		keystore.load(fileInputStream, "uno".toCharArray());
+		privateKey = (PrivateKey) keystore.getKey("uno", "uno".toCharArray());
+		signature = Signature.getInstance("SHA256withRSA");
+
 	}
 
 	// aanmaken van een table voor Users
@@ -42,7 +67,7 @@ public class Database {
 			String sql = "CREATE TABLE IF NOT EXISTS Users (\n"
 					+ "	user_id     INTEGER     PRIMARY KEY         AUTOINCREMENT,\n"
 					+ "	username    VARCHAR     NOT NULL,\n" + "	password    VARCHAR     NOT NULL, \n"
-					+ " token       VARCHAR,\n" + " timestamp	DATETIME\n" + ");";
+					+ " token       BLOB,\n" + " timestamp	TIMESTAMP\n" + ");";
 
 			connection = DriverManager.getConnection("jdbc:sqlite:" + uri);
 			statement = connection.createStatement();
@@ -174,7 +199,13 @@ public class Database {
 	}
 
 	// toevoegen van een user in databank
-	public void insertUser(String username, String password) {
+	public void insertUser(String username, String password) throws InvalidKeyException, SignatureException {
+		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+		String token = createToken(username, password, timestamp);
+		
+		System.out.println("Timestamp: " + timestamp);
+		System.out.println("Token: " + token);
+		
 		if (!checkUsername(username)) {
 			try {
 				connection = DriverManager.getConnection("jdbc:sqlite:" + uri);
@@ -183,11 +214,48 @@ public class Database {
 			}
 		}
 
-		String sql = "INSERT INTO Users(username,password) VALUES(?,?)";
+		String sql = "INSERT INTO Users(username,password,token,timestamp) VALUES(?,?,?,?)";
 
 		try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
 			pstmt.setString(1, username);
-			pstmt.setString(2, password);
+			pstmt.setString(2, PasswordHashing.hashPassword(password));
+			pstmt.setString(3, token);
+			pstmt.setTimestamp(4, timestamp);
+			pstmt.executeUpdate();
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		System.out.println("insert user completed!");
+
+	}
+
+	private String createToken(String username, String password, Timestamp timestamp)
+			throws InvalidKeyException, SignatureException {
+
+		String token = (username + timestamp);
+		signature.initSign(privateKey);
+		signature.update(token.getBytes());
+		byte[] signedToken = signature.sign();
+
+		saveToken(username, new String(signedToken), timestamp);
+
+		return new String(signedToken);
+
+	}
+
+	private void saveToken(String username, String signedToken, Timestamp timestamp) {
+		try {
+			connection = DriverManager.getConnection("jdbc:sqlite:" + uri);
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+
+		String sql = "UPDATE Users SET token = ?, timestamp =? WHERE username = ?";
+
+		try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+			pstmt.setString(1, signedToken);
+			pstmt.setTimestamp(2, timestamp);
+			pstmt.setString(3, username);
 			pstmt.executeUpdate();
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
@@ -223,7 +291,9 @@ public class Database {
 
 	// nakijken of de user met overeenkomstig passwoord zich al in
 	// de databank bevindt
-	public boolean loginUser(String name, String password) {
+	public boolean loginUser(String username, String password) throws InvalidKeyException, SignatureException {
+		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+		String token = createToken(username, password, timestamp);
 		try {
 			connection = DriverManager.getConnection("jdbc:sqlite:" + uri);
 		} catch (SQLException e1) {
@@ -233,7 +303,7 @@ public class Database {
 		String sql = "SELECT USERNAME FROM USERS WHERE USERNAME = ? AND PASSWORD = ?;";
 		try {
 			PreparedStatement pstmt = connection.prepareStatement(sql);
-			pstmt.setString(1, name);
+			pstmt.setString(1, username);
 			pstmt.setString(2, password);
 
 			ResultSet rs = pstmt.executeQuery();
@@ -517,6 +587,26 @@ public class Database {
 			System.out.println(e.getMessage());
 		}
 		System.out.println("Image insert card completed!");
+	}
+
+	public String getToken(String username) throws SQLException {
+		try {
+			connection = DriverManager.getConnection("jdbc:sqlite:" + uri);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		String sql = "SELECT token FROM Users WHERE username = ?";
+
+		PreparedStatement pstmt = connection.prepareStatement(sql);
+		pstmt.setString(1, username);
+		ResultSet rs = pstmt.executeQuery();
+
+		return rs.toString();
+	}
+
+	public boolean validateToken(String username, String token) {
+		
 	}
 
 }

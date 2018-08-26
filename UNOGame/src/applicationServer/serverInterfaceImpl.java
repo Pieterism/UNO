@@ -6,15 +6,20 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
+import java.security.InvalidKeyException;
+import java.security.SignatureException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import interfaces.AuthenticationInterface;
 import interfaces.clientInterface;
 import interfaces.dbInterface;
 import interfaces.gameControllerInterface;
 import interfaces.lobbyInterface;
 import interfaces.serverInterface;
+import security.BCrypt;
 import uno.Card;
 import uno.Player;
 import uno.UnoGame;
@@ -49,6 +54,39 @@ public class serverInterfaceImpl extends UnicastRemoteObject implements serverIn
 		}
 		System.out.println("server has started");
 		setdb(dbPortnumber);
+	}
+
+	@Override
+	public boolean register(String username, String password)
+			throws RemoteException, InvalidKeyException, SignatureException {
+		if (!db.checkUsername(username)) {
+			return false;
+		} else {
+			db.addUser(username, BCrypt.hashpw(password, BCrypt.gensalt()));
+			tellClients(username + " has succesfully connected to UNO room and your id is: ");
+			return true;
+		}
+	}
+
+	@Override
+	public boolean login(String username, String password)
+			throws RemoteException, InvalidKeyException, SignatureException {
+		if (!db.checkUsername(username)) {
+			return false;
+		} else {
+			if (db.loginUser(username, password)) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+	}
+
+	public void tellClients(String msg) throws RemoteException {
+		for (clientInterface client : clients) {
+			client.tell(msg);
+		}
+
 	}
 
 	public void setdb(int dbPortnumber) {
@@ -201,6 +239,12 @@ public class serverInterfaceImpl extends UnicastRemoteObject implements serverIn
 
 	public List<clientInterface> getClients() {
 		return clients;
+	}
+
+	@Override
+	public String getLoginToken(String username, String password) throws RemoteException, SQLException {
+		db.getToken(username);
+		return null;
 	}
 
 }

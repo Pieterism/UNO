@@ -2,6 +2,8 @@ package services;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.security.InvalidKeyException;
+import java.security.SignatureException;
 
 import applicationServer.serverInterfaceImpl;
 import databaseServer.Database;
@@ -27,7 +29,7 @@ public class LoginService extends UnicastRemoteObject implements LoginInterface 
 	// controleert of er geldige username-password combinatie is en geeft Token
 	// terug indien dit het geval is.
 	@Override
-	public String getToken(String username, String password) throws RemoteException {
+	public String getToken(String username, String password) throws RemoteException, InvalidKeyException, SignatureException {
 
 		if (db.checkUsername(username) && db.loginUser(username, password)) {
 			String token = JWTUtils.createJWT(username, null, username, timeToLive, server.secret);

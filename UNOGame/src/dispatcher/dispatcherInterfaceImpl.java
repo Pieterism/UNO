@@ -1,11 +1,16 @@
 package dispatcher;
 
 
+import java.io.IOException;
 import java.rmi.AlreadyBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.UnrecoverableKeyException;
+import java.security.cert.CertificateException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,15 +26,15 @@ public class dispatcherInterfaceImpl extends UnicastRemoteObject implements disp
     private Map<Integer, Integer> serverStatus;
     private List<Integer> unfilledServers;
     private List<Integer> fullServers;
-    private String uri = "C:\\Users\\wouter\\Documents\\School\\geavanceerde\\UNO\\uno.db";
-    //private String uri = "D:\\Google Drive\\School\\2017-2018\\1e Semester\\Gedistribueerde Systemen\\Opdracht UNO\\GIT_UNO\\uno.db";
+    //private String uri = "C:\\Users\\wouter\\Documents\\School\\geavanceerde\\UNO\\uno.db";
+    private String uri = "D:\\Google Drive\\School\\2017-2018\\1e Semester\\Gedistribueerde Systemen\\Opdracht UNO\\GIT_UNO\\uno.db";
     
     private Map<Integer, Integer> serverToDB;
     
     private final int MAXLOAD = 20;
     private final int dbPortnumber = 1300;
     
-    public dispatcherInterfaceImpl() throws RemoteException, AlreadyBoundException, SQLException{
+    public dispatcherInterfaceImpl() throws AlreadyBoundException, SQLException, UnrecoverableKeyException, KeyStoreException, NoSuchAlgorithmException, CertificateException, IOException{
     	serverStatus = new HashMap<>();
     	unfilledServers = new ArrayList<>();
     	fullServers = new ArrayList<>();
@@ -94,7 +99,7 @@ public class dispatcherInterfaceImpl extends UnicastRemoteObject implements disp
 	}
 	
 	//give uri => location on disk
-	private Registry createdbserver(int portnumber) throws SQLException {
+	private Registry createdbserver(int portnumber) throws SQLException, UnrecoverableKeyException, KeyStoreException, NoSuchAlgorithmException, CertificateException, IOException {
 		Registry registry;
 		try {
 			registry = LocateRegistry.createRegistry(portnumber);
