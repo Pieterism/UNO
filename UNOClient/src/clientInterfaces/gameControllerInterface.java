@@ -14,8 +14,7 @@ public interface gameControllerInterface extends Remote{
 	//game methods
 	public void addPile(Card card) throws RemoteException;
 	public void addPlayer(String username, int aantal) throws RemoteException;
-	public void addCards(List<String> cards) throws RemoteException;
-	public void addCards() throws RemoteException;
+	public void addCards(List<Card> cards) throws RemoteException;
 	public Card getCard() throws RemoteException;
 	public void setNextPlayer(String username) throws RemoteException;
 	public void setCardAmountPlayer(String username, int amount) throws RemoteException;

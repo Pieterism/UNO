@@ -17,8 +17,14 @@ public class LoginService extends Service<Boolean>{
 
 	@Override
 	protected Task<Boolean> createTask() {
-		// TODO Auto-generated method stub
-		return null;
+		return new Task<Boolean>() {
+
+			@Override
+			protected Boolean call() throws Exception {
+				return server.login(username, password);
+			}
+			
+		};
 	}
 //	@Override
 //	protected Task<Boolean> createTask() {

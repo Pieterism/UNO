@@ -102,13 +102,7 @@ public class UnoGame {
     public void dealCards() throws RemoteException {
 
     	for (Player player : players) {
-    		List<String>strings = new ArrayList<>();
-    		List<Card> cards = new ArrayList<>();
-    		cards = draw(7);
-    		for (Card card : cards) {
-    			strings.add(card.cardName);
-    		}
-            player.getGameController().addCards(strings);
+            player.getGameController().addCards(draw(7));
         }
 
         // turn over the top card
@@ -134,9 +128,7 @@ public class UnoGame {
         Card card = player.getGameController().getCard();
         if (card == null) {
             // they cannot play, so draw a card
-        	List <String> strings = new ArrayList<>();
-        	strings.add(draw(1).get(0).cardName);
-        	player.getGameController().addCards(strings);
+        	player.getGameController().addCards(draw(1));
         	updateCardAmountPlayer(player);
         } else {
             // play the card
@@ -198,12 +190,7 @@ public class UnoGame {
     }
 
     public void draw(gameControllerInterface nextPlayer, int nDraw) throws RemoteException {
-    	List<Card> cards = draw(nDraw);
-    	List<String> strings = new ArrayList<>();
-    	for(Card card: cards) {
-    		strings.add(card.cardName);
-    	}
-    	nextPlayer.addCards(strings);
+    	nextPlayer.addCards(draw(nDraw));
     }
 
     public String getName() {
