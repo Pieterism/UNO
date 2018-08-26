@@ -179,8 +179,34 @@ public class serverInterfaceImpl extends UnicastRemoteObject implements serverIn
 	}
 
 	@Override
-	public void readyToStart(int gameId, String username) throws RemoteException {
-		// TODO
+	public void readyToStart(int gameId, String username ) throws RemoteException {
+		System.out.println("ready to start executed!");
+		boolean start = true;
+		for (Player player : games.get(gameId).getPlayers()) {
+			if(player.getName().contains(username)&& !player.getReady() ) {
+				player.setReady(true);
+				sendGameMsg("is ready to play!", gameId, player.getName());
+			}
+			if (!player.getReady()&& games.get(gameId).getPlayerCount() == games.get(gameId).getPlayers().size()) {
+				start = false;
+			}
+		}
+		if (start) {
+			Thread thread = new Thread(new Runnable() {
+				
+				@Override
+				public void run() {
+					try {
+						games.get(gameId).play();
+					} catch (RemoteException e) {
+						e.printStackTrace();
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+			});
+			thread.start();
+		}
 	}
 
 	@Override

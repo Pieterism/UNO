@@ -15,6 +15,7 @@ import interfaces.serverInterface;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -35,12 +36,13 @@ public class GameController extends UnicastRemoteObject implements gameControlle
 
 	//private String path = "D:\\Google Drive\\School\\2017-2018\\1e Semester\\Gedistribueerde Systemen\\Opdracht UNO\\GIT_UNO\\UNOClient\\picture\\";
 
-	private String path = "C:\\Users\\wouter\\Documents\\school\\GedistribueerdeSystemen\\UNO-game\\UNOClient\\picture\\";
+	private String path = "C:\\Users\\wouter\\Documents\\School\\geavanceerde\\UNO-game\\UNOClient\\picture\\";
 
 	//class variables
 	private String username;
 	private serverInterface server;
     private ObservableList data = FXCollections.observableArrayList();
+    private List<ImageView> cards = new ArrayList<>();
     
     //game variables
     private String nextPlayer;
@@ -120,11 +122,12 @@ public class GameController extends UnicastRemoteObject implements gameControlle
 						e.printStackTrace();
 					}
 					server.readyToStart(gameID, username);
-					readyToStart = true;
+					this.readyToStart = true;
 				}
 			} catch (RemoteException e) {
 				e.printStackTrace();
 			}
+			event.consume();
 		});
 	}
 	
@@ -316,54 +319,59 @@ public class GameController extends UnicastRemoteObject implements gameControlle
 
 	// add cards in lijst van kaarten van de speler
 	@Override
-	public void addCards(List<String> cards) throws RemoteException {
-
-		for (String card : cards) {
-			System.out.println(card);
-		}
-//		Platform.runLater(new Runnable() {
-//			@Override
-//			public void run() {
-//				cardsList.addAll(cards);
-//				try {
-//					setMyCards();
-//				} catch (FileNotFoundException e) {
-//					e.printStackTrace();
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		});
+	public void addCards(List<Card> cards) throws RemoteException {
+		cardsList.addAll(cards);
 		
-	}
-	
-	@Override
-	public void addCards() throws RemoteException {
-		cardsList.addAll(server.getCards(this.username, this.gameID));
+		//run on UI thread
 		Platform.runLater(new Runnable() {
-			
 			@Override
 			public void run() {
 				try {
 					setMyCards();
 				} catch (FileNotFoundException e) {
 					e.printStackTrace();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+				}				
 			}
 		});
-		
 	}
 
 	//return the selected card in GUI
 	@Override
 	public Card getCard() throws RemoteException {
+		this.setMsg("It is your turn, play a card!");
 		selectedCard = null;
-		while (selectedCard == null || !selectedCard.canPlayOn(topCard)) {
-
+		while (selectedCard == null) {
+			try {
+				Thread.sleep(100L);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 		}
 		return selectedCard;
+	}
+
+	private void startmyturn() {
+		for (ImageView iv : cards) {
+			iv.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+				for (int i = 0; i < userBox.getChildren().size(); i++) {
+					if (userBox.getChildren().get(i) == event.getTarget()) {
+						selectedCard = cardsList.get(i);
+						break;
+					}
+				}
+				System.out.println(selectedCard.cardName);
+				event.consume();
+			});
+		}
+	}
+
+	private void endmyturn() {
+		for (ImageView iv : cards) {
+			iv.removeEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+				
+			});
+		}
+		
 	}
 
 	@Override
