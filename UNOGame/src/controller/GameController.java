@@ -1,5 +1,6 @@
 package controller;
 
+import java.awt.Color;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.rmi.NotBoundException;
@@ -8,6 +9,7 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import interfaces.gameControllerInterface;
@@ -17,6 +19,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.Event;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
@@ -36,7 +39,7 @@ public class GameController extends UnicastRemoteObject implements gameControlle
 
 	//private String path = "D:\\Google Drive\\School\\2017-2018\\1e Semester\\Gedistribueerde Systemen\\Opdracht UNO\\GIT_UNO\\UNOClient\\picture\\";
 
-	private String path = "C:\\Users\\wouter\\Documents\\School\\geavanceerde\\UNO-game\\UNOClient\\picture\\";
+	private String path = "C:\\Users\\wouter\\Documents\\School\\geavanceerde\\UNO\\UNOGame\\src\\pictures\\";
 
 	//class variables
 	private String username;
@@ -53,7 +56,9 @@ public class GameController extends UnicastRemoteObject implements gameControlle
     private int gameID;
     private String gameName;
     private List<Opponent> opponents;
-    private boolean yourTurn, readyToStart;
+    private boolean yourTurn, readyToStart, boolDrawCard, colourSelected;
+    
+    private int selectedColor;
     
     //back-image
     private Image backImage;
@@ -62,6 +67,9 @@ public class GameController extends UnicastRemoteObject implements gameControlle
     //fxml variables
     @FXML
     private Label title;
+    
+    @FXML
+    private Button btn_red, btn_green, btn_blue, btn_yellow, btn_drawCard;
     
     @FXML
     private TextField opponent1, opponent2, opponent3;
@@ -115,12 +123,6 @@ public class GameController extends UnicastRemoteObject implements gameControlle
 			try {
 				System.out.println("pressed!");
 				if(!readyToStart) {
-					Registry registry = LocateRegistry.getRegistry("localhost", 1200);
-					try {
-						server = (serverInterface) registry.lookup("UNOserver");
-					} catch (NotBoundException e) {
-						e.printStackTrace();
-					}
 					server.readyToStart(gameID, username);
 					this.readyToStart = true;
 				}
@@ -129,6 +131,36 @@ public class GameController extends UnicastRemoteObject implements gameControlle
 			}
 			event.consume();
 		});
+		
+		btn_red.addEventHandler(MouseEvent.MOUSE_CLICKED, event->{
+			this.colourSelected = true;
+			this.selectedColor= Card.COLOUR_RED;
+			event.consume();
+		});
+		
+		btn_blue.addEventHandler(MouseEvent.MOUSE_CLICKED, event->{
+			this.colourSelected = true;
+			this.selectedColor = Card.COLOUR_BLUE;
+			event.consume();
+		});
+		
+		btn_yellow.addEventHandler(MouseEvent.MOUSE_CLICKED, event->{
+			this.colourSelected = true;
+			this.selectedColor = Card.COLOUR_YELLOW;
+			event.consume();
+		});
+		
+		btn_green.addEventHandler(MouseEvent.MOUSE_CLICKED, event->{
+			this.colourSelected = true;
+			this.selectedColor = Card.COLOUR_GREEN;
+			event.consume();
+		});
+		
+		btn_drawCard.addEventHandler(MouseEvent.MOUSE_CLICKED, event-> {
+			boolDrawCard = true;
+			event.consume();
+		});
+		
 	}
 	
 	@FXML
@@ -156,8 +188,7 @@ public class GameController extends UnicastRemoteObject implements gameControlle
 	}
 
 	// add player in de lijst van spelers in het spel
-	@Override
-	public void addPlayer(String username, int aantal) throws RemoteException {
+	public void addPlayer(String username, int aantal) {
 		Opponent opponent = new Opponent(username, aantal, 0);
 		opponents.add(opponent);
 		switch(opponents.size()) {
@@ -178,11 +209,11 @@ public class GameController extends UnicastRemoteObject implements gameControlle
 		}
 		default: break;
 		}
-		setOpponentCards(opponent);
 	}
 
 	private void setOpponentCards(Opponent opponent) {
 		if (opponent.id == 1 ) {
+			opponent1Box.getChildren().clear();
 			ImageView imageView;
 			for(int i = 0; i< opponent.getAmountCards(); i++) {
 				imageView = new ImageView(backImage);
@@ -193,6 +224,7 @@ public class GameController extends UnicastRemoteObject implements gameControlle
 			}
 		}
 		if (opponent.id == 2 ) {
+			opponent2Box.getChildren().clear();
 			ImageView imageView;
 			for(int i = 0; i< opponent.getAmountCards(); i++) {
 				imageView = new ImageView(backImage);
@@ -203,6 +235,7 @@ public class GameController extends UnicastRemoteObject implements gameControlle
 			}
 		}
 		if (opponent.id == 3 ) {
+			opponent3Box.getChildren().clear();
 			ImageView imageView;
 			for(int i = 0; i< opponent.getAmountCards(); i++) {
 				imageView = new ImageView(backImage);
@@ -290,6 +323,7 @@ public class GameController extends UnicastRemoteObject implements gameControlle
 	private void setMyCards() throws FileNotFoundException {
 		ImageView imageView;
 		Image image;
+		userBox.getChildren().clear();
 		for (Card card : cardsList) {
 			try {
 				image = new Image(new FileInputStream(path + card.cardName));
@@ -301,7 +335,6 @@ public class GameController extends UnicastRemoteObject implements gameControlle
 							break;
 						}
 					}
-					System.out.println(selectedCard.cardName);
 					event.consume();
 				});
 				imageView.setFocusTraversable(true);
@@ -339,39 +372,52 @@ public class GameController extends UnicastRemoteObject implements gameControlle
 	@Override
 	public Card getCard() throws RemoteException {
 		this.setMsg("It is your turn, play a card!");
+		
+		//logic to select a card
+		Card temp = getCardRec();
+		if (temp == null) {
+			return null;
+		}
+		Iterator<Card> iterator = cardsList.iterator();
+		while(iterator.hasNext()) {
+			Card card = iterator.next();
+			if (card.cardName.equals(temp.cardName)) {
+				cardsList.remove(temp);
+				break;
+			}
+		}
+		
+		Platform.runLater(new  Runnable() {
+			public void run() {
+				// view update
+				try {
+					setMyCards();
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+				}
+			}
+		});
+
+		return temp;
+	}
+	
+	public Card getCardRec() {
 		selectedCard = null;
-		while (selectedCard == null) {
+		boolDrawCard = false;
+		while (selectedCard == null && !boolDrawCard) {
 			try {
 				Thread.sleep(100L);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 		}
+		if (selectedCard == null) {
+			return null;
+		}
+		if (!selectedCard.canPlayOn(topCard)) {
+			return getCardRec();
+		}
 		return selectedCard;
-	}
-
-	private void startmyturn() {
-		for (ImageView iv : cards) {
-			iv.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
-				for (int i = 0; i < userBox.getChildren().size(); i++) {
-					if (userBox.getChildren().get(i) == event.getTarget()) {
-						selectedCard = cardsList.get(i);
-						break;
-					}
-				}
-				System.out.println(selectedCard.cardName);
-				event.consume();
-			});
-		}
-	}
-
-	private void endmyturn() {
-		for (ImageView iv : cards) {
-			iv.removeEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
-				
-			});
-		}
-		
 	}
 
 	@Override
@@ -392,12 +438,73 @@ public class GameController extends UnicastRemoteObject implements gameControlle
 
 	@Override
 	public void setCardAmountPlayer(String username, int amount) throws RemoteException {
-		for(Opponent opponent : opponents) {
-			if(opponent.getName()==username) {
-				opponent.setAmountCards(amount);
-				setOpponentCards(opponent);
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				for(Opponent opponent : opponents) {
+					if(opponent.getName().equals(username)) {
+						opponent.setAmountCards(amount);
+						setOpponentCards(opponent);
+					}
+				}
+			}
+		});
+	}
+
+	@Override
+	public void setReady(boolean b) throws RemoteException {
+		this.readyToStart = b;
+		this.cardsList.clear();
+		Platform.runLater(new Runnable() {
+			
+			@Override
+			public void run() {
+				userBox.getChildren().clear();
+				try {
+					itopCard.setImage(new Image(new FileInputStream(path + "UNO-Back.png")));
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	@Override
+	public int askColor() throws RemoteException {
+		setMsg("Chose a color!");
+		btn_blue.setOpacity(0.7);
+		btn_green.setOpacity(0.7);
+		btn_red.setOpacity(0.7);
+		btn_yellow.setOpacity(0.7);
+		this.selectedColor = Card.COLOUR_BLUE;
+		this.colourSelected = false;
+		while (!colourSelected) {
+			try {
+				Thread.sleep(100L);
+			} catch (Exception e) {
 			}
 		}
+		
+		btn_blue.setOpacity(0.4);
+		btn_green.setOpacity(0.4);
+		btn_red.setOpacity(0.4);
+		btn_yellow.setOpacity(0.4);
+		
+		return selectedColor;
+	}
+
+	@Override
+	public void sendPlayerInfo(ArrayList<String> info) throws RemoteException {
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				for (String string: info) {
+					if (!info.equals(username)) {
+						addPlayer(string, 0);
+					}
+				}
+			}
+		});
 	}
 }
 

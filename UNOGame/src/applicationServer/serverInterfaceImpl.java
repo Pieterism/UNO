@@ -36,13 +36,13 @@ public class serverInterfaceImpl extends UnicastRemoteObject implements serverIn
 		map = new HashMap<>();
 		gameCounter = 0;
 		playerCounter = 0;
-//        try {
-//            Registry registry = LocateRegistry.getRegistry("localhost", 1100);
-//            this.db = (dbInterface) registry.lookup("UNO");
-//            System.out.println("connected to db");
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
+		// try {
+		// Registry registry = LocateRegistry.getRegistry("localhost", 1100);
+		// this.db = (dbInterface) registry.lookup("UNO");
+		// System.out.println("connected to db");
+		// } catch (Exception e) {
+		// e.printStackTrace();
+		// }
 
 		if (secret == null) {
 			secret = generateApiSecret(50);
@@ -175,29 +175,41 @@ public class serverInterfaceImpl extends UnicastRemoteObject implements serverIn
 
 	@Override
 	public void giveGameController(gameControllerInterface gcInterface) throws RemoteException {
-		//TODO
+		// TODO
 	}
 
 	@Override
-	public void readyToStart(int gameId, String username ) throws RemoteException {
+	public void readyToStart(int gameId, String username) throws RemoteException {
 		System.out.println("ready to start executed!");
 		boolean start = true;
 		for (Player player : games.get(gameId).getPlayers()) {
-			if(player.getName().contains(username)&& !player.getReady() ) {
+			if (player.getName().contains(username) && !player.getReady()) {
 				player.setReady(true);
 				sendGameMsg("is ready to play!", gameId, player.getName());
 			}
-			if (!player.getReady()&& games.get(gameId).getPlayerCount() == games.get(gameId).getPlayers().size()) {
+			if (!player.getReady() && games.get(gameId).getPlayerCount() == games.get(gameId).getPlayers().size()) {
 				start = false;
 			}
 		}
 		if (start) {
 			Thread thread = new Thread(new Runnable() {
-				
+
 				@Override
 				public void run() {
 					try {
+						ArrayList<String> info = new ArrayList<>();
+						for (Player player : games.get(gameId).getPlayers()) {
+							info.add(player.getName());
+						}
+						for (Player player : games.get(gameId).getPlayers()) {
+							player.getGameController().sendPlayerInfo(info);
+						}
+
 						games.get(gameId).play();
+						for (Player player : games.get(gameId).getPlayers()) {
+							player.setReady(false);
+							player.getGameController().setReady(false);
+						}
 					} catch (RemoteException e) {
 						e.printStackTrace();
 					} catch (InterruptedException e) {

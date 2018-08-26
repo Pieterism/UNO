@@ -2,6 +2,7 @@ package interfaces;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.List;
 
 import uno.Card;
@@ -13,9 +14,11 @@ public interface gameControllerInterface extends Remote{
 	
 	//game methods
 	public void addPile(Card card) throws RemoteException;
-	public void addPlayer(String username, int aantal) throws RemoteException;
 	public void addCards(List<Card> cards) throws RemoteException;
 	public Card getCard() throws RemoteException;
 	public void setNextPlayer(String username) throws RemoteException;
 	public void setCardAmountPlayer(String username, int amount) throws RemoteException;
+	public void setReady(boolean b) throws RemoteException;
+	public int askColor() throws RemoteException;
+	public void sendPlayerInfo(ArrayList<String> info) throws RemoteException;
 }

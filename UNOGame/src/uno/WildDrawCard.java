@@ -3,6 +3,7 @@ package uno;
 
 import java.io.Serializable;
 import java.rmi.RemoteException;
+import java.util.List;
 import java.util.Random;
 
 /*
@@ -33,24 +34,18 @@ public class WildDrawCard extends Card implements Serializable{
 
     @Override
     public boolean canPlayOn(Card card) {
-    	Random rand = new Random();
-    	System.out.println("Wat is de nieuwe kleur? ");
-        System.out.println("GREEN: 1");
-        System.out.println("BLUE: 2");
-        System.out.println("RED : 3");
-        System.out.println("YELLOW : 4");
-        int kleur = rand.nextInt(4) +1;
-        this.setColour(kleur);
-        
-        System.out.println("Nieuwe kleur is: " + COLOUR_NAMES[kleur]);
-
         return true;
     }
 
     @Override
 	public void play(UnoGame game) {
         try {
-			game.draw(game.getNextPlayer(1).getGameController(), nDraw);
+        	List<Card> draw = game.draw(nDraw);
+        	game.getNextPlayer(1).getGameController().addCards(draw);
+        	game.getNextPlayer(1).getCards().addAll(draw);
+			this.myColour = game.getNextPlayer(0).getGameController().askColor();
+			game.goToNextPlayer();
+
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

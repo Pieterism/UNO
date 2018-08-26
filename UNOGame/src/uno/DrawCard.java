@@ -3,6 +3,8 @@ package uno;
 
 import java.io.Serializable;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -36,7 +38,9 @@ public class DrawCard extends Card implements Serializable{
     @Override
 	public void play(UnoGame game) {
         try {
-            game.draw(game.getNextPlayer(1).getGameController(), nDraw);
+        	List<Card> draw = game.draw(nDraw);
+        	game.getNextPlayer(1).getGameController().addCards(draw);
+        	game.getNextPlayer(1).getCards().addAll(draw);
         } catch (RemoteException e) {
             e.printStackTrace();
         }
