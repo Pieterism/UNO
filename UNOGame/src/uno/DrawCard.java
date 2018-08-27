@@ -25,6 +25,7 @@ public class DrawCard extends Card implements Serializable{
     public DrawCard(int colour, int nDraw) {
         super(colour, "PLUS2");
         this.nDraw = nDraw;
+        this.myScore = 20;
     }
 
     public int getNDraw() {

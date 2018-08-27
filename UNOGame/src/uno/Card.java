@@ -32,6 +32,7 @@ public class Card  implements Serializable{
     public int myColour;
     public String mySymbol;
     public String cardName;
+    public int myScore;
 
     //Constructor om speciale kaart te maken
     public Card(int colour, String symbol) {
@@ -45,6 +46,7 @@ public class Card  implements Serializable{
         myColour = colour;
         mySymbol = String.valueOf(number);
         cardName = mySymbol + "_" + COLOUR_NAMES[colour] + ".png";
+        myScore = number;
     }
 
     public Card(Card selectedCard) {

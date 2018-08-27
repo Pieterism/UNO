@@ -6,6 +6,8 @@ import java.rmi.RemoteException;
 import java.util.List;
 import java.util.Random;
 
+import javax.swing.text.html.HTMLDocument.HTMLReader.IsindexAction;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -26,6 +28,7 @@ public class WildDrawCard extends Card implements Serializable{
     public WildDrawCard(int nDraw) {
         super(COLOUR_NONE, "WILDDRAWCARD");
         this.nDraw = nDraw;
+        this.myScore = 50;
     }
 
     public int getNDraw() {
@@ -44,13 +47,10 @@ public class WildDrawCard extends Card implements Serializable{
         	game.getNextPlayer(1).getGameController().addCards(draw);
         	game.getNextPlayer(1).getCards().addAll(draw);
 			this.myColour = game.getNextPlayer(0).getGameController().askColor();
-			game.goToNextPlayer();
-
+			game.sendMsg("Chosen colour is " + Card.COLOUR_NAMES[myColour]);
 		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-        // the current player's turn will also be skipped
         game.goToNextPlayer();
     }
 }

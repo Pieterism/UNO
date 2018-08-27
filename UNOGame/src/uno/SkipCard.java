@@ -17,6 +17,7 @@ public class SkipCard extends Card implements Serializable{
     public SkipCard(int colour, int nSkip) {
         super(colour, "SKIP");
         this.nSkip = nSkip;
+        this.myScore = 20;
     }
 
     public int getNSkip() {

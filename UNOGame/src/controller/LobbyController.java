@@ -7,7 +7,6 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.Arrays;
 import java.util.List;
 
-import client.clientInterfaceImpl;
 import interfaces.lobbyInterface;
 import interfaces.serverInterface;
 import javafx.beans.value.ChangeListener;
@@ -30,7 +29,6 @@ import uno.Player;
 public class LobbyController extends UnicastRemoteObject implements lobbyInterface{
 
     serverInterface server;
-    clientInterfaceImpl client;
     private String textmsg;
     private ObservableList gameData = FXCollections.observableArrayList();
     private ObservableList userData = FXCollections.observableArrayList();
@@ -59,9 +57,8 @@ public class LobbyController extends UnicastRemoteObject implements lobbyInterfa
     @FXML
     private AnchorPane pn_input, pn_output;
 
-    public LobbyController(String s, clientInterfaceImpl client, serverInterface server) throws RemoteException{
+    public LobbyController(String s, serverInterface server) throws RemoteException{
         this.username = s;
-        this.client = client;
         this.server = server;
     }
 
@@ -100,14 +97,6 @@ public class LobbyController extends UnicastRemoteObject implements lobbyInterfa
         pn_input.getChildren().add(games);
         games.prefWidthProperty().bind(pn_input.widthProperty());
         games.prefHeightProperty().bind(pn_input.heightProperty());
-
-        List<String> userList = server.getUsers();
-        userData.addAll(userList);
-        users.setEditable(false);
-        users.setItems(userData);
-        pn_output.getChildren().add(users);
-        users.prefWidthProperty().bind(pn_output.widthProperty());
-        users.prefHeightProperty().bind(pn_output.heightProperty());
     }
 
     @FXML
@@ -125,7 +114,7 @@ public class LobbyController extends UnicastRemoteObject implements lobbyInterfa
 
     @FXML
     public void exit() throws RemoteException {
-    	server.exit(client, this);
+    	server.exit(this);
         Stage stage = (Stage) btn_exit.getScene().getWindow();
         stage.close();
     }
@@ -143,12 +132,6 @@ public class LobbyController extends UnicastRemoteObject implements lobbyInterfa
         gameData.addAll(gameslist);
         games.setEditable(false);
         games.setItems(gameData);
-        
-        List<String> userList = server.getUsers();
-        userData.clear();        
-        userData.addAll(userList);
-        users.setEditable(false);
-        users.setItems(userData);
     }
 
     public void startGame() {

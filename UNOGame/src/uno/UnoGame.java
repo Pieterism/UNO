@@ -42,6 +42,10 @@ public class UnoGame {
 		this.myPlayDirection = i;
 	}
 	
+	public void reversePlayDirection() {
+		this.myPlayDirection = this.myPlayDirection*(-1);
+	}
+	
 	public int connectedPlayers() {
 		return players.size();
 	}
@@ -210,6 +214,20 @@ public class UnoGame {
         String winner = playTurn();
         while (winner== null) {
         	winner = playTurn();
+        }
+        
+        
+        // count the score
+        StringBuilder sBuilder = new StringBuilder();
+        for (Player player : players) {
+        	player.setScore();
+        	sBuilder.append(player.getName() + ": \t " + player.getScore() + "\n");
+        }
+        
+        
+        // send the score to the players
+        for(Player player: players){
+        	player.getGameController().setMsg(sBuilder.toString());
         }
         return winner;
     }

@@ -494,16 +494,18 @@ public class GameController extends UnicastRemoteObject implements gameControlle
 
 	@Override
 	public void sendPlayerInfo(ArrayList<String> info) throws RemoteException {
-		Platform.runLater(new Runnable() {
-			@Override
-			public void run() {
-				for (String string: info) {
-					if (!info.equals(username)) {
-						addPlayer(string, 0);
+		if (opponents.isEmpty()) {
+			Platform.runLater(new Runnable() {
+				@Override
+				public void run() {
+					for (String string: info) {
+						if (!string.equals(username)) {
+							addPlayer(string, 0);
+						}
 					}
 				}
-			}
-		});
+			});
+		}
 	}
 }
 

@@ -2,6 +2,7 @@ package applicationServer;
 
 import static security.JWTUtils.generateApiSecret;
 
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -16,6 +17,7 @@ import java.util.List;
 import interfaces.AuthenticationInterface;
 import interfaces.clientInterface;
 import interfaces.dbInterface;
+import interfaces.dispatcherInterface;
 import interfaces.gameControllerInterface;
 import interfaces.lobbyInterface;
 import interfaces.serverInterface;
@@ -28,27 +30,19 @@ public class serverInterfaceImpl extends UnicastRemoteObject implements serverIn
 
 	private dbInterface db;
 	private List<UnoGame> games;
-	private int gameCounter, playerCounter;
+	private int gameCounter, portnumber;
 	private List<clientInterface> clients;
 	private List<lobbyInterface> lobbies;
-	private HashMap<String, clientInterface> map;
 	public String secret;
+	private dispatcherInterface dispatcher;
 
-	public serverInterfaceImpl(int dbPortnumber) throws RemoteException {
+	public serverInterfaceImpl(int dbPortnumber, int portnumber) throws RemoteException {
 		games = new ArrayList<>();
 		clients = new ArrayList<>();
 		lobbies = new ArrayList<>();
-		map = new HashMap<>();
 		gameCounter = 0;
-		playerCounter = 0;
-		// try {
-		// Registry registry = LocateRegistry.getRegistry("localhost", 1100);
-		// this.db = (dbInterface) registry.lookup("UNO");
-		// System.out.println("connected to db");
-		// } catch (Exception e) {
-		// e.printStackTrace();
-		// }
-
+		this.portnumber = portnumber;
+		
 		if (secret == null) {
 			secret = generateApiSecret(50);
 		}
@@ -105,6 +99,22 @@ public class serverInterfaceImpl extends UnicastRemoteObject implements serverIn
 	public void startNewGame(String name, String description, int aantalSpelers) throws RemoteException {
 		games.add(new UnoGame(aantalSpelers, gameCounter, name, description));
 		gameCounter++;
+		while (dispatcher==null) {
+			getDispatcher();
+		}
+		dispatcher.updateInfo(portnumber, games.size());
+	}
+	
+	public void getDispatcher() {
+		Registry registry;
+		try {
+			registry = LocateRegistry.getRegistry("localhost", 1099);
+			dispatcher = (dispatcherInterface) registry.lookup("UNOdispatcher");
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		} catch (NotBoundException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -115,17 +125,6 @@ public class serverInterfaceImpl extends UnicastRemoteObject implements serverIn
 					+ game.getPlayerCount() + "\t" + game.getBeschrijving()));
 		}
 		return gamesList;
-	}
-
-	@Override
-	public void playCard(Card card) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public List<String> getUsers() throws RemoteException {
-		return new ArrayList<>(map.keySet());
 	}
 
 	@Override
@@ -140,22 +139,13 @@ public class serverInterfaceImpl extends UnicastRemoteObject implements serverIn
 	}
 
 	@Override
-	public void giveClient(String s, clientInterface client) throws RemoteException {
-		map.put(s, client);
-		System.out.println(s);
-		clients.add(client);
-	}
-
-	@Override
 	public void giveLobby(lobbyInterface lobbyController) throws RemoteException {
 		lobbies.add(lobbyController);
 	}
 
 	@Override
-	public void exit(clientInterface client, lobbyInterface lobbyController) throws RemoteException {
+	public void exit(lobbyInterface lobbyController) throws RemoteException {
 		lobbies.remove(lobbyController);
-		map.remove(client);
-		clients.remove(client);
 	}
 
 	@Override
@@ -173,11 +163,6 @@ public class serverInterfaceImpl extends UnicastRemoteObject implements serverIn
 	@Override
 	public void sendGameMsg(String msg, int gameID, String username) throws RemoteException {
 		games.get(gameID).sendMsg(username + ": " + msg);
-	}
-
-	@Override
-	public void giveGameController(gameControllerInterface gcInterface) throws RemoteException {
-		// TODO
 	}
 
 	@Override
@@ -246,5 +231,4 @@ public class serverInterfaceImpl extends UnicastRemoteObject implements serverIn
 		db.getToken(username);
 		return null;
 	}
-
 }

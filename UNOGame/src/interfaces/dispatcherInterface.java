@@ -9,5 +9,5 @@ public interface dispatcherInterface extends Remote {
 	
 	//server methods
 	public void updateInfo(int serverPort, int load) throws RemoteException;
-     
+    	
 }

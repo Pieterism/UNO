@@ -14,8 +14,10 @@ import java.security.cert.CertificateException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import applicationServer.serverInterfaceImpl;
 import databaseServer.dbInterfaceImpl;
@@ -24,8 +26,8 @@ import interfaces.dispatcherInterface;
 public class dispatcherInterfaceImpl extends UnicastRemoteObject implements dispatcherInterface {
 
     private Map<Integer, Integer> serverStatus;
-    private List<Integer> unfilledServers;
-    private List<Integer> fullServers;
+    private Set<Integer> unfilledServers;
+    private Set<Integer> fullServers;
     private String uri = "C:\\Users\\wouter\\Documents\\School\\geavanceerde\\UNO\\uno.db";
     //private String uri = "D:\\Google Drive\\School\\2017-2018\\1e Semester\\Gedistribueerde Systemen\\Opdracht UNO\\GIT_UNO\\uno.db";
     
@@ -36,8 +38,8 @@ public class dispatcherInterfaceImpl extends UnicastRemoteObject implements disp
     
     public dispatcherInterfaceImpl() throws AlreadyBoundException, SQLException, UnrecoverableKeyException, KeyStoreException, NoSuchAlgorithmException, CertificateException, IOException{
     	serverStatus = new HashMap<>();
-    	unfilledServers = new ArrayList<>();
-    	fullServers = new ArrayList<>();
+    	unfilledServers = new HashSet<>();
+    	fullServers = new HashSet<>();
     	serverToDB = new HashMap<>();
     	
 
@@ -82,7 +84,7 @@ public class dispatcherInterfaceImpl extends UnicastRemoteObject implements disp
         Registry registry;
 		try {
 			registry = LocateRegistry.createRegistry(portnumber);
-	        registry.bind("UNOserver", new serverInterfaceImpl(dbPortnumber));
+	        registry.bind("UNOserver", new serverInterfaceImpl(dbPortnumber, portnumber));
 	        unfilledServers.add(portnumber);
 	        serverStatus.put(portnumber, 0);
 			return registry;
@@ -142,7 +144,8 @@ public class dispatcherInterfaceImpl extends UnicastRemoteObject implements disp
 		}
 		else {
 			//allocate user to server
-			return unfilledServers.get(0);
+			System.out.println("already made server");
+			return unfilledServers.iterator().next();
 		}
 		return -2;	// alle poorten zijn in gebruik => te veel spellen 0
 	}
@@ -150,8 +153,13 @@ public class dispatcherInterfaceImpl extends UnicastRemoteObject implements disp
 	@Override
 	public void updateInfo(int serverPort, int load) throws RemoteException {
 		serverStatus.put(serverPort, load);
-		if (load==MAXLOAD) {
-			fullServers.add(serverPort);
+		if (load>=MAXLOAD) {
+			unfilledServers.remove(load);
+			fullServers.add(load);
+		}
+		else {
+			unfilledServers.add(load);
+			fullServers.remove(load);
 		}
 		
 	}

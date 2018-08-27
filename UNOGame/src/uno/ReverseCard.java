@@ -21,6 +21,7 @@ public class ReverseCard extends Card implements Serializable{
 
 	public ReverseCard(int colour) {
         super(colour, "REVERSE");
+        this.myScore = 20;
     }
 
     @Override
@@ -30,6 +31,6 @@ public class ReverseCard extends Card implements Serializable{
 
     @Override
 	public void play(UnoGame game) {
-        game.setPlayDirection(-1);
+        game.reversePlayDirection();
     }
 }

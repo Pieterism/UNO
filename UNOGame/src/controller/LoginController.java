@@ -5,7 +5,6 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
-import client.clientInterfaceImpl;
 import interfaces.dispatcherInterface;
 import interfaces.serverInterface;
 import javafx.fxml.FXML;
@@ -28,7 +27,6 @@ public class LoginController {
 
 	dispatcherInterface dispatcher;
 	serverInterface server = null;
-	clientInterfaceImpl client;
 	String username = null;
 	private int port;
 
@@ -138,7 +136,7 @@ public class LoginController {
 		try {
 			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/controller/Lobby.fxml"));
 			System.out.println(username);
-			LobbyController controller = new LobbyController(username, client, server);
+			LobbyController controller = new LobbyController(username, server);
 			fxmlLoader.setController(controller);
 
 			Parent root1 = (Parent) fxmlLoader.load();

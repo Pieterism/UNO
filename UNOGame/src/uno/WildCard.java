@@ -18,6 +18,7 @@ public class WildCard extends Card implements Serializable{
 
 	public WildCard() {
         super(COLOUR_NONE, "WILDCARD");
+        this.myScore = 50;
     }
 
     @Override
