@@ -1,29 +1,27 @@
 package databaseServer;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.security.InvalidKeyException;
-import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
-import java.security.PrivateKey;
-import java.security.Signature;
 import java.security.SignatureException;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 import java.sql.Blob;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import interfaces.dbInterface;
 import interfaces.serverInterface;
 
 public class dbInterfaceImpl extends UnicastRemoteObject implements dbInterface {
 
-	Database db;
-	serverInterface server;
+	private Database db;
+	private List<serverInterface> applicationServers;
+	private List<dbInterfaceImpl> databaseServers;
 
 	// constructor
 	public dbInterfaceImpl(String uri) throws SQLException, KeyStoreException, NoSuchAlgorithmException,
@@ -34,7 +32,10 @@ public class dbInterfaceImpl extends UnicastRemoteObject implements dbInterface 
 		db.createGameTable();
 		db.createGameTurnTable();
 		db.createImagesTable();
-		
+		applicationServers = new ArrayList<>();
+		databaseServers = new ArrayList<>();
+		System.out.println("----------------------------------------------");
+
 	}
 
 	// Gebruiker toevoegen aan de databank
@@ -51,10 +52,10 @@ public class dbInterfaceImpl extends UnicastRemoteObject implements dbInterface 
 
 	// username en password van een bepaalde user verifieren in databank
 	@Override
-	public boolean loginUser(String username, String password) throws RemoteException, InvalidKeyException, SignatureException {
+	public boolean loginUser(String username, String password)
+			throws RemoteException, InvalidKeyException, SignatureException {
 		return db.loginUser(username, password);
 	}
-
 
 	@Override
 	public String getAllUsers() {
@@ -130,12 +131,48 @@ public class dbInterfaceImpl extends UnicastRemoteObject implements dbInterface 
 	@Override
 	public String getToken(String username) throws RemoteException, SQLException {
 		return db.getToken(username);
-		
+
 	}
 
 	@Override
 	public boolean validateToken(String username, String token) {
 		return db.validateToken(username, token);
+	}
+
+	public Database getDb() {
+		return db;
+	}
+
+	public void setDb(Database db) {
+		this.db = db;
+	}
+
+	public List<serverInterface> getApplicationServers() {
+		return applicationServers;
+	}
+
+	public void setApplicationServers(List<serverInterface> applicationServers) {
+		this.applicationServers = applicationServers;
+	}
+
+	public List<dbInterfaceImpl> getDatabaseServers() {
+		return databaseServers;
+	}
+
+	public void setDatabaseServers(List<dbInterfaceImpl> databaseServers) {
+		List<dbInterfaceImpl> result = new ArrayList<>();
+		for (dbInterfaceImpl db : databaseServers) {
+			if (db.equals(this)) {
+				continue;
+			} else {
+				result.add(db);
+			}
+		}
+		this.databaseServers = result;
+	}
+
+	public void addDatabaseServer(dbInterfaceImpl databaseServer) {
+		this.databaseServers.add(databaseServer);
 	}
 
 }

@@ -29,8 +29,8 @@ public class Database {
 	private Connection connection;
 	private Statement statement;
 	String uri;
-	//String filepath = "D:\\Google Drive\\School\\2017-2018\\1e Semester\\Gedistribueerde Systemen\\Opdracht UNO\\GIT_UNO\\keystore.jks";
-	String filepath = "C:\\Users\\wouter\\Documents\\School\\geavanceerde\\UNO\\keystore.jks";
+	String filepath = "D:\\Google Drive\\School\\2017-2018\\1e Semester\\Gedistribueerde Systemen\\Opdracht UNO\\GIT_UNO\\keystore.jks";
+	//String filepath = "C:\\Users\\wouter\\Documents\\School\\geavanceerde\\UNO\\keystore.jks";
 	Signature signature;
 	PrivateKey privateKey;
 
@@ -41,12 +41,12 @@ public class Database {
 		File dbName = new File(uri);
 		if (dbName.exists()) {
 			connection = DriverManager.getConnection("jdbc:sqlite:" + uri);
-			System.out.println("UNO database opened successfully!");
+			System.out.println("UNO database opened successfully! " +" [ "+ this.uri + " ]");
 		} else {
 			try (Connection conn = DriverManager.getConnection("jdbc:sqlite:" + uri)) {
 				if (conn != null) {
 
-					System.out.println("UNO database has been created.");
+					System.out.println("UNO database has been created." + "[ "+ this.uri + " ]");
 				}
 			} catch (SQLException e) {
 				System.out.println(e.getMessage());
