@@ -38,7 +38,7 @@ public class GameController extends UnicastRemoteObject implements gameControlle
 
 	//private String path = "D:\\Google Drive\\School\\2017-2018\\1e Semester\\Gedistribueerde Systemen\\Opdracht UNO\\GIT_UNO\\UNOClient\\picture\\";
 
-	private String path = "C:\\Users\\wouter\\Documents\\School\\geavanceerde\\UNO\\UNOGame\\src\\pictures\\";
+	private String path = "C:\\Users\\wouter\\Documents\\School\\geavanceerde\\UNOGame\\src\\pictures\\";
 
 	//class variables
 	private String username;

@@ -120,7 +120,7 @@ public class LoginController {
 					registerService.setOnSucceeded(Success -> {
 						boolean succes = Success.getSource().getValue() != null;
 						if (succes) {
-							this.username = loginUsername.getText();
+							this.username = registerUsername.getText();
 							startLobby();
 							Stage stage = (Stage) btn_Login.getScene().getWindow();
 							stage.close();

@@ -35,8 +35,8 @@ public class dispatcherInterfaceImpl extends UnicastRemoteObject implements disp
 	private List<Integer> fullServers;
 	private List<dbInterface> databaseServers;
 
-	//private String uri ="C:\\Users\\wouter\\Documents\\School\\geavanceerde\\UNO\\uno.db";
-	private String uri = "D:\\Google Drive\\School\\2017-2018\\1e Semester\\Gedistribueerde Systemen\\Opdracht UNO\\GIT_UNO\\uno";
+	private String uri ="C:\\Users\\wouter\\Documents\\School\\geavanceerde\\UNO\\uno.db";
+	//private String uri = "D:\\Google Drive\\School\\2017-2018\\1e Semester\\Gedistribueerde Systemen\\Opdracht UNO\\GIT_UNO\\uno";
 
 	private Map<Integer, Integer> serverToDB;
 
@@ -55,6 +55,7 @@ public class dispatcherInterfaceImpl extends UnicastRemoteObject implements disp
 		// auto create dbserver
 		createDbServers(1300);
 
+		
 		// auto create 1 server
 		createServer(1200, 1300);
 
