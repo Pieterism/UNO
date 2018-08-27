@@ -1,6 +1,5 @@
 package dispatcher;
 
-
 import java.io.IOException;
 import java.rmi.AlreadyBoundException;
 import java.rmi.RemoteException;
@@ -23,33 +22,36 @@ import interfaces.dispatcherInterface;
 
 public class dispatcherInterfaceImpl extends UnicastRemoteObject implements dispatcherInterface {
 
-    private Map<Integer, Integer> serverStatus;
-    private List<Integer> unfilledServers;
-    private List<Integer> fullServers;
-    //private String uri = "C:\\Users\\wouter\\Documents\\School\\geavanceerde\\UNO\\uno.db";
-    private String uri = "D:\\Google Drive\\School\\2017-2018\\1e Semester\\Gedistribueerde Systemen\\Opdracht UNO\\GIT_UNO\\uno.db";
-    
-    private Map<Integer, Integer> serverToDB;
-    
-    private final int MAXLOAD = 20;
-    private final int dbPortnumber = 1300;
-    
-    public dispatcherInterfaceImpl() throws AlreadyBoundException, SQLException, UnrecoverableKeyException, KeyStoreException, NoSuchAlgorithmException, CertificateException, IOException{
-    	serverStatus = new HashMap<>();
-    	unfilledServers = new ArrayList<>();
-    	fullServers = new ArrayList<>();
-    	serverToDB = new HashMap<>();
-    	
+	private Map<Integer, Integer> serverStatus;
+	private List<Integer> unfilledServers;
+	private List<Integer> fullServers;
+	private List<dbInterfaceImpl> databaseServers;
 
-    	//auto create dbserver
-    	createdbserver(1300);
-    	
-    	//auto create 1 server 
-    	createServer(1200, 1300);
-    	
+	// private String uri =
+	// "C:\\Users\\wouter\\Documents\\School\\geavanceerde\\UNO\\uno.db";
+	private String uri = "D:\\Google Drive\\School\\2017-2018\\1e Semester\\Gedistribueerde Systemen\\Opdracht UNO\\GIT_UNO\\uno.db";
 
-    }
-    
+	private Map<Integer, Integer> serverToDB;
+
+	private final int MAXLOAD = 20;
+	private final int dbPortnumber = 1300;
+	private final int NUMBER_OF_DATABASES = 4;
+
+	public dispatcherInterfaceImpl() throws AlreadyBoundException, SQLException, UnrecoverableKeyException,
+			KeyStoreException, NoSuchAlgorithmException, CertificateException, IOException {
+		serverStatus = new HashMap<>();
+		unfilledServers = new ArrayList<>();
+		fullServers = new ArrayList<>();
+		serverToDB = new HashMap<>();
+
+		// auto create dbserver
+		createDbServers(1300);
+
+		// auto create 1 server
+		createServer(1200, 1300);
+
+	}
+
 //    @Override
 //    public int register(String username, String password) throws RemoteException {
 //        serverInterface temp = emptyServers.get(0);
@@ -77,84 +79,82 @@ public class dispatcherInterfaceImpl extends UnicastRemoteObject implements disp
 //        serverInterface temp = emptyServers.get(0);
 //        return temp.checkName(name);
 //	}
-	
+
 	private Registry createServer(int portnumber, int dbPortnumber) {
-        Registry registry;
-		try {
-			registry = LocateRegistry.createRegistry(portnumber);
-	        registry.bind("UNOserver", new serverInterfaceImpl(dbPortnumber));
-	        unfilledServers.add(portnumber);
-	        serverStatus.put(portnumber, 0);
-			return registry;
-		} 
-		catch (RemoteException e) {	
-			e.printStackTrace();
-			System.out.println("Remote Exception");
-		} 
-		catch (AlreadyBoundException e) {
-			e.printStackTrace();
-			System.out.println("AlreadyBoundException");
-		}
-		return null;
-	}
-	
-	//give uri => location on disk
-	private Registry createdbserver(int portnumber) throws SQLException, UnrecoverableKeyException, KeyStoreException, NoSuchAlgorithmException, CertificateException, IOException {
 		Registry registry;
+
+		for (int i = 0; i < NUMBER_OF_DATABASES; i++) {
+			try {
+				registry = LocateRegistry.createRegistry(portnumber+i);
+				registry.bind("UNOserver", new serverInterfaceImpl(dbPortnumber+i));
+				unfilledServers.add(portnumber+i);
+				serverStatus.put(portnumber+i, 0);
+				return registry;
+			} catch (RemoteException e) {
+				e.printStackTrace();
+				System.out.println("Remote Exception");
+			} catch (AlreadyBoundException e) {
+				e.printStackTrace();
+				System.out.println("AlreadyBoundException");
+			}
+		}
+		return null;
+	}
+
+	// give uri => location on disk
+	private Registry createDbServers(int portnumber) throws SQLException, UnrecoverableKeyException, KeyStoreException,
+			NoSuchAlgorithmException, CertificateException, IOException {
+		Registry registry;
+
 		try {
 			registry = LocateRegistry.createRegistry(portnumber);
-	        registry.bind("UNOdatabase", new dbInterfaceImpl(uri));
+			registry.bind("UNOdatabase", new dbInterfaceImpl(uri));
 			return registry;
-		} 
-		catch (RemoteException e) {	
+		} catch (RemoteException e) {
 			e.printStackTrace();
 			System.out.println("Remote Exception");
-		} 
-		catch (AlreadyBoundException e) {
+		} catch (AlreadyBoundException e) {
 			e.printStackTrace();
 			System.out.println("AlreadyBoundException");
 		}
 		return null;
 	}
-	
-	//TODO
+
+	// TODO
 	private int getLeastLoadedDB() {
 		return 0;
 	}
 
 	@Override
 	public int getPort() throws RemoteException {
-		if (unfilledServers.size()==0) {
-			//new server met zo laag mogelijk portnumber
-			for(int i = 1200; i<1300; i++) {
-				if(!serverStatus.containsKey(i)) {
+		if (unfilledServers.size() == 0) {
+			// new server met zo laag mogelijk portnumber
+			for (int i = 1200; i < 1300; i++) {
+				if (!serverStatus.containsKey(i)) {
 					Registry server = createServer(i, dbPortnumber);
 					System.out.println("Server " + i + " has been created");
 					if (server != null) {
 						return i;
-					}
-					else {
+					} else {
 						System.out.println("something went wrong error (creating server failed)");
 						return -1;
 					}
 				}
 			}
-		}
-		else {
-			//allocate user to server
+		} else {
+			// allocate user to server
 			return unfilledServers.get(0);
 		}
-		return -2;	// alle poorten zijn in gebruik => te veel spellen 0
+		return -2; // alle poorten zijn in gebruik => te veel spellen 0
 	}
 
 	@Override
 	public void updateInfo(int serverPort, int load) throws RemoteException {
 		serverStatus.put(serverPort, load);
-		if (load==MAXLOAD) {
+		if (load == MAXLOAD) {
 			fullServers.add(serverPort);
 		}
-		
+
 	}
-	
-	
+
 }
