@@ -113,7 +113,7 @@ public class LoginController {
 				if (username.length() <= 6) {
 					popUpAlert("The size of the username must be at least 6 characters long.");
 				} else {
-					RegisterService registerService = new RegisterService(username, password1.getText());
+					RegisterService registerService = new RegisterService(username, password1.getText(), server);
 					registerService.setOnSucceeded(Success -> {
 						boolean succes = Success.getSource().getValue() != null;
 						if (succes) {

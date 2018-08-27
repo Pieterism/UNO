@@ -52,6 +52,8 @@ public class dispatcherInterfaceImpl extends UnicastRemoteObject implements disp
 
 	}
 
+ 
+
 //    @Override
 //    public int register(String username, String password) throws RemoteException {
 //        serverInterface temp = emptyServers.get(0);
