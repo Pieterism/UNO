@@ -44,6 +44,9 @@ public class dbInterfaceImpl extends UnicastRemoteObject implements dbInterface 
 	@Override
 	public void addUser(String username, String password) throws InvalidKeyException, SignatureException {
 		db.insertUser(username, password);
+		for (dbInterfaceImpl database : databaseServers) {
+			database.db.insertUser(username, password);
+		}
 	}
 
 	// methode om te checken of een bepaalde username reeds bestaat in databank
@@ -181,4 +184,7 @@ public class dbInterfaceImpl extends UnicastRemoteObject implements dbInterface 
 		this.databaseServers.add(databaseServer);
 	}
 
+	public void updateOtherDatabases() {
+		
+	}
 }

@@ -1,48 +1,69 @@
 package services;
 
-import java.rmi.RemoteException;
-import java.rmi.server.UnicastRemoteObject;
-import java.security.InvalidKeyException;
-import java.security.SignatureException;
-
 import applicationServer.serverInterfaceImpl;
-import databaseServer.Database;
-import interfaces.LoginInterface;
-import security.JWTUtils;
+import javafx.concurrent.Service;
+import javafx.concurrent.Task;
 
-public class LoginService extends UnicastRemoteObject implements LoginInterface {
+public class LoginService extends Service<Boolean>{
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
-	private final long timeToLive = 24 * 60 * 60 * 1000; // TODO hoelang moet token geldig blijven?
-
-	serverInterfaceImpl server;
-	Database db;
-
-	public LoginService(serverInterfaceImpl server) throws RemoteException {
-		this.server = server;
-	}
-
-	// controleert of er geldige username-password combinatie is en geeft Token
-	// terug indien dit het geval is.
-	@Override
-	public String getToken(String username, String password) throws RemoteException, InvalidKeyException, SignatureException {
-
-		if (db.checkUsername(username) && db.loginUser(username, password)) {
-			String token = JWTUtils.createJWT(username, null, username, timeToLive, server.secret);
-			return token;
-		}
-
-		return null;
+	private String username, password;
+	private serverInterfaceImpl server;
+	
+	public LoginService(String username, String password) {
+		this.username = username;
+		this.password = password;
 	}
 
 	@Override
-	public boolean loginToken(String token) throws RemoteException {
-		// TODO Auto-generated method stub
-		return false;
+	protected Task<Boolean> createTask() {
+		return new Task<Boolean>() {
+
+			@Override
+			protected Boolean call() throws Exception {
+				return server.login(username, password);
+			}
+			
+		};
 	}
+//	@Override
+//	protected Task<Boolean> createTask() {
+//		return new Task<Boolean>() {
+//			@Override
+//			protected Boolean call() throws Exception {
+//				 try {
+//					 //TODO: Main aanpassen (eventueel ook nog jwt) 
+//	                    Registry myRegistry = LocateRegistry.getRegistry(Main.appServer.getIp(), Main.appServer.getPort());
+//	                    //LOGGER.log(Level.INFO, "Registry retrieved: {0}", myRegistry);
+//
+//	                     serverInterface loginService = (serverInterface) myRegistry.lookup("LoginService");
+//	                    //LOGGER.log(Level.INFO, "loginService retrieved: {0}", loginService);
+//
+//	                    boolean succesfulLogin = false;
+//
+//	                    if (Main.token != null) {
+//	                        succesfulLogin = loginService.loginWithToken(Main.token);
+//	                        System.out.println("1: " + succesfulLogin);
+//	                    }
+//
+//	                    if(!succesfulLogin) {
+//
+//	                        String token = loginService.getLoginToken(username, password);
+//
+//	                        succesfulLogin = token != null;
+//
+//	                        if (succesfulLogin) {
+//	                            Main.token = token;
+//	                        }
+//	                    }
+//
+//	                    return succesfulLogin;
+//	                } catch (Exception e) {
+//	                    e.printStackTrace();
+//	                }
+//	                return false;
+//	            }
+//		};
+//	}
+	
 
 }

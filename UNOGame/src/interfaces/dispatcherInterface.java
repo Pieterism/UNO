@@ -2,6 +2,8 @@ package interfaces;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.security.InvalidKeyException;
+import java.security.SignatureException;
 
 public interface dispatcherInterface extends Remote {
 	//user methods
@@ -9,5 +11,5 @@ public interface dispatcherInterface extends Remote {
 	
 	//server methods
 	public void updateInfo(int serverPort, int load) throws RemoteException;
-    	
+	    	
 }
