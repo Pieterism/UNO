@@ -160,10 +160,19 @@ public class dbInterfaceImpl extends UnicastRemoteObject implements dbInterface 
 	}
 
 	public void setDatabaseServers(List<dbInterfaceImpl> databaseServers) {
-		this.databaseServers = databaseServers;
+		List<dbInterfaceImpl> result = new ArrayList<>();
+		for (dbInterfaceImpl db : databaseServers) {
+			if (db.equals(this)) {
+				continue;
+			} else {
+				result.add(db);
+			}
+		}
+		this.databaseServers = result;
 	}
 
 	public void addDatabaseServer(dbInterfaceImpl databaseServer) {
 		this.databaseServers.add(databaseServer);
 	}
+
 }

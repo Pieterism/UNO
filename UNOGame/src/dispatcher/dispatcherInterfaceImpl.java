@@ -111,7 +111,7 @@ public class dispatcherInterfaceImpl extends UnicastRemoteObject implements disp
 				dbInterfaceImpl db = new dbInterfaceImpl(uri + (portnumber + i) + ".db");
 				registry.bind("UNOdatabase" + (portnumber + i), db);
 				databaseServers.add(db);
-				
+
 				System.out.println("check databaseServersList");
 
 			} catch (RemoteException e) {
@@ -122,12 +122,14 @@ public class dispatcherInterfaceImpl extends UnicastRemoteObject implements disp
 				System.out.println("AlreadyBoundException");
 			}
 		}
-		
+
 		for (dbInterfaceImpl db : databaseServers) {
 			db.setDatabaseServers(databaseServers);
 		}
+
 		return registry;
 	}
+
 
 	// TODO
 	private int getLeastLoadedDB() {
