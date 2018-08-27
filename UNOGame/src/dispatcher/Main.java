@@ -9,6 +9,7 @@ public class Main {
         try {
             Registry registry = LocateRegistry.createRegistry(1099);
             registry.rebind("UNOdispatcher", new dispatcherInterfaceImpl());
+            System.out.println("chilloutssss");
         } catch (Exception e) {
             e.printStackTrace();
         }
