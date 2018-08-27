@@ -13,6 +13,7 @@ import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 import java.sql.Blob;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,10 +43,12 @@ public class dbInterfaceImpl extends UnicastRemoteObject implements dbInterface 
 
 	// Gebruiker toevoegen aan de databank
 	@Override
-	public void addUser(String username, String password) throws InvalidKeyException, SignatureException {
+	public void addUser(String username, String password) throws InvalidKeyException, SignatureException, RemoteException {
 		db.insertUser(username, password);
-		for (dbInterfaceImpl database : databaseServers) {
-			database.db.insertUser(username, password);
+		String token = null;
+		Timestamp timestamp = null;
+		for (dbInterface database : databaseServers) {
+			database.insertUser(username, password, token, timestamp);
 		}
 	}
 
@@ -185,6 +188,13 @@ public class dbInterfaceImpl extends UnicastRemoteObject implements dbInterface 
 	}
 
 	public void updateOtherDatabases() {
+		
+	}
+
+	@Override
+	public void insertUser(String username, String password, String token, Timestamp timestamp)
+			throws RemoteException, InvalidKeyException, SignatureException {
+		// TODO Auto-generated method stub
 		
 	}
 }

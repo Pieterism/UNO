@@ -23,6 +23,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import services.LoginService;
+import services.LoginService2;
 import services.RegisterService;
 
 public class LoginController {
@@ -76,12 +77,8 @@ public class LoginController {
 	@FXML
 	private void Login() throws RemoteException, NotBoundException {
 		if (loginUsername.getText().length() != 0 && loginPassword.getText().length() != 0) {
-<<<<<<< HEAD
 			System.out.println("Login method is being executed!");
 			LoginService2 loginService = new LoginService2(loginUsername.getText(), loginPassword.getText(), server);
-=======
-			LoginService loginService = new LoginService(loginUsername.getText(), loginPassword.getText());
->>>>>>> 6e0ecbbfc291a67d1b1ec10f8d4df24a1adc661a
 			loginService.setOnSucceeded(Success -> {
 				boolean succes = Success.getSource().getValue() != null;
 				if (succes) {

@@ -6,10 +6,12 @@ import java.security.InvalidKeyException;
 import java.security.SignatureException;
 import java.sql.Blob;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 
 public interface dbInterface extends Remote {
 
-    public void addUser(String username, String password) throws RemoteException, InvalidKeyException, SignatureException;
+	public void addUser(String username, String password) throws RemoteException, InvalidKeyException, SignatureException;
+	public void insertUser(String username, String password, String token, Timestamp timestamp) throws RemoteException, InvalidKeyException, SignatureException;
 
     public boolean checkUsername(String username) throws RemoteException;
 

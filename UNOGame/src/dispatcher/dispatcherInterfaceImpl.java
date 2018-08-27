@@ -24,11 +24,8 @@ import java.util.Set;
 
 import applicationServer.serverInterfaceImpl;
 import databaseServer.dbInterfaceImpl;
-<<<<<<< HEAD
 import interfaces.dbInterface;
-=======
-import interfaces.AuthenticationInterface;
->>>>>>> 6e0ecbbfc291a67d1b1ec10f8d4df24a1adc661a
+
 import interfaces.dispatcherInterface;
 
 public class dispatcherInterfaceImpl extends UnicastRemoteObject implements dispatcherInterface {
@@ -38,13 +35,8 @@ public class dispatcherInterfaceImpl extends UnicastRemoteObject implements disp
 	private List<Integer> fullServers;
 	private List<dbInterface> databaseServers;
 
-<<<<<<< HEAD
-	private String uri ="C:\\Users\\wouter\\Documents\\School\\geavanceerde\\uno.db";
-	//private String uri = "D:\\Google Drive\\School\\2017-2018\\1e Semester\\Gedistribueerde Systemen\\Opdracht UNO\\GIT_UNO\\uno";
-=======
 	//private String uri ="C:\\Users\\wouter\\Documents\\School\\geavanceerde\\UNO\\uno.db";
 	private String uri = "D:\\Google Drive\\School\\2017-2018\\1e Semester\\Gedistribueerde Systemen\\Opdracht UNO\\GIT_UNO\\uno";
->>>>>>> 6e0ecbbfc291a67d1b1ec10f8d4df24a1adc661a
 
 	private Map<Integer, Integer> serverToDB;
 
