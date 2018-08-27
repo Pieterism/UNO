@@ -610,4 +610,8 @@ public class Database {
 		return false;
 	}
 
+	public void persistQuerty(String sql) {
+		
+	}
+	
 }

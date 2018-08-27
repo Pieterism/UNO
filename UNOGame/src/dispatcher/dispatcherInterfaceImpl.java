@@ -7,8 +7,10 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
+import java.security.InvalidKeyException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
+import java.security.SignatureException;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 import java.sql.SQLException;
@@ -22,6 +24,7 @@ import java.util.Set;
 
 import applicationServer.serverInterfaceImpl;
 import databaseServer.dbInterfaceImpl;
+import interfaces.AuthenticationInterface;
 import interfaces.dispatcherInterface;
 
 public class dispatcherInterfaceImpl extends UnicastRemoteObject implements dispatcherInterface {
@@ -31,8 +34,8 @@ public class dispatcherInterfaceImpl extends UnicastRemoteObject implements disp
 	private List<Integer> fullServers;
 	private List<dbInterfaceImpl> databaseServers;
 
-	private String uri ="C:\\Users\\wouter\\Documents\\School\\geavanceerde\\UNO\\uno.db";
-	//private String uri = "D:\\Google Drive\\School\\2017-2018\\1e Semester\\Gedistribueerde Systemen\\Opdracht UNO\\GIT_UNO\\uno";
+	//private String uri ="C:\\Users\\wouter\\Documents\\School\\geavanceerde\\UNO\\uno.db";
+	private String uri = "D:\\Google Drive\\School\\2017-2018\\1e Semester\\Gedistribueerde Systemen\\Opdracht UNO\\GIT_UNO\\uno";
 
 	private Map<Integer, Integer> serverToDB;
 

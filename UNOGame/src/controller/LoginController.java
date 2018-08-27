@@ -4,6 +4,8 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.security.InvalidKeyException;
+import java.security.SignatureException;
 
 import interfaces.dispatcherInterface;
 import interfaces.serverInterface;
@@ -20,7 +22,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import services.LoginService2;
+import services.LoginService;
 import services.RegisterService;
 
 public class LoginController {
@@ -74,7 +76,7 @@ public class LoginController {
 	@FXML
 	private void Login() throws RemoteException, NotBoundException {
 		if (loginUsername.getText().length() != 0 && loginPassword.getText().length() != 0) {
-			LoginService2 loginService = new LoginService2(loginUsername.getText(), loginPassword.getText());
+			LoginService loginService = new LoginService(loginUsername.getText(), loginPassword.getText());
 			loginService.setOnSucceeded(Success -> {
 				boolean succes = Success.getSource().getValue() != null;
 				if (succes) {
@@ -101,7 +103,7 @@ public class LoginController {
 
 	// register new account
 	@FXML
-	private void Register() throws RemoteException, NotBoundException {
+	private void Register() throws RemoteException, NotBoundException, InvalidKeyException, SignatureException {
 		if (password1.getText().toCharArray().length <= 6) {
 			popUpAlert("The size of password must be at least 6 characters long.");
 		} else {
@@ -111,19 +113,20 @@ public class LoginController {
 				if (username.length() <= 6) {
 					popUpAlert("The size of the username must be at least 6 characters long.");
 				} else {
-					RegisterService registerService = new RegisterService(username, password1.getText(), server);
+					RegisterService registerService = new RegisterService(registerUsername.getText(),
+							password1.getText(), server);
 					registerService.setOnSucceeded(Success -> {
 						boolean succes = Success.getSource().getValue() != null;
 						if (succes) {
+							this.username = loginUsername.getText();
 							startLobby();
 							Stage stage = (Stage) btn_Login.getScene().getWindow();
 							stage.close();
 						} else {
-							popUpAlert("Registration failed");
+							popUpAlert("Password of username was incorrect!");
 						}
 					});
 					registerService.start();
-
 				}
 			} else {
 				popUpAlert("The passwords do not match");

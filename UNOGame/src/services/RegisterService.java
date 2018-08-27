@@ -1,5 +1,9 @@
 package services;
 
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+
+import client.GUIMain;
 import interfaces.AuthenticationInterface;
 import interfaces.serverInterface;
 import javafx.concurrent.Service;
@@ -8,7 +12,6 @@ import javafx.concurrent.Task;
 public class RegisterService extends Service<Boolean> {
 
 	private String username, password;
-	private AuthenticationInterface auth;
 	private serverInterface server;
 
 	public RegisterService(String username, String password, serverInterface server) {
