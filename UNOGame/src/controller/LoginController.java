@@ -74,7 +74,8 @@ public class LoginController {
 	@FXML
 	private void Login() throws RemoteException, NotBoundException {
 		if (loginUsername.getText().length() != 0 && loginPassword.getText().length() != 0) {
-			LoginService2 loginService = new LoginService2(loginUsername.getText(), loginPassword.getText());
+			System.out.println("Login method is being executed!");
+			LoginService2 loginService = new LoginService2(loginUsername.getText(), loginPassword.getText(), server);
 			loginService.setOnSucceeded(Success -> {
 				boolean succes = Success.getSource().getValue() != null;
 				if (succes) {

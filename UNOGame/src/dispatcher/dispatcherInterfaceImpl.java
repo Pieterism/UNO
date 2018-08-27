@@ -22,6 +22,7 @@ import java.util.Set;
 
 import applicationServer.serverInterfaceImpl;
 import databaseServer.dbInterfaceImpl;
+import interfaces.dbInterface;
 import interfaces.dispatcherInterface;
 
 public class dispatcherInterfaceImpl extends UnicastRemoteObject implements dispatcherInterface {
@@ -29,9 +30,9 @@ public class dispatcherInterfaceImpl extends UnicastRemoteObject implements disp
 	private Map<Integer, Integer> serverStatus;
 	private List<Integer> unfilledServers;
 	private List<Integer> fullServers;
-	private List<dbInterfaceImpl> databaseServers;
+	private List<dbInterface> databaseServers;
 
-	private String uri ="C:\\Users\\wouter\\Documents\\School\\geavanceerde\\UNO\\uno.db";
+	private String uri ="C:\\Users\\wouter\\Documents\\School\\geavanceerde\\uno.db";
 	//private String uri = "D:\\Google Drive\\School\\2017-2018\\1e Semester\\Gedistribueerde Systemen\\Opdracht UNO\\GIT_UNO\\uno";
 
 	private Map<Integer, Integer> serverToDB;
@@ -76,13 +77,12 @@ public class dispatcherInterfaceImpl extends UnicastRemoteObject implements disp
 	}
 
 	// give uri => location on disk
-	private Registry createDbServers(int portnumber) throws SQLException, UnrecoverableKeyException, KeyStoreException,
+	private void createDbServers(int portnumber) throws SQLException, UnrecoverableKeyException, KeyStoreException,
 			NoSuchAlgorithmException, CertificateException, IOException {
-		Registry registry = null;
 		for (int i = 0; i < NUMBER_OF_DATABASES; i++) {
 
 			try {
-				registry = LocateRegistry.createRegistry(portnumber + i);
+				Registry registry = LocateRegistry.createRegistry(portnumber + i);
 				dbInterfaceImpl db = new dbInterfaceImpl(uri + (portnumber + i) + ".db");
 				registry.bind("UNOdatabase" + (portnumber + i), db);
 				databaseServers.add(db);
@@ -97,12 +97,6 @@ public class dispatcherInterfaceImpl extends UnicastRemoteObject implements disp
 				System.out.println("AlreadyBoundException");
 			}
 		}
-
-		for (dbInterfaceImpl db : databaseServers) {
-			db.setDatabaseServers(databaseServers);
-		}
-
-		return registry;
 	}
 
 

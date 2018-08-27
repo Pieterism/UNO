@@ -8,7 +8,6 @@ import javafx.concurrent.Task;
 public class RegisterService extends Service<Boolean> {
 
 	private String username, password;
-	private AuthenticationInterface auth;
 	private serverInterface server;
 
 	public RegisterService(String username, String password, serverInterface server) {

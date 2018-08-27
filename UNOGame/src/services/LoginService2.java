@@ -1,17 +1,18 @@
 package services;
 
-import applicationServer.serverInterfaceImpl;
+import interfaces.serverInterface;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 
 public class LoginService2 extends Service<Boolean>{
 
 	private String username, password;
-	private serverInterfaceImpl server;
+	private serverInterface server;
 	
-	public LoginService2(String username, String password) {
+	public LoginService2(String username, String password, serverInterface server) {
 		this.username = username;
 		this.password = password;
+		this.server = server;
 	}
 
 	@Override
@@ -20,6 +21,7 @@ public class LoginService2 extends Service<Boolean>{
 
 			@Override
 			protected Boolean call() throws Exception {
+				System.out.println("LogginService is executed!");
 				return server.login(username, password);
 			}
 			

@@ -46,7 +46,7 @@ public class serverInterfaceImpl extends UnicastRemoteObject implements serverIn
 		if (secret == null) {
 			secret = generateApiSecret(50);
 		}
-		System.out.println("server has started");
+		System.out.println("server has started and pnmbr= " + dbPortnumber);
 		setdb(dbPortnumber);
 	}
 
@@ -65,12 +65,16 @@ public class serverInterfaceImpl extends UnicastRemoteObject implements serverIn
 	@Override
 	public boolean login(String username, String password)
 			throws RemoteException, InvalidKeyException, SignatureException {
+		System.out.println("login is executed on server");
 		if (!db.checkUsername(username)) {
+			System.out.println("checkUsername");
 			return false;
 		} else {
 			if (db.loginUser(username, password)) {
+				System.out.println("true returned");
 				return true;
 			} else {
+				System.out.println("false returned");
 				return false;
 			}
 		}
@@ -85,12 +89,11 @@ public class serverInterfaceImpl extends UnicastRemoteObject implements serverIn
 
 	public void setdb(int dbPortnumber) {
 		Registry registry;
-		dbInterface db;
 		try {
 			registry = LocateRegistry.getRegistry("localhost", dbPortnumber);
-			db = (dbInterface) registry.lookup("UNOdatabase");
-			this.db = db;
+			this.db = (dbInterface) registry.lookup("UNOdatabase"+ dbPortnumber);
 		} catch (Exception e) {
+			e.printStackTrace();
 		}
 
 	}

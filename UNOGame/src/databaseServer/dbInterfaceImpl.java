@@ -2,6 +2,8 @@ package databaseServer;
 
 import java.io.IOException;
 import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.security.InvalidKeyException;
 import java.security.KeyStoreException;
@@ -21,7 +23,7 @@ public class dbInterfaceImpl extends UnicastRemoteObject implements dbInterface 
 
 	private Database db;
 	private List<serverInterface> applicationServers;
-	private List<dbInterfaceImpl> databaseServers;
+	private List<dbInterface> databaseServers;
 
 	// constructor
 	public dbInterfaceImpl(String uri) throws SQLException, KeyStoreException, NoSuchAlgorithmException,
@@ -155,17 +157,21 @@ public class dbInterfaceImpl extends UnicastRemoteObject implements dbInterface 
 		this.applicationServers = applicationServers;
 	}
 
-	public List<dbInterfaceImpl> getDatabaseServers() {
+	public List<dbInterface> getDatabaseServers() {
 		return databaseServers;
 	}
 
-	public void setDatabaseServers(List<dbInterfaceImpl> databaseServers) {
-		List<dbInterfaceImpl> result = new ArrayList<>();
-		for (dbInterfaceImpl db : databaseServers) {
-			if (db.equals(this)) {
-				continue;
-			} else {
-				result.add(db);
+	public void setDatabaseServers() throws RemoteException {
+		List<dbInterface> result = new ArrayList<>();
+		for (int i = 1300; i<1304; i++) {
+			Registry registry;
+			try {
+				registry = LocateRegistry.getRegistry("localhost", i);
+				dbInterface temp = (dbInterface) registry.lookup("UNOdatabase"+ i);
+				result.add(temp);
+
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		}
 		this.databaseServers = result;
