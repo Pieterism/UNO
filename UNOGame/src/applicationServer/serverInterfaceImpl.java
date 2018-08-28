@@ -100,12 +100,15 @@ public class serverInterfaceImpl extends UnicastRemoteObject implements serverIn
 
 	@Override
 	public void startNewGame(String name, String description, int aantalSpelers) throws RemoteException {
-		games.add(new UnoGame(aantalSpelers, gameCounter, name, description));
+		games.add(new UnoGame(aantalSpelers, gameCounter, name, description, db));
 		gameCounter++;
 		while (dispatcher==null) {
 			getDispatcher();
 		}
-		dispatcher.updateInfo(portnumber, games.size());
+
+		dispatcher.updateInfo(portnumber, gameCounter);
+		System.out.println("dispatcher was notified with the new info " + gameCounter);
+
 	}
 	
 	public void getDispatcher() {
@@ -191,10 +194,12 @@ public class serverInterfaceImpl extends UnicastRemoteObject implements serverIn
 						for (Player player : games.get(gameId).getPlayers()) {
 							info.add(player.getName());
 						}
+						List<gameControllerInterface> controllers = new ArrayList<>();
 						for (Player player : games.get(gameId).getPlayers()) {
 							player.getGameController().sendPlayerInfo(info);
+							controllers.add(player.getGameController());
 						}
-
+						db.addGame(info);
 						games.get(gameId).play();
 						for (Player player : games.get(gameId).getPlayers()) {
 							player.setReady(false);

@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import interfaces.dbInterface;
 import interfaces.gameControllerInterface;
 /**
  *
@@ -19,6 +20,7 @@ public class UnoGame {
 
     private int myPlayDirection, currentPlayer;
     private int gameId, playerCount;
+    private dbInterface db;
 
     private String name, beschrijving;
 
@@ -55,13 +57,14 @@ public class UnoGame {
 	}
 
     //Nieuw spel starten met aantal spelers met standaard UNO-deck. 
-    public UnoGame(int nPlayers, int id, String name, String description) {
+    public UnoGame(int nPlayers, int id, String name, String description, dbInterface db) {
         deck = new ArrayList<Card>();
         this.name = "UNO game";
         this.beschrijving = "Een korte beschrijving";
         this.name = name;
         this.beschrijving = description;
         this.players = new ArrayList<>();
+        this.db=db;
 
         //Deck vullen met alle kaarten. 
         newDeck();
@@ -119,6 +122,7 @@ public class UnoGame {
             player.getGameController().addPile(card);
         }
 
+        updateToDBServerInit();
 
         currentPlayer = 0;
         myPlayDirection = 1;
@@ -129,7 +133,17 @@ public class UnoGame {
 
     }
 
-    //speel 1 beurt van het spel
+    private void updateToDBServerInit() throws RemoteException {
+		for (Player player : players) {
+			db.updateHandPlayer(player.getName(), player.getCards(), gameId);
+		}
+	}
+
+	private void updateToDBServer(String username, List<Card> cards) throws RemoteException {
+		db.updateHandPlayer(username, cards, gameId);
+	}
+
+	//speel 1 beurt van het spel
     public String playTurn() throws RemoteException {
     	Player player = players.get(currentPlayer);
 
@@ -145,6 +159,7 @@ public class UnoGame {
         	updateCardAmountPlayer(player);
         	goToNextPlayer();
         	System.out.println();
+        	updateToDBServer(player.getName(), player.getCards());
         	return null;
         } 
         if (!card.canPlayOn(pile.get(0))){
@@ -155,6 +170,7 @@ public class UnoGame {
         pile.add(0, card);
         card.play(this);
         playCard(player, card);
+    	updateToDBServer(player.getName(), player.getCards());
 
         // If that was their last card, then they win
         if (player.getCards().size() == 0) {
