@@ -1,12 +1,8 @@
 package controller;
 
-import java.awt.Color;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
-import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -36,9 +32,9 @@ import uno.WildCard;
 
 public class GameController extends UnicastRemoteObject implements gameControllerInterface{
 
-	//private String path = "D:\\Google Drive\\School\\2017-2018\\1e Semester\\Gedistribueerde Systemen\\Opdracht UNO\\GIT_UNO\\UNOClient\\picture\\";
+	private String path = "D:\\Google Drive\\School\\2017-2018\\1e Semester\\Gedistribueerde Systemen\\Opdracht UNO\\GIT_UNO\\UNOGame\\src\\pictures\\";
 
-	private String path = "C:\\Users\\wouter\\Documents\\School\\geavanceerde\\UNOGame\\src\\pictures\\";
+	//private String path = "C:\\Users\\wouter\\Documents\\School\\geavanceerde\\UNOGame\\src\\pictures\\";
 
 	//class variables
 	private String username;
@@ -387,6 +383,7 @@ public class GameController extends UnicastRemoteObject implements gameControlle
 		}
 		
 		Platform.runLater(new  Runnable() {
+			@Override
 			public void run() {
 				// view update
 				try {
