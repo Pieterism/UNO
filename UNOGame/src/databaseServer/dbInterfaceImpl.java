@@ -23,12 +23,12 @@ import interfaces.serverInterface;
 public class dbInterfaceImpl extends UnicastRemoteObject implements dbInterface {
 
 	private Database db;
-	private List<serverInterface> applicationServers;
 	private List<dbInterface> databaseServers;
 	private int portnumber;
 	
 	private final int dbPortnumber = 1300;
 	private final int NUMBER_OF_DATABASES = 4;
+	private int ApplicationServerCount;
 
 	// constructor
 	public dbInterfaceImpl(String uri, int portnumber) throws SQLException, KeyStoreException, NoSuchAlgorithmException,
@@ -39,7 +39,6 @@ public class dbInterfaceImpl extends UnicastRemoteObject implements dbInterface 
 		db.createGameTable();
 		db.createGameTurnTable();
 		db.createImagesTable();
-		applicationServers = new ArrayList<>();
 		databaseServers = new ArrayList<>();
 		this.portnumber = portnumber;
 		System.out.println("----------------------------------------------");
@@ -49,9 +48,8 @@ public class dbInterfaceImpl extends UnicastRemoteObject implements dbInterface 
 	// Gebruiker toevoegen aan de databank
 	@Override
 	public void addUser(String username, String password) throws InvalidKeyException, SignatureException, RemoteException {
-		db.insertUser(username, password);
-		String token = null;
-		Timestamp timestamp = null;
+		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+		String token = 	db.insertUser(username, password, timestamp);
 		for (dbInterface database : databaseServers) {
 			database.insertUser(username, password, token, timestamp);
 		}
@@ -160,14 +158,6 @@ public class dbInterfaceImpl extends UnicastRemoteObject implements dbInterface 
 		this.db = db;
 	}
 
-	public List<serverInterface> getApplicationServers() {
-		return applicationServers;
-	}
-
-	public void setApplicationServers(List<serverInterface> applicationServers) {
-		this.applicationServers = applicationServers;
-	}
-
 	public List<dbInterface> getDatabaseServers() {
 		return databaseServers;
 	}
@@ -199,14 +189,10 @@ public class dbInterfaceImpl extends UnicastRemoteObject implements dbInterface 
 		this.databaseServers.add(databaseServer);
 	}
 
-	public void updateOtherDatabases() {
-		
-	}
-
 	@Override
 	public void insertUser(String username, String password, String token, Timestamp timestamp)
 			throws RemoteException, InvalidKeyException, SignatureException {
-		// TODO Auto-generated method stub
+		db.duplicateUser(username, password, token, timestamp);
 		
 	}
 
@@ -214,5 +200,10 @@ public class dbInterfaceImpl extends UnicastRemoteObject implements dbInterface 
 	public void ping(int portnumber) throws RemoteException {
 		System.out.println("server " + portnumber + " has pinged server " + this.portnumber);
 		
+	}
+
+	@Override
+	public int getPortnumber() throws RemoteException {
+		return this.portnumber;
 	}
 }

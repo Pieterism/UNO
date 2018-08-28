@@ -30,10 +30,11 @@ import interfaces.dispatcherInterface;
 
 public class dispatcherInterfaceImpl extends UnicastRemoteObject implements dispatcherInterface {
 
-	private Map<Integer, Integer> serverStatus;
-	private List<Integer> unfilledServers;
-	private List<Integer> fullServers;
+	private Map<Integer, Integer> serverStatus, dbServerStatus;
+	private Set<Integer> unfilledServers;
+	private Set<Integer> fullServers;
 	private List<dbInterface> databaseServers;
+	private int serverPort;
 
 	//private String uri ="C:\\Users\\wouter\\Documents\\School\\geavanceerde\\UNO\\uno.db";
 	private String uri = "D:\\Google Drive\\School\\2017-2018\\1e Semester\\Gedistribueerde Systemen\\Opdracht UNO\\GIT_UNO\\uno";
@@ -47,10 +48,12 @@ public class dispatcherInterfaceImpl extends UnicastRemoteObject implements disp
 	public dispatcherInterfaceImpl() throws AlreadyBoundException, SQLException, UnrecoverableKeyException,
 			KeyStoreException, NoSuchAlgorithmException, CertificateException, IOException {
 		serverStatus = new HashMap<>();
-		unfilledServers = new ArrayList<>();
-		fullServers = new ArrayList<>();
+		dbServerStatus = new HashMap<>();
+		unfilledServers = new HashSet<>();
+		fullServers = new HashSet<>();
 		serverToDB = new HashMap<>();
 		databaseServers = new ArrayList<>();
+		serverPort = 1200;
 
 		// auto create dbserver
 		createDbServers(1300);
@@ -62,7 +65,7 @@ public class dispatcherInterfaceImpl extends UnicastRemoteObject implements disp
 		makeConnect();
 		
 		// auto create 1 server
-		createServer(1200, 1300);
+		createServer(serverPort);
 
 	}
 
@@ -100,15 +103,19 @@ public class dispatcherInterfaceImpl extends UnicastRemoteObject implements disp
 		
 	}
 
-	private Registry createServer(int portnumber, int dbPortnumber) {
+	private void createServer(int portnumber) {
 		Registry registry;
 		try {
+			int dbPortnumber = this.getLeastLoadedDB();
+			System.out.println(dbPortnumber);
 			registry = LocateRegistry.createRegistry(portnumber);
 	        registry.bind("UNOserver", new serverInterfaceImpl(dbPortnumber, portnumber));
+	        
+	        //update class variables
 	        unfilledServers.add(portnumber);
 	        serverStatus.put(portnumber, 0);
-
-			return registry;
+	        serverPort ++;
+	        
 		} catch (RemoteException e) {
 			e.printStackTrace();
 			System.out.println("Remote Exception");
@@ -116,7 +123,6 @@ public class dispatcherInterfaceImpl extends UnicastRemoteObject implements disp
 			e.printStackTrace();
 			System.out.println("AlreadyBoundException");
 		}
-		return null;
 	}
 
 	// give uri => location on disk
@@ -128,8 +134,8 @@ public class dispatcherInterfaceImpl extends UnicastRemoteObject implements disp
 				Registry registry = LocateRegistry.createRegistry(portnumber + i);
 				dbInterfaceImpl db = new dbInterfaceImpl(uri + (portnumber + i) + ".db", portnumber+i);
 				registry.bind("UNOdatabase" + (portnumber + i), db);
-//				databaseServers.add(db);
 
+				dbServerStatus.put(portnumber+i, 0);
 				System.out.println("check databaseServersList");
 
 			} catch (RemoteException e) {
@@ -143,35 +149,29 @@ public class dispatcherInterfaceImpl extends UnicastRemoteObject implements disp
 	}
 
 
-	// TODO
-	private int getLeastLoadedDB() {
-		return 0;
+	private int getLeastLoadedDB() throws RemoteException {
+		int highestLoad = Integer.MAX_VALUE;
+		int portnumber = 1300;
+		for (int i = dbPortnumber; i < dbPortnumber + dbServerStatus.size(); i++) {
+			if (dbServerStatus.get(i) < highestLoad) {
+				highestLoad = dbServerStatus.get(i);
+				portnumber = i;
+			}
+		}
+		dbServerStatus.put(portnumber, highestLoad+1);
+		return portnumber;
 	}
 
 	@Override
 	public int getPort() throws RemoteException {
 		if (unfilledServers.size() == 0) {
 			// new server met zo laag mogelijk portnumber
-			for (int i = 1200; i < 1300; i++) {
-				if (!serverStatus.containsKey(i)) {
-					Registry server = createServer(i, dbPortnumber);
-					System.out.println("Server " + i + " has been created");
-					if (server != null) {
-						return i;
-					} else {
-						System.out.println("something went wrong error (creating server failed)");
-						return -1;
-					}
-				}
-			}
+			createServer(serverPort);
 		}
-		else {
-			//allocate user to server
-			System.out.println("already made server");
-			return unfilledServers.iterator().next();
+		//allocate user to server
+		System.out.println("already made server");
+		return unfilledServers.iterator().next();
 
-		}
-		return -2; // alle poorten zijn in gebruik => te veel spellen 0
 	}
 
 	@Override
@@ -181,7 +181,7 @@ public class dispatcherInterfaceImpl extends UnicastRemoteObject implements disp
 			try {
 				unfilledServers.remove(load);
 				fullServers.add(load);
-			} catch (Exception e) {
+			} catch (IndexOutOfBoundsException e) {
 			}
 		}
 		else {
@@ -191,10 +191,10 @@ public class dispatcherInterfaceImpl extends UnicastRemoteObject implements disp
 			} catch (IndexOutOfBoundsException e) {
 				
 			}
-
-
 		}
-
+		if (unfilledServers.isEmpty()) {
+			createServer(fullServers.size());
+		}
 	}
 
 }
