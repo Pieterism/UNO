@@ -108,13 +108,6 @@ public class dbInterfaceImpl extends UnicastRemoteObject implements dbInterface 
 	}
 
 	@Override
-	public String getCardImage(String card_name) throws RemoteException, SQLException {
-		throw new UnsupportedOperationException("Not supported yet."); // To change body of generated methods, choose
-																		// Tools | Templates.
-	}
-
-	@Override
-<<<<<<< HEAD
 	public String getCardImage(int color, int value, int theme) throws RemoteException, SQLException {
 		return db.getCardImage(color, value, theme);
 	}
@@ -125,8 +118,6 @@ public class dbInterfaceImpl extends UnicastRemoteObject implements dbInterface 
 	}
 
 	@Override
-=======
->>>>>>> b4ea13035f1ccc3e334c471e3f02ef3c6a36ef09
 	public String getToken(String username) throws RemoteException, SQLException {
 		return this.db.getToken(username);
 

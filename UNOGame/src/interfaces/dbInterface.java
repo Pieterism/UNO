@@ -31,7 +31,7 @@ public interface dbInterface extends Remote {
 
     public void StopGame(int game_id) throws RemoteException;
 
-    public String getCardImage(String card_name) throws RemoteException, SQLException;
+    public String getCardImage(int color, int value, int theme) throws RemoteException, SQLException;
 
 	public void setDatabaseServers() throws RemoteException;
 
@@ -46,4 +46,6 @@ public interface dbInterface extends Remote {
 	public void duplicateCards(String name, List<Card> cards, int gameId) throws RemoteException;
 
 	String getToken(String username) throws RemoteException, SQLException;
+
+	void insertImage(int card_color, int card_value, int theme, Blob image) throws RemoteException;
 }

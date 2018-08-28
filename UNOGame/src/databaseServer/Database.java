@@ -32,8 +32,8 @@ public class Database {
 	private Connection connection;
 	private Statement statement;
 	String uri;
-	//String filepath = "D:\\Google Drive\\School\\2017-2018\\1e Semester\\Gedistribueerde Systemen\\Opdracht UNO\\GIT_UNO\\keystore.jks";
-	String filepath = "C:\\Users\\wouter\\Documents\\School\\geavanceerde\\keystore.jks";
+	String filepath = "D:\\Google Drive\\School\\2017-2018\\1e Semester\\Gedistribueerde Systemen\\Opdracht UNO\\GIT_UNO\\keystore.jks";
+	//String filepath = "C:\\Users\\wouter\\Documents\\School\\geavanceerde\\keystore.jks";
 	PublicKey publicKey;
 	PrivateKey privateKey;
 	Signature signature;
