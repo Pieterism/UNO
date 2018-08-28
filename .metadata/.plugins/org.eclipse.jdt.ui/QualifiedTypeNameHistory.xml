@@ -41,4 +41,6 @@
 <fullyQualifiedTypeName name="java.lang.System"/>
 <fullyQualifiedTypeName name="java.sql.Timestamp"/>
 <fullyQualifiedTypeName name="services.LoginService2"/>
+<fullyQualifiedTypeName name="javafx.stage.Screen"/>
+<fullyQualifiedTypeName name="java.awt.geom.Rectangle2D"/>
 </qualifiedTypeNameHistroy>
