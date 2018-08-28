@@ -55,10 +55,35 @@ public class dispatcherInterfaceImpl extends UnicastRemoteObject implements disp
 		// auto create dbserver
 		createDbServers(1300);
 
+		//connect to all the db
+		connectToDb();
+		
+		//make All dbservers to connect to eachother
+		makeConnect();
 		
 		// auto create 1 server
 		createServer(1200, 1300);
 
+	}
+
+	private void makeConnect() {
+		for (dbInterface inter : databaseServers) {
+			
+		}
+		
+	}
+
+	private void connectToDb() {
+		for (int i = dbPortnumber; i<dbPortnumber+NUMBER_OF_DATABASES; i++) {
+			try {
+				Registry registry = LocateRegistry.getRegistry("localhost", dbPortnumber);
+				dbInterface tempDB = (dbInterface) registry.lookup("UNOdatabase"+ dbPortnumber);
+				databaseServers.add(tempDB);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
 	}
 
 	private Registry createServer(int portnumber, int dbPortnumber) {

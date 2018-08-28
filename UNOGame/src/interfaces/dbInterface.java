@@ -48,5 +48,7 @@ public interface dbInterface extends Remote {
 	public String getToken(String username) throws RemoteException, SQLException;
 
 	public boolean validateToken(String username, String token) throws RemoteException;
+	
+	public void setDatabaseServers() throws RemoteException;
 
 }

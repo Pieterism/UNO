@@ -25,6 +25,9 @@ public class dbInterfaceImpl extends UnicastRemoteObject implements dbInterface 
 	private Database db;
 	private List<serverInterface> applicationServers;
 	private List<dbInterface> databaseServers;
+	
+	private final int dbPortnumber = 1300;
+	private final int NUMBER_OF_DATABASES = 4;
 
 	// constructor
 	public dbInterfaceImpl(String uri) throws SQLException, KeyStoreException, NoSuchAlgorithmException,
@@ -167,9 +170,13 @@ public class dbInterfaceImpl extends UnicastRemoteObject implements dbInterface 
 		return databaseServers;
 	}
 
+	@Override
 	public void setDatabaseServers() throws RemoteException {
 		List<dbInterface> result = new ArrayList<>();
-		for (int i = 1300; i<1304; i++) {
+		for (int i = dbPortnumber; i<dbPortnumber+NUMBER_OF_DATABASES; i++) {
+			if (i == this.) {
+				
+			}
 			Registry registry;
 			try {
 				registry = LocateRegistry.getRegistry("localhost", i);
