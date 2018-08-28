@@ -51,16 +51,17 @@ public class LoginController {
 	// singup naar voorgrond brengen
 	@FXML
 	private void SignUpUp() {
-		pn_Login.toBack();
-		pn_Register.toFront();
+		pn_Login.setVisible(false);
+		pn_Register.setVisible(true);
 	}
 
 	// signin naar voorgrond brengen
 	@FXML
 	private void SignInUp() {
-		pn_Register.toBack();
-		pn_Login.toFront();
+		pn_Login.setVisible(true);
+		pn_Register.setVisible(false);
 	}
+	
 
 	// init, connectie naar dispatcher opzetten, connectie met vrije server starten
 	public void initialize() throws RemoteException, NotBoundException {
