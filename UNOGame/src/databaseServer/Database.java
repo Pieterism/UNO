@@ -9,6 +9,7 @@ import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
+import java.security.PublicKey;
 import java.security.Signature;
 import java.security.SignatureException;
 import java.security.UnrecoverableKeyException;
@@ -31,10 +32,11 @@ public class Database {
 	private Connection connection;
 	private Statement statement;
 	String uri;
-	String filepath = "D:\\Google Drive\\School\\2017-2018\\1e Semester\\Gedistribueerde Systemen\\Opdracht UNO\\GIT_UNO\\keystore.jks";
-	//String filepath = "C:\\Users\\wouter\\Documents\\School\\geavanceerde\\keystore.jks";
-	Signature signature;
+	//String filepath = "D:\\Google Drive\\School\\2017-2018\\1e Semester\\Gedistribueerde Systemen\\Opdracht UNO\\GIT_UNO\\keystore.jks";
+	String filepath = "C:\\Users\\wouter\\Documents\\School\\geavanceerde\\keystore.jks";
+	PublicKey publicKey;
 	PrivateKey privateKey;
+	Signature signature;
 
 	// Database aanmaken indien ze nog niet bestaat
 	public Database(String uri) throws SQLException, KeyStoreException, NoSuchAlgorithmException, CertificateException,
@@ -174,7 +176,7 @@ public class Database {
 
 	// toevoegen van een user in databank
 	public String insertUser(String username, String password, Timestamp timestamp) throws InvalidKeyException, SignatureException {
-		String token = createToken(username, password, timestamp);
+		String token = createToken(username, timestamp);
 		createUser(username, password, token, timestamp);
 		return token;
 	}
@@ -204,7 +206,7 @@ public class Database {
 		createUser(username, password, token, timestamp);
 	}
 
-	private String createToken(String username, String password, Timestamp timestamp)
+	private String createToken(String username, Timestamp timestamp)
 			throws InvalidKeyException, SignatureException {
 
 		String token = (username + timestamp);
@@ -268,7 +270,6 @@ public class Database {
 	// de databank bevindt
 	public boolean loginUser(String username, String password) throws InvalidKeyException, SignatureException {
 		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-		String token = createToken(username, password, timestamp);
 		try {
 			connection = DriverManager.getConnection("jdbc:sqlite:" + uri);
 		} catch (SQLException e1) {
@@ -280,16 +281,14 @@ public class Database {
 			PreparedStatement pstmt = connection.prepareStatement(sql);
 			pstmt.setString(1, username);
 			pstmt.setString(2, password);
-
 			ResultSet rs = pstmt.executeQuery();
-
 			if (rs.next()) {
 				System.out.println("LOGGED IN");
+				createToken(username, timestamp);
 				return true;
 			} else {
 				return false;
 			}
-
 		} catch (SQLException ex) {
 			ex.printStackTrace();
 		}
@@ -545,10 +544,6 @@ public class Database {
 		ResultSet rs = pstmt.executeQuery();
 
 		return rs.toString();
-	}
-
-	public boolean validateToken(String username, String token) {
-		return false;
 	}
 	
 	// voegt kaart toe aan table van de hand van een speler
