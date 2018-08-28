@@ -212,5 +212,13 @@ public class dbInterfaceImpl extends UnicastRemoteObject implements dbInterface 
 	@Override
 	public void updateHandPlayer(String name, List<Card> cards, int gameId) throws RemoteException {
 		db.playTurn(name, cards, gameId);
+		for (dbInterface databaseInterface : databaseServers) {
+			databaseInterface.duplicateCards(name, cards, gameId);
+		}
+	}
+	
+	@Override
+	public void duplicateCards(String name, List<Card> cards, int gameId) throws RemoteException {
+		db.playTurn(name, cards, gameId);
 	}
 }
