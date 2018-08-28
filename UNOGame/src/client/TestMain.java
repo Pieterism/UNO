@@ -25,8 +25,8 @@ public class TestMain {
 //        		System.out.println("connection established!");
 //        	}
 			server.register("woutertje", "Password");
-			server.startNewGame("myNewGame", "myNewDespription", 2);
-			server.readyToStart(0, "My game");
+			server.startNewGame("myNewGame", 1, 2);
+			server.readyToStart(0, "My game",1);
 		   	System.out.println(dispatcher.getPort());
             
         } catch (Exception e) {

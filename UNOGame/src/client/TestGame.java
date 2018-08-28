@@ -12,7 +12,7 @@ public class TestGame extends Application{
 	@Override
     public void start(Stage stage) throws Exception {
     	FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/GUI/Game.fxml"));
-        GameController controller = new GameController("Wouter");
+        GameController controller = new GameController("Wouter", 1);
 
         fxmlLoader.setController(controller);
         Parent root = (Parent) fxmlLoader.load();

@@ -33,11 +33,10 @@ import uno.WildCard;
 
 public class GameController extends UnicastRemoteObject implements gameControllerInterface {
 
-	// private String path = "D:\\Google Drive\\School\\2017-2018\\1e
-	// Semester\\Gedistribueerde Systemen\\Opdracht
-	// UNO\\GIT_UNO\\UNOGame\\src\\pictures\\";
+	private String path = "D:\\Google Drive\\School\\2017-2018\\1e Semester\\Gedistribueerde Systemen\\Opdracht UNO\\GIT_UNO\\UNOGame\\src\\pictures\\";
 
-	private String path = "C:\\Users\\wouter\\Documents\\School\\geavanceerde\\UNOGame\\src\\pictures\\";
+	// private String path =
+	// "C:\\Users\\wouter\\Documents\\School\\geavanceerde\\UNOGame\\src\\pictures\\";
 
 	// class variables
 	private String username;
@@ -46,6 +45,7 @@ public class GameController extends UnicastRemoteObject implements gameControlle
 	private List<ImageView> cards = new ArrayList<>();
 
 	// game variables
+	private int gameTheme;
 	private String nextPlayer;
 	private String currentPlayer;
 	private Card topCard;
@@ -91,7 +91,7 @@ public class GameController extends UnicastRemoteObject implements gameControlle
 	@FXML
 	private TextArea chat_output;
 
-	public GameController(String username, serverInterface server, int gameID, String gameName)
+	public GameController(String username, serverInterface server, int gameID, String gameName, int gameTheme)
 			throws RemoteException, FileNotFoundException {
 		this.username = username;
 		this.server = server;
@@ -99,16 +99,18 @@ public class GameController extends UnicastRemoteObject implements gameControlle
 		opponents = new ArrayList<>();
 		this.gameID = gameID;
 		this.gameName = gameName;
-		backImage = new Image(new FileInputStream(path + "UNO-Back.png"));
+		this.gameTheme = gameTheme;
+		backImage = new Image(new FileInputStream(path + gameTheme + "\\" + "UNO-Back.png"));
 
 	}
 
-	public GameController(String username) throws RemoteException, FileNotFoundException {
+	public GameController(String username, int gameTheme) throws RemoteException, FileNotFoundException {
 		this.username = username;
 		cardsList = new ArrayList<>();
 		opponents = new ArrayList<>();
+		this.gameTheme = gameTheme;
 
-		backImage = new Image(new FileInputStream(path + "UNO-Back.png"));
+		backImage = new Image(new FileInputStream(path + gameTheme + "\\" + "UNO-Back.png"));
 
 	}
 
@@ -122,7 +124,7 @@ public class GameController extends UnicastRemoteObject implements gameControlle
 			try {
 				System.out.println("pressed!");
 				if (!readyToStart) {
-					server.readyToStart(gameID, username);
+					server.readyToStart(gameID, username, gameTheme);
 					this.readyToStart = true;
 				}
 			} catch (RemoteException e) {
@@ -253,10 +255,10 @@ public class GameController extends UnicastRemoteObject implements gameControlle
 		Card card3 = new Card(4, 8);
 		Card card4 = new Card(3, 0);
 
-		Image image1 = new Image(new FileInputStream(path + card1.cardName));
-		Image image2 = new Image(new FileInputStream(path + card2.cardName));
-		Image image3 = new Image(new FileInputStream(path + card3.cardName));
-		Image image4 = new Image(new FileInputStream(path + card4.cardName));
+		Image image1 = new Image(new FileInputStream(path + gameTheme + "\\" + card1.cardName));
+		Image image2 = new Image(new FileInputStream(path + gameTheme + "\\" + card2.cardName));
+		Image image3 = new Image(new FileInputStream(path + gameTheme + "\\" + card3.cardName));
+		Image image4 = new Image(new FileInputStream(path + gameTheme + "\\" + card4.cardName));
 
 		ImageView imageView1 = new ImageView(image1);
 		ImageView imageView2 = new ImageView(image2);
@@ -326,7 +328,7 @@ public class GameController extends UnicastRemoteObject implements gameControlle
 		try {
 			for (Card card : cardsList) {
 
-				image = new Image(new FileInputStream(path + card.cardName));
+				image = new Image(new FileInputStream(path + gameTheme + "\\" + card.cardName));
 				imageView = new ImageView(image);
 				imageView.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
 					for (int i = 0; i < userBox.getChildren().size(); i++) {
@@ -347,7 +349,7 @@ public class GameController extends UnicastRemoteObject implements gameControlle
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (ConcurrentModificationException cme) {
-			
+
 		}
 
 	}
@@ -433,7 +435,7 @@ public class GameController extends UnicastRemoteObject implements gameControlle
 		System.out.println("Top card " + card.cardName);
 		topCard = card;
 		try {
-			itopCard.setImage(new Image(new FileInputStream(path + card.cardName)));
+			itopCard.setImage(new Image(new FileInputStream(path + gameTheme + "\\" + card.cardName)));
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
@@ -464,7 +466,7 @@ public class GameController extends UnicastRemoteObject implements gameControlle
 			public void run() {
 				userBox.getChildren().clear();
 				try {
-					itopCard.setImage(new Image(new FileInputStream(path + "UNO-Back.png")));
+					itopCard.setImage(new Image(new FileInputStream(path + gameTheme + "\\" + "UNO-Back.png")));
 				} catch (FileNotFoundException e) {
 					e.printStackTrace();
 				}

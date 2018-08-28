@@ -54,7 +54,7 @@ public class PopupNewGameController {
 			gameDescription = "A game made by " + username;
 		}
 		
-		NewGameService newGameService = new NewGameService(gameName, gameDescription, aantal, server);
+		NewGameService newGameService = new NewGameService(gameName, 0, aantal, server);
 		newGameService.setOnSucceeded(Success ->{
 			System.out.println("new game started!");
 			

@@ -35,6 +35,7 @@ public class LobbyController extends UnicastRemoteObject implements lobbyInterfa
     private ListView games = new ListView(gameData);
     private ListView users = new ListView(gameData);
     private int gameID;
+    private int gameTheme;
     private String gameName;
     String selectedUser = null;
     String username;
@@ -73,16 +74,9 @@ public class LobbyController extends UnicastRemoteObject implements lobbyInterfa
 				List<String> temp = Arrays.asList(newValue.split("\t"));
 				gameID = Integer.parseInt(temp.get(0));
 				gameName = temp.get(1);
+				gameTheme = Integer.parseInt(temp.get(3));
+				
 			}
-        });
-        
-        users.getSelectionModel().selectedItemProperty().addListener(
-                new ChangeListener<String>() {
-            @Override
-			public void changed(ObservableValue<? extends String> ov,
-                    String old_val, String new_val) {
-                selectedUser = new_val;
-            }
         });
         
         chat.setEditable(false);
@@ -138,7 +132,7 @@ public class LobbyController extends UnicastRemoteObject implements lobbyInterfa
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/controller/Game.fxml"));
             
-            GameController controller = new GameController(username, server, gameID, gameName);
+            GameController controller = new GameController(username, server, gameID, gameName, gameTheme);
 
             fxmlLoader.setController(controller);
             System.out.println(controller);

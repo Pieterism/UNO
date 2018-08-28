@@ -99,8 +99,8 @@ public class serverInterfaceImpl extends UnicastRemoteObject implements serverIn
 	}
 
 	@Override
-	public void startNewGame(String name, String description, int aantalSpelers) throws RemoteException {
-		games.add(new UnoGame(aantalSpelers, gameCounter, name, description, db));
+	public void startNewGame(String name, int gameTheme, int aantalSpelers) throws RemoteException {
+		games.add(new UnoGame(aantalSpelers, gameCounter, name, gameTheme, db));
 		gameCounter++;
 		while (dispatcher==null) {
 			getDispatcher();
@@ -128,7 +128,7 @@ public class serverInterfaceImpl extends UnicastRemoteObject implements serverIn
 		List<String> gamesList = new ArrayList<>();
 		for (UnoGame game : games) {
 			gamesList.add(new String(game.getId() + "\t" + game.getName() + "\t" + game.connectedPlayers() + "/"
-					+ game.getPlayerCount() + "\t" + game.getBeschrijving()));
+					+ game.getPlayerCount() + "\t" + game.getTheme()));
 		}
 		return gamesList;
 	}
@@ -172,7 +172,7 @@ public class serverInterfaceImpl extends UnicastRemoteObject implements serverIn
 	}
 
 	@Override
-	public void readyToStart(int gameId, String username) throws RemoteException {
+	public void readyToStart(int gameId, String username, int gametheme) throws RemoteException {
 		System.out.println("ready to start executed!");
 		boolean start = true;
 		for (Player player : games.get(gameId).getPlayers()) {
@@ -199,7 +199,7 @@ public class serverInterfaceImpl extends UnicastRemoteObject implements serverIn
 							player.getGameController().sendPlayerInfo(info);
 							controllers.add(player.getGameController());
 						}
-						db.addGame(info);
+						db.addGame(info, gametheme);
 						games.get(gameId).play();
 						for (Player player : games.get(gameId).getPlayers()) {
 							player.setReady(false);

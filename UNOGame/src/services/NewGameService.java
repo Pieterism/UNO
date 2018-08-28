@@ -6,13 +6,13 @@ import javafx.concurrent.Task;
 
 public class NewGameService extends Service<Void>{
 
-	private String gameName, gameDescription;
-	private int aantal;
+	private String gameName;
+	private int aantal, gameTheme;
 	private serverInterface server;
 	
-	public NewGameService(String gameName, String gameDescription, Integer aantal, serverInterface server) {
+	public NewGameService(String gameName, int gameTheme, Integer aantal, serverInterface server) {
 		this.gameName = gameName;
-		this.gameDescription = gameDescription;
+		this.gameTheme = gameTheme;
 		this.server = server;
 		this.aantal = aantal;
 	}
@@ -22,7 +22,7 @@ public class NewGameService extends Service<Void>{
 		return new Task<Void>() {
 			@Override
 			protected Void call() throws Exception {
-				server.startNewGame(gameName, gameDescription, aantal);
+				server.startNewGame(gameName, gameTheme, aantal);
 				return null;
 			}
 		};
