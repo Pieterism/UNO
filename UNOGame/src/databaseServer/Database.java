@@ -32,7 +32,8 @@ public class Database {
 	private Statement statement;
 	String uri;
 	String filepath = "D:\\Google Drive\\School\\2017-2018\\1e Semester\\Gedistribueerde Systemen\\Opdracht UNO\\GIT_UNO\\keystore.jks";
-	//String filepath = "C:\\Users\\wouter\\Documents\\School\\geavanceerde\\keystore.jks";
+	// String filepath =
+	// "C:\\Users\\wouter\\Documents\\School\\geavanceerde\\keystore.jks";
 	Signature signature;
 	PrivateKey privateKey;
 
@@ -43,12 +44,12 @@ public class Database {
 		File dbName = new File(uri);
 		if (dbName.exists()) {
 			connection = DriverManager.getConnection("jdbc:sqlite:" + uri);
-			System.out.println("UNO database opened successfully! " +" [ "+ this.uri + " ]");
+			System.out.println("UNO database opened successfully! " + " [ " + this.uri + " ]");
 		} else {
 			try (Connection conn = DriverManager.getConnection("jdbc:sqlite:" + uri)) {
 				if (conn != null) {
 
-					System.out.println("UNO database has been created." + "[ "+ this.uri + " ]");
+					System.out.println("UNO database has been created." + "[ " + this.uri + " ]");
 				}
 			} catch (SQLException e) {
 				System.out.println(e.getMessage());
@@ -88,10 +89,8 @@ public class Database {
 		try {
 
 			String sql = "CREATE TABLE IF NOT EXISTS PlayerHand" + id + " (\n"
-					+ "	id        INTEGER     PRIMARY KEY   AUTOINCREMENT,\n" 
-					+ "	username   VARCHAR     NOT NULL,\n"
-					+ "	cards   VARCHAR     NOT NULL \n" 
-					+ ");";
+					+ "	id        INTEGER     PRIMARY KEY   AUTOINCREMENT,\n" + "	username   VARCHAR     NOT NULL,\n"
+					+ "	cards   VARCHAR     NOT NULL \n" + ");";
 
 			connection = DriverManager.getConnection("jdbc:sqlite:" + uri);
 			statement = connection.createStatement();
@@ -112,7 +111,8 @@ public class Database {
 					+ "	game_id     INTEGER     PRIMARY KEY     AUTOINCREMENT,\n"
 					+ "	user1       INTEGER     NOT NULL,\n" + "	user2       INTEGER     NOT NULL, \n"
 					+ " user3       INTEGER     NOT NULL, \n" + " user4       INTEGER     NOT NULL, \n"
-					+ " active      BOOLEAN     , \n" + "FOREIGN KEY(user1) REFERENCES Users(username),\n"
+					+ " game_theme, \n" + " active      BOOLEAN ,   \n  "
+					+ "FOREIGN KEY(user1) REFERENCES Users(username),\n"
 					+ "FOREIGN KEY(user2) REFERENCES Users(username),\n"
 					+ "FOREIGN KEY(user3) REFERENCES Users(username),\n"
 					+ "FOREIGN KEY(user4) REFERENCES Users(username)\n" + ");";
@@ -135,7 +135,7 @@ public class Database {
 			String sql = "CREATE TABLE IF NOT EXISTS Images (\n"
 					+ "	card_id         INTEGER     PRIMARY KEY     AUTOINCREMENT,\n"
 					+ "	card_color      INTEGER     NOT NULL,\n" + "	card_value      INTEGER     NOT NULL,\n"
-					+ " card_image      BLOB        NOT NULL\n" + ");";
+					+ " card_theme		INTEGER,\n" + " card_image      BLOB        NOT NULL\n" + ");";
 
 			connection = DriverManager.getConnection("jdbc:sqlite:" + uri);
 			statement = connection.createStatement();
@@ -173,7 +173,8 @@ public class Database {
 	}
 
 	// toevoegen van een user in databank
-	public String insertUser(String username, String password, Timestamp timestamp) throws InvalidKeyException, SignatureException {
+	public String insertUser(String username, String password, Timestamp timestamp)
+			throws InvalidKeyException, SignatureException {
 		String token = createToken(username, password, timestamp);
 		createUser(username, password, token, timestamp);
 		return token;
@@ -185,7 +186,7 @@ public class Database {
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}
-		
+
 		String sql = "INSERT INTO Users(username,password,token,timestamp) VALUES(?,?,?,?)";
 
 		try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
@@ -199,7 +200,7 @@ public class Database {
 		}
 		System.out.println("insert user completed!");
 	}
-	
+
 	public void duplicateUser(String username, String password, String token, Timestamp timestamp) {
 		createUser(username, password, token, timestamp);
 	}
@@ -322,25 +323,27 @@ public class Database {
 	}
 
 	// voeg nieuw spel toe aan databank
-	public void addGame(String user1, String user2, String user3, String user4) {
+	public void addGame(String user1, String user2, String user3, String user4, int gameTheme) {
 		try {
 			connection = DriverManager.getConnection("jdbc:sqlite:" + uri);
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}
 
-		String sql = "INSERT INTO Game(user1, user2, user3, user4, active) VALUES(?,?,?,?,?)";
+		String sql = "INSERT INTO Game(user1, user2, user3, user4,game_theme, active) VALUES(?,?,?,?,?,?)";
 
 		try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
 			pstmt.setString(1, user1);
 			pstmt.setString(2, user2);
 			pstmt.setString(3, user3);
 			pstmt.setString(4, user4);
-			pstmt.setBoolean(5, true);
+			pstmt.setInt(5, gameTheme);
+			pstmt.setBoolean(6, true);
+
 			pstmt.executeUpdate();
-			
+
 			createPlayerHandTable(getGameId(user1, user2, user3, user4));
-			
+
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 		}
@@ -371,7 +374,7 @@ public class Database {
 		}
 		return 0;
 	}
-	
+
 	// Geeft weer welke spellen actief zijn
 	public String getActiveGames() throws SQLException {
 		try {
@@ -492,18 +495,20 @@ public class Database {
 	}
 
 	// geeft voorstelling van kaart terug
-	public String getCardImage(int color, int value) throws SQLException {
+	public String getCardImage(int color, int value, int theme) throws SQLException {
 		try {
 			connection = DriverManager.getConnection("jdbc:sqlite:" + uri);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 
-		String sql = "SELECT card_image FROM Images WHERE card_color = ? AND card_value = ?";
+		String sql = "SELECT card_image FROM Images WHERE card_color = ? AND card_value = ? AND card_theme = ?";
 
 		PreparedStatement pstmt = connection.prepareStatement(sql);
 		pstmt.setInt(1, color);
 		pstmt.setInt(2, value);
+		pstmt.setInt(2, theme);
+
 		ResultSet rs = pstmt.executeQuery();
 
 		return rs.toString();
@@ -511,7 +516,7 @@ public class Database {
 	}
 
 	// afbeelding unokaart toevoegen
-	public void insertImage(int card_color, int card_value, Blob image) {
+	public void insertImage(int card_color, int card_value, int theme, Blob image) {
 		try {
 			connection = DriverManager.getConnection("jdbc:sqlite:" + uri);
 		} catch (SQLException e1) {
@@ -523,7 +528,8 @@ public class Database {
 		try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
 			pstmt.setInt(1, card_color);
 			pstmt.setInt(2, card_value);
-			pstmt.setBlob(3, image);
+			pstmt.setInt(3, theme);
+			pstmt.setBlob(4, image);
 			pstmt.executeUpdate();
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
@@ -550,7 +556,7 @@ public class Database {
 	public boolean validateToken(String username, String token) {
 		return false;
 	}
-	
+
 	// voegt kaart toe aan table van de hand van een speler
 	public void insertCard(int user_id, int card_id) {
 		try {
@@ -592,6 +598,4 @@ public class Database {
 		System.out.println("Removed Card " + card_id);
 	}
 
-
-	
 }

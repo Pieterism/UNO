@@ -41,9 +41,9 @@ public interface dbInterface extends Remote {
 
     public String getCardImage(int card_id) throws RemoteException, SQLException;
 
-    public String getCardImage(int color, int value) throws RemoteException, SQLException;
+    public String getCardImage(int color, int value , int theme) throws RemoteException, SQLException;
 
-    public void insertImage(int card_color, int card_value, Blob image) throws RemoteException;
+    public void insertImage(int card_color, int card_value, int theme, Blob image) throws RemoteException;
 
 	public String getToken(String username) throws RemoteException, SQLException;
 
