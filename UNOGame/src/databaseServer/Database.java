@@ -9,6 +9,7 @@ import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
+import java.security.PublicKey;
 import java.security.Signature;
 import java.security.SignatureException;
 import java.security.UnrecoverableKeyException;
@@ -31,11 +32,11 @@ public class Database {
 	private Connection connection;
 	private Statement statement;
 	String uri;
-	String filepath = "D:\\Google Drive\\School\\2017-2018\\1e Semester\\Gedistribueerde Systemen\\Opdracht UNO\\GIT_UNO\\keystore.jks";
-	// String filepath =
-	// "C:\\Users\\wouter\\Documents\\School\\geavanceerde\\keystore.jks";
-	Signature signature;
+	//String filepath = "D:\\Google Drive\\School\\2017-2018\\1e Semester\\Gedistribueerde Systemen\\Opdracht UNO\\GIT_UNO\\keystore.jks";
+	String filepath = "C:\\Users\\wouter\\Documents\\School\\geavanceerde\\keystore.jks";
+	PublicKey publicKey;
 	PrivateKey privateKey;
+	Signature signature;
 
 	// Database aanmaken indien ze nog niet bestaat
 	public Database(String uri) throws SQLException, KeyStoreException, NoSuchAlgorithmException, CertificateException,
@@ -173,11 +174,8 @@ public class Database {
 	}
 
 	// toevoegen van een user in databank
-	public String insertUser(String username, String password, Timestamp timestamp)
-			throws InvalidKeyException, SignatureException {
-		String token = createToken(username, password, timestamp);
-		createUser(username, password, token, timestamp);
-		return token;
+	public String insertUser(String username, String password, Timestamp timestamp) throws InvalidKeyException, SignatureException {
+		return createToken(username, timestamp);
 	}
 
 	private void createUser(String username, String password, String token, Timestamp timestamp) {
@@ -205,18 +203,15 @@ public class Database {
 		createUser(username, password, token, timestamp);
 	}
 
-	private String createToken(String username, String password, Timestamp timestamp)
+	private String createToken(String username, Timestamp timestamp)
 			throws InvalidKeyException, SignatureException {
 
 		String token = (username + timestamp);
 		signature.initSign(privateKey);
 		signature.update(token.getBytes());
 		byte[] signedToken = signature.sign();
-
 		saveToken(username, new String(signedToken), timestamp);
-
 		return new String(signedToken);
-
 	}
 
 	private void saveToken(String username, String signedToken, Timestamp timestamp) {
@@ -247,7 +242,6 @@ public class Database {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
 		String sql = "SELECT user_id, username, password FROM USERS";
 		StringBuffer sb = new StringBuffer();
 		try {
@@ -257,7 +251,6 @@ public class Database {
 				sb.append(rs.getString("USER_ID") + "\t");
 				sb.append(rs.getString("USERNAME") + "\t");
 				sb.append(rs.getString("PASSWORD") + "\n");
-
 			}
 		} catch (SQLException e1) {
 			e1.printStackTrace();
@@ -269,7 +262,6 @@ public class Database {
 	// de databank bevindt
 	public boolean loginUser(String username, String password) throws InvalidKeyException, SignatureException {
 		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-		String token = createToken(username, password, timestamp);
 		try {
 			connection = DriverManager.getConnection("jdbc:sqlite:" + uri);
 		} catch (SQLException e1) {
@@ -281,22 +273,18 @@ public class Database {
 			PreparedStatement pstmt = connection.prepareStatement(sql);
 			pstmt.setString(1, username);
 			pstmt.setString(2, password);
-
 			ResultSet rs = pstmt.executeQuery();
-
 			if (rs.next()) {
 				System.out.println("LOGGED IN");
+				createToken(username, timestamp);
 				return true;
 			} else {
 				return false;
 			}
-
 		} catch (SQLException ex) {
 			ex.printStackTrace();
 		}
-
 		return false;
-
 	}
 
 	// geeft alle kaarten in de hand van een speler weer
@@ -552,11 +540,6 @@ public class Database {
 
 		return rs.toString();
 	}
-
-	public boolean validateToken(String username, String token) {
-		return false;
-	}
-
 	// voegt kaart toe aan table van de hand van een speler
 	public void insertCard(int user_id, int card_id) {
 		try {

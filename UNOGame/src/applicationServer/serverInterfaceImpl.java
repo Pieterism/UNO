@@ -236,7 +236,6 @@ public class serverInterfaceImpl extends UnicastRemoteObject implements serverIn
 
 	@Override
 	public String getLoginToken(String username, String password) throws RemoteException, SQLException {
-		db.getToken(username);
-		return null;
+		return db.getToken(username);
 	}
 }
