@@ -21,8 +21,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.util.List;
 
 import security.PasswordHashing;
+import uno.Card;
 
 public class Database {
 
@@ -82,13 +84,14 @@ public class Database {
 	}
 
 	// aanmaken van table voor Players hun kaarten
-	public void createPlayerHandTable() throws SQLException {
+	public void createPlayerHandTable(int id) throws SQLException {
 		try {
 
-			String sql = "CREATE TABLE IF NOT EXISTS PlayerHand (\n"
-					+ "	id        INTEGER     PRIMARY KEY   AUTOINCREMENT,\n" + "	user_id   INTEGER     NOT NULL,\n"
-					+ "	card_id   INTEGER     NOT NULL, \n" + " FOREIGN KEY(user_id) REFERENCES Users(user_id),"
-					+ " FOREIGN KEY (card_id) REFERENCES Images(card_id)\n" + ");";
+			String sql = "CREATE TABLE IF NOT EXISTS PlayerHand" + id + " (\n"
+					+ "	id        INTEGER     PRIMARY KEY   AUTOINCREMENT,\n" 
+					+ "	username   VARCHAR     NOT NULL,\n"
+					+ "	cards   VARCHAR     NOT NULL \n" 
+					+ ");";
 
 			connection = DriverManager.getConnection("jdbc:sqlite:" + uri);
 			statement = connection.createStatement();
@@ -109,10 +112,10 @@ public class Database {
 					+ "	game_id     INTEGER     PRIMARY KEY     AUTOINCREMENT,\n"
 					+ "	user1       INTEGER     NOT NULL,\n" + "	user2       INTEGER     NOT NULL, \n"
 					+ " user3       INTEGER     NOT NULL, \n" + " user4       INTEGER     NOT NULL, \n"
-					+ " active      BOOLEAN     , \n" + "FOREIGN KEY(user1) REFERENCES Users(user_id),\n"
-					+ "FOREIGN KEY(user2) REFERENCES Users(user_id),\n"
-					+ "FOREIGN KEY(user3) REFERENCES Users(user_id),\n"
-					+ "FOREIGN KEY(user4) REFERENCES Users(user_id)\n" + ");";
+					+ " active      BOOLEAN     , \n" + "FOREIGN KEY(user1) REFERENCES Users(username),\n"
+					+ "FOREIGN KEY(user2) REFERENCES Users(username),\n"
+					+ "FOREIGN KEY(user3) REFERENCES Users(username),\n"
+					+ "FOREIGN KEY(user4) REFERENCES Users(username)\n" + ");";
 
 			connection = DriverManager.getConnection("jdbc:sqlite:" + uri);
 			statement = connection.createStatement();
@@ -145,58 +148,28 @@ public class Database {
 		System.out.println("Images table created successfully");
 	}
 
-	// aanmaken table voor beurtenverloop van een spel
-	public void createGameTurnTable() throws SQLException {
-		try {
-
-			String sql = "CREATE TABLE IF NOT EXISTS GameTurn (\n"
-					+ "	turn_id         INTEGER        PRIMARY KEY     AUTOINCREMENT,\n"
-					+ "	game_id         INTEGER        NOT NULL,\n" + "	user_id         INTEGER        NOT NULL,\n"
-					+ " card_id         INTEGER        NOT NULL,\n" + " next_player     INTEGER        NOT NULL,\n"
-					+ "FOREIGN KEY(game_id) REFERENCES Game(game_id),\n"
-					+ "FOREIGN KEY(user_id) REFERENCES Users(user_id),\n"
-					+ "FOREIGN KEY(card_id) REFERENCES Images(card_id)\n" + ");";
-
-			connection = DriverManager.getConnection("jdbc:sqlite:" + uri);
-			statement = connection.createStatement();
-			statement.execute(sql);
-
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.exit(0);
-		}
-		System.out.println("GameTurn table created successfully");
-	}
-
 	// Controle of de username reeds aanwezig is in de databank
 	public boolean checkUsername(String name) {
-
 		try {
 			connection = DriverManager.getConnection("jdbc:sqlite:" + uri);
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}
-
 		String sql = "SELECT username FROM USERS WHERE USERNAME = ?";
 		try {
-
 			PreparedStatement pstmt = connection.prepareStatement(sql);
 			pstmt.setString(1, name);
 			ResultSet rs = pstmt.executeQuery();
-
 			if (rs.next()) {
 				System.out.println("USERNAME IS REEDS IN GEBRUIK");
 				return false;
 			} else {
 				return true;
 			}
-
 		} catch (SQLException ex) {
 			ex.printStackTrace();
 		}
-
 		return false;
-
 	}
 
 	// toevoegen van een user in databank
@@ -325,47 +298,6 @@ public class Database {
 
 	}
 
-	// voegt kaart toe aan table van de hand van een speler
-	public void insertCard(int user_id, int card_id) {
-		try {
-			connection = DriverManager.getConnection("jdbc:sqlite:" + uri);
-		} catch (SQLException e1) {
-			e1.printStackTrace();
-		}
-
-		String sql = "INSERT INTO PlayerHand(user_id,card_id) VALUES(?,?)";
-
-		try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-			pstmt.setInt(1, user_id);
-			pstmt.setInt(2, card_id);
-			pstmt.executeUpdate();
-		} catch (SQLException e) {
-			System.out.println(e.getMessage());
-		}
-		System.out.println("insert card completed!");
-	}
-
-	// verwijdert kaart uit de hand van een speler
-	public void removeCard(int user_id, int card_id) {
-		try {
-			connection = DriverManager.getConnection("jdbc:sqlite:" + uri);
-		} catch (SQLException e1) {
-			e1.printStackTrace();
-		}
-
-		String sql = "DELETE FROM PlayerHand WHERE card_id = ?";
-
-		try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-			pstmt.setInt(1, card_id);
-			pstmt.executeUpdate();
-
-		} catch (SQLException e) {
-			System.out.println(e.getMessage());
-		}
-
-		System.out.println("Removed Card " + card_id);
-	}
-
 	// geeft alle kaarten in de hand van een speler weer
 	public String getPlayerHand(int user_id) throws SQLException {
 		try {
@@ -390,7 +322,7 @@ public class Database {
 	}
 
 	// voeg nieuw spel toe aan databank
-	public void addGame(int user1, int user2, int user3, int user4) {
+	public void addGame(String user1, String user2, String user3, String user4) {
 		try {
 			connection = DriverManager.getConnection("jdbc:sqlite:" + uri);
 		} catch (SQLException e1) {
@@ -400,39 +332,46 @@ public class Database {
 		String sql = "INSERT INTO Game(user1, user2, user3, user4, active) VALUES(?,?,?,?,?)";
 
 		try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-			pstmt.setInt(1, user1);
-			pstmt.setInt(2, user2);
-			pstmt.setInt(3, user3);
-			pstmt.setInt(4, user4);
+			pstmt.setString(1, user1);
+			pstmt.setString(2, user2);
+			pstmt.setString(3, user3);
+			pstmt.setString(4, user4);
 			pstmt.setBoolean(5, true);
 			pstmt.executeUpdate();
+			
+			createPlayerHandTable(getGameId(user1, user2, user3, user4));
+			
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 		}
 		System.out.println("New game added!");
 	}
 
-	// verwijdert spel uit databank
-	public void removeGame(int game_id) {
+	public int getGameId(String user1, String user2, String user3, String user4) {
 		try {
 			connection = DriverManager.getConnection("jdbc:sqlite:" + uri);
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}
 
-		String sql = "DELETE FROM Game WHERE game_id = ?";
+		String sql = "SELECT game_id FROM Game WHERE user1 = ? AND user2 = ? AND user3 = ? AND user4 = ? AND active = ?";
 
 		try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-			pstmt.setInt(1, game_id);
-			pstmt.executeUpdate();
-
+			pstmt.setString(1, user1);
+			pstmt.setString(2, user2);
+			pstmt.setString(3, user3);
+			pstmt.setString(4, user4);
+			pstmt.setBoolean(5, true);
+			ResultSet rs = pstmt.executeQuery();
+			if (rs.next()) {
+				return rs.getInt(0);
+			}
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 		}
-
-		System.out.println("Removed Game " + game_id);
+		return 0;
 	}
-
+	
 	// Geeft weer welke spellen actief zijn
 	public String getActiveGames() throws SQLException {
 		try {
@@ -474,20 +413,22 @@ public class Database {
 	}
 
 	// gespeelde beurt toevoegen aan databank van spelverloop
-	public void playTurn(int game_id, int user_id, int card_id, int next_player) {
+	public void playTurn(String name, List<Card> cards, int gameId) {
+		StringBuilder sb = new StringBuilder();
+		for (Card card : cards) {
+			sb.append(card.toString() + "\'");
+		}
 		try {
 			connection = DriverManager.getConnection("jdbc:sqlite:" + uri);
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}
 
-		String sql = "INSERT INTO GameTurn(game_id, user_id, card_id, next_player) VALUES(?,?,?,?)";
+		String sql = "INSERT INTO PlayerHand" + gameId + " (username, cards) VALUES(?,?)";
 
 		try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-			pstmt.setInt(1, game_id);
-			pstmt.setInt(2, user_id);
-			pstmt.setInt(3, card_id);
-			pstmt.setInt(4, next_player);
+			pstmt.setString(1, name);
+			pstmt.setString(2, sb.toString());
 			pstmt.executeUpdate();
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
@@ -609,9 +550,48 @@ public class Database {
 	public boolean validateToken(String username, String token) {
 		return false;
 	}
+	
+	// voegt kaart toe aan table van de hand van een speler
+	public void insertCard(int user_id, int card_id) {
+		try {
+			connection = DriverManager.getConnection("jdbc:sqlite:" + uri);
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
 
-	public void persistQuerty(String sql) {
-		
+		String sql = "INSERT INTO PlayerHand(user_id,card_id) VALUES(?,?)";
+
+		try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+			pstmt.setInt(1, user_id);
+			pstmt.setInt(2, card_id);
+			pstmt.executeUpdate();
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		System.out.println("insert card completed!");
 	}
+
+	// verwijdert kaart uit de hand van een speler
+	public void removeCard(int user_id, int card_id) {
+		try {
+			connection = DriverManager.getConnection("jdbc:sqlite:" + uri);
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+
+		String sql = "DELETE FROM PlayerHand WHERE card_id = ?";
+
+		try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+			pstmt.setInt(1, card_id);
+			pstmt.executeUpdate();
+
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+
+		System.out.println("Removed Card " + card_id);
+	}
+
+
 	
 }

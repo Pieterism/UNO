@@ -24,10 +24,10 @@ public class TestMain {
 //        	if(server.ping()) {
 //        		System.out.println("connection established!");
 //        	}
-        	for (int i = 0; i<25; i++) {
-            	server.startNewGame("myNewGame", "myNewDespription", 2);
-        	}
-        	System.out.println(dispatcher.getPort());
+			server.register("woutertje", "Password");
+			server.startNewGame("myNewGame", "myNewDespription", 2);
+			server.readyToStart(0, "My game");
+		   	System.out.println(dispatcher.getPort());
             
         } catch (Exception e) {
             e.printStackTrace();

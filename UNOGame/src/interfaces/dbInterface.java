@@ -7,6 +7,9 @@ import java.security.SignatureException;
 import java.sql.Blob;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.List;
+
+import uno.Card;
 
 public interface dbInterface extends Remote {
 
@@ -26,15 +29,11 @@ public interface dbInterface extends Remote {
 
     public String getPlayerHand(int user_id) throws RemoteException, SQLException;
 
-    public void addGame(int user1, int user2, int user3, int user4) throws RemoteException;
-
-    public void removeGame(int game_id) throws RemoteException;
+    public void addGame(List<String> users) throws RemoteException;
 
     public String getActiveGames() throws RemoteException, SQLException;
 
     public void StopGame(int game_id) throws RemoteException;
-
-    public void playTurn(int game_id, int user_id, int card_id, int next_player) throws RemoteException;
 
     public String getAllTurns(int game_id) throws RemoteException, SQLException;
 
@@ -55,4 +54,8 @@ public interface dbInterface extends Remote {
 	public void ping(int portnumber)throws RemoteException;
 	
 	public int getPortnumber() throws RemoteException;
+
+	public void duplicateGame(List<String> temp)throws RemoteException;
+
+	public void updateHandPlayer(String name, List<Card> cards, int gameId) throws RemoteException;
 }

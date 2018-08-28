@@ -18,7 +18,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import interfaces.dbInterface;
+import interfaces.gameControllerInterface;
 import interfaces.serverInterface;
+import uno.Card;
 
 public class dbInterfaceImpl extends UnicastRemoteObject implements dbInterface {
 
@@ -35,9 +37,7 @@ public class dbInterfaceImpl extends UnicastRemoteObject implements dbInterface 
 			CertificateException, IOException, UnrecoverableKeyException {
 		db = new Database(uri);
 		db.createUserTable();
-		db.createPlayerHandTable();
 		db.createGameTable();
-		db.createGameTurnTable();
 		db.createImagesTable();
 		databaseServers = new ArrayList<>();
 		this.portnumber = portnumber;
@@ -89,13 +89,21 @@ public class dbInterfaceImpl extends UnicastRemoteObject implements dbInterface 
 	}
 
 	@Override
-	public void addGame(int user1, int user2, int user3, int user4) throws RemoteException {
-		db.addGame(user1, user2, user3, user4);
+	public void addGame(List<String> users) throws RemoteException {
+		List<String> temp = new ArrayList<>();
+		temp.addAll(users);
+		for (int i=0; i<4-users.size(); i++) {
+			temp.add(new String(""));
+		}
+		
+		db.addGame(temp.get(0), temp.get(1), temp.get(2), temp.get(3));
+		for (dbInterface database : databaseServers) {
+			database.duplicateGame(temp);
+		}
 	}
-
-	@Override
-	public void removeGame(int game_id) throws RemoteException {
-		db.removeGame(game_id);
+	
+	public void duplicateGame(List<String> users) {
+		db.addGame(users.get(0), users.get(1), users.get(2), users.get(3));
 	}
 
 	@Override
@@ -106,11 +114,6 @@ public class dbInterfaceImpl extends UnicastRemoteObject implements dbInterface 
 	@Override
 	public void StopGame(int game_id) throws RemoteException {
 		db.StopGame(game_id);
-	}
-
-	@Override
-	public void playTurn(int game_id, int user_id, int card_id, int next_player) throws RemoteException {
-		db.playTurn(game_id, user_id, card_id, next_player);
 	}
 
 	@Override
@@ -193,7 +196,6 @@ public class dbInterfaceImpl extends UnicastRemoteObject implements dbInterface 
 	public void insertUser(String username, String password, String token, Timestamp timestamp)
 			throws RemoteException, InvalidKeyException, SignatureException {
 		db.duplicateUser(username, password, token, timestamp);
-		
 	}
 
 	@Override
@@ -205,5 +207,10 @@ public class dbInterfaceImpl extends UnicastRemoteObject implements dbInterface 
 	@Override
 	public int getPortnumber() throws RemoteException {
 		return this.portnumber;
+	}
+
+	@Override
+	public void updateHandPlayer(String name, List<Card> cards, int gameId) throws RemoteException {
+		db.playTurn(name, cards, gameId);
 	}
 }
