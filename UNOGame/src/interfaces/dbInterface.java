@@ -25,7 +25,7 @@ public interface dbInterface extends Remote {
 
     public String getPlayerHand(int user_id) throws RemoteException, SQLException;
 
-    public void addGame(List<String> users) throws RemoteException;
+    public void addGame(List<String> users, int gameTheme) throws RemoteException;
 
     public String getActiveGames() throws RemoteException, SQLException;
 
@@ -39,7 +39,7 @@ public interface dbInterface extends Remote {
 	
 	public int getPortnumber() throws RemoteException;
 
-	public void duplicateGame(List<String> temp)throws RemoteException;
+	public void duplicateGame(List<String> temp, int gameTheme)throws RemoteException;
 
 	public void updateHandPlayer(String name, List<Card> cards, int gameId) throws RemoteException;
 

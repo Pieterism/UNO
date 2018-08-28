@@ -174,16 +174,8 @@ public class Database {
 	}
 
 	// toevoegen van een user in databank
-<<<<<<< HEAD
 	public String insertUser(String username, String password, Timestamp timestamp) throws InvalidKeyException, SignatureException {
-		String token = createToken(username, timestamp);
-=======
-	public String insertUser(String username, String password, Timestamp timestamp)
-			throws InvalidKeyException, SignatureException {
-		String token = createToken(username, password, timestamp);
->>>>>>> 5227e3bc27193f50d4bf020a6d828f4376205ce2
-		createUser(username, password, token, timestamp);
-		return token;
+		return createToken(username, timestamp);
 	}
 
 	private void createUser(String username, String password, String token, Timestamp timestamp) {
@@ -218,11 +210,8 @@ public class Database {
 		signature.initSign(privateKey);
 		signature.update(token.getBytes());
 		byte[] signedToken = signature.sign();
-
 		saveToken(username, new String(signedToken), timestamp);
-
 		return new String(signedToken);
-
 	}
 
 	private void saveToken(String username, String signedToken, Timestamp timestamp) {
@@ -253,7 +242,6 @@ public class Database {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
 		String sql = "SELECT user_id, username, password FROM USERS";
 		StringBuffer sb = new StringBuffer();
 		try {
@@ -263,7 +251,6 @@ public class Database {
 				sb.append(rs.getString("USER_ID") + "\t");
 				sb.append(rs.getString("USERNAME") + "\t");
 				sb.append(rs.getString("PASSWORD") + "\n");
-
 			}
 		} catch (SQLException e1) {
 			e1.printStackTrace();
@@ -297,9 +284,7 @@ public class Database {
 		} catch (SQLException ex) {
 			ex.printStackTrace();
 		}
-
 		return false;
-
 	}
 
 	// geeft alle kaarten in de hand van een speler weer
@@ -555,15 +540,6 @@ public class Database {
 
 		return rs.toString();
 	}
-<<<<<<< HEAD
-	
-=======
-
-	public boolean validateToken(String username, String token) {
-		return false;
-	}
-
->>>>>>> 5227e3bc27193f50d4bf020a6d828f4376205ce2
 	// voegt kaart toe aan table van de hand van een speler
 	public void insertCard(int user_id, int card_id) {
 		try {

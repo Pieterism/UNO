@@ -79,21 +79,21 @@ public class dbInterfaceImpl extends UnicastRemoteObject implements dbInterface 
 	}
 
 	@Override
-	public void addGame(List<String> users) throws RemoteException {
+	public void addGame(List<String> users, int gameTheme) throws RemoteException {
 		List<String> temp = new ArrayList<>();
 		temp.addAll(users);
 		for (int i=0; i<NUMBER_OF_DATABASES-users.size(); i++) {
 			temp.add(new String(""));
 		}
 		
-		db.addGame(temp.get(0), temp.get(1), temp.get(2), temp.get(3));
+		db.addGame(temp.get(0), temp.get(1), temp.get(2), temp.get(3), gameTheme);
 		for (dbInterface database : databaseServers) {
-			database.duplicateGame(temp);
+			database.duplicateGame(temp, gameTheme);
 		}
 	}
 	
-	public void duplicateGame(List<String> users) {
-		db.addGame(users.get(0), users.get(1), users.get(2), users.get(3));
+	public void duplicateGame(List<String> users, int gameTheme) {
+		db.addGame(users.get(0), users.get(1), users.get(2), users.get(3), gameTheme);
 	}
 
 	@Override
@@ -186,4 +186,5 @@ public class dbInterfaceImpl extends UnicastRemoteObject implements dbInterface 
 	public void duplicateCards(String name, List<Card> cards, int gameId) throws RemoteException {
 		db.playTurn(name, cards, gameId);
 	}
+
 }
