@@ -35,8 +35,8 @@ public class dispatcherInterfaceImpl extends UnicastRemoteObject implements disp
 	private List<Integer> fullServers;
 	private List<dbInterface> databaseServers;
 
-	//private String uri ="C:\\Users\\wouter\\Documents\\School\\geavanceerde\\UNO\\uno.db";
-	private String uri = "D:\\Google Drive\\School\\2017-2018\\1e Semester\\Gedistribueerde Systemen\\Opdracht UNO\\GIT_UNO\\uno";
+	private String uri ="C:\\Users\\wouter\\Documents\\School\\geavanceerde\\UNO\\uno.db";
+	//private String uri = "D:\\Google Drive\\School\\2017-2018\\1e Semester\\Gedistribueerde Systemen\\Opdracht UNO\\GIT_UNO\\uno";
 
 	private Map<Integer, Integer> serverToDB;
 
@@ -67,8 +67,12 @@ public class dispatcherInterfaceImpl extends UnicastRemoteObject implements disp
 	}
 
 	private void makeConnect() {
-		for (dbInterface inter : databaseServers) {
-			
+		for (dbInterface iter : databaseServers) {
+			try {
+				iter.setDatabaseServers();
+			} catch (RemoteException e) {
+				e.printStackTrace();
+			}
 		}
 		
 	}
@@ -76,10 +80,20 @@ public class dispatcherInterfaceImpl extends UnicastRemoteObject implements disp
 	private void connectToDb() {
 		for (int i = dbPortnumber; i<dbPortnumber+NUMBER_OF_DATABASES; i++) {
 			try {
-				Registry registry = LocateRegistry.getRegistry("localhost", dbPortnumber);
-				dbInterface tempDB = (dbInterface) registry.lookup("UNOdatabase"+ dbPortnumber);
+				Registry registry = LocateRegistry.getRegistry("localhost", i);
+				dbInterface tempDB = (dbInterface) registry.lookup("UNOdatabase"+ i);
 				databaseServers.add(tempDB);
 			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		//check connection
+		for (dbInterface databaseInterface : this.databaseServers) {
+			try {
+				System.out.println("check connection!");
+				databaseInterface.ping(1099);
+			} catch (RemoteException e) {
 				e.printStackTrace();
 			}
 		}
@@ -112,9 +126,9 @@ public class dispatcherInterfaceImpl extends UnicastRemoteObject implements disp
 
 			try {
 				Registry registry = LocateRegistry.createRegistry(portnumber + i);
-				dbInterfaceImpl db = new dbInterfaceImpl(uri + (portnumber + i) + ".db");
+				dbInterfaceImpl db = new dbInterfaceImpl(uri + (portnumber + i) + ".db", portnumber+i);
 				registry.bind("UNOdatabase" + (portnumber + i), db);
-				databaseServers.add(db);
+//				databaseServers.add(db);
 
 				System.out.println("check databaseServersList");
 

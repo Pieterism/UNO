@@ -25,12 +25,13 @@ public class dbInterfaceImpl extends UnicastRemoteObject implements dbInterface 
 	private Database db;
 	private List<serverInterface> applicationServers;
 	private List<dbInterface> databaseServers;
+	private int portnumber;
 	
 	private final int dbPortnumber = 1300;
 	private final int NUMBER_OF_DATABASES = 4;
 
 	// constructor
-	public dbInterfaceImpl(String uri) throws SQLException, KeyStoreException, NoSuchAlgorithmException,
+	public dbInterfaceImpl(String uri, int portnumber) throws SQLException, KeyStoreException, NoSuchAlgorithmException,
 			CertificateException, IOException, UnrecoverableKeyException {
 		db = new Database(uri);
 		db.createUserTable();
@@ -40,6 +41,7 @@ public class dbInterfaceImpl extends UnicastRemoteObject implements dbInterface 
 		db.createImagesTable();
 		applicationServers = new ArrayList<>();
 		databaseServers = new ArrayList<>();
+		this.portnumber = portnumber;
 		System.out.println("----------------------------------------------");
 
 	}
@@ -172,22 +174,25 @@ public class dbInterfaceImpl extends UnicastRemoteObject implements dbInterface 
 
 	@Override
 	public void setDatabaseServers() throws RemoteException {
-		List<dbInterface> result = new ArrayList<>();
 		for (int i = dbPortnumber; i<dbPortnumber+NUMBER_OF_DATABASES; i++) {
-			if (i == this.) {
-				
-			}
-			Registry registry;
-			try {
-				registry = LocateRegistry.getRegistry("localhost", i);
-				dbInterface temp = (dbInterface) registry.lookup("UNOdatabase"+ i);
-				result.add(temp);
+			if (i != this.portnumber) {
+				Registry registry;
+				try {
+					registry = LocateRegistry.getRegistry("localhost", i);
+					dbInterface temp = (dbInterface) registry.lookup("UNOdatabase"+ i);
+					this.databaseServers.add(temp);
+					
 
-			} catch (Exception e) {
-				e.printStackTrace();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		}
-		this.databaseServers = result;
+		
+		//check the connection
+		for (dbInterface databaseInterface : this.databaseServers) {
+			databaseInterface.ping(this.portnumber);
+		}
 	}
 
 	public void addDatabaseServer(dbInterfaceImpl databaseServer) {
@@ -202,6 +207,12 @@ public class dbInterfaceImpl extends UnicastRemoteObject implements dbInterface 
 	public void insertUser(String username, String password, String token, Timestamp timestamp)
 			throws RemoteException, InvalidKeyException, SignatureException {
 		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void ping(int portnumber) throws RemoteException {
+		System.out.println("server " + portnumber + " has pinged server " + this.portnumber);
 		
 	}
 }
