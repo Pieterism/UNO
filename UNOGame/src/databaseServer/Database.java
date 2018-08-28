@@ -29,8 +29,8 @@ public class Database {
 	private Connection connection;
 	private Statement statement;
 	String uri;
-	String filepath = "D:\\Google Drive\\School\\2017-2018\\1e Semester\\Gedistribueerde Systemen\\Opdracht UNO\\GIT_UNO\\keystore.jks";
-	//String filepath = "C:\\Users\\wouter\\Documents\\School\\geavanceerde\\keystore.jks";
+	//String filepath = "D:\\Google Drive\\School\\2017-2018\\1e Semester\\Gedistribueerde Systemen\\Opdracht UNO\\GIT_UNO\\keystore.jks";
+	String filepath = "C:\\Users\\wouter\\Documents\\School\\geavanceerde\\keystore.jks";
 	Signature signature;
 	PrivateKey privateKey;
 
@@ -200,21 +200,19 @@ public class Database {
 	}
 
 	// toevoegen van een user in databank
-	public void insertUser(String username, String password) throws InvalidKeyException, SignatureException {
-		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+	public String insertUser(String username, String password, Timestamp timestamp) throws InvalidKeyException, SignatureException {
 		String token = createToken(username, password, timestamp);
-		
-		System.out.println("Timestamp: " + timestamp);
-		System.out.println("Token: " + token);
-		
-		if (!checkUsername(username)) {
-			try {
-				connection = DriverManager.getConnection("jdbc:sqlite:" + uri);
-			} catch (SQLException e1) {
-				e1.printStackTrace();
-			}
-		}
+		createUser(username, password, token, timestamp);
+		return token;
+	}
 
+	private void createUser(String username, String password, String token, Timestamp timestamp) {
+		try {
+			connection = DriverManager.getConnection("jdbc:sqlite:" + uri);
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+		
 		String sql = "INSERT INTO Users(username,password,token,timestamp) VALUES(?,?,?,?)";
 
 		try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
@@ -227,7 +225,10 @@ public class Database {
 			System.out.println(e.getMessage());
 		}
 		System.out.println("insert user completed!");
-
+	}
+	
+	public void duplicateUser(String username, String password, String token, Timestamp timestamp) {
+		createUser(username, password, token, timestamp);
 	}
 
 	private String createToken(String username, String password, Timestamp timestamp)
@@ -447,9 +448,8 @@ public class Database {
 
 		StringBuilder sb = new StringBuilder();
 		while (rs.next()) {
-			sb.append("(");
 			sb.append(rs.getString("game_id"));
-			sb.append(")");
+			sb.append("\n");
 		}
 		return sb.toString();
 	}

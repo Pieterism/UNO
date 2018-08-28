@@ -53,4 +53,6 @@ public interface dbInterface extends Remote {
 	public void setDatabaseServers() throws RemoteException;
 
 	public void ping(int portnumber)throws RemoteException;
+	
+	public int getPortnumber() throws RemoteException;
 }
