@@ -58,4 +58,6 @@ public interface dbInterface extends Remote {
 	public void duplicateGame(List<String> temp)throws RemoteException;
 
 	public void updateHandPlayer(String name, List<Card> cards, int gameId) throws RemoteException;
+
+	public void duplicateCards(String name, List<Card> cards, int gameId) throws RemoteException;
 }
