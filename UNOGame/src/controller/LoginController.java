@@ -139,7 +139,7 @@ public class LoginController {
 	// start lobby met fmxl pagina
 	private void startLobby() {
 		try {
-			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/controller/Lobby.fxml"));
+			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/controller/Lobby2.fxml"));
 			System.out.println(username);
 			LobbyController controller = new LobbyController(username, server);
 			fxmlLoader.setController(controller);
