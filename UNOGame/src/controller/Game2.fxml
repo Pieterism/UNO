@@ -45,10 +45,7 @@
                <children>
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                      <children>
-                        <ImageView fx:id="btn_drawCard" fitHeight="200.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../pictures/1/UNO-Back.png" />
-                           </image>
+                        <ImageView fx:id="btn_drawCard" fitHeight="175.0" pickOnBounds="true" preserveRatio="true">
                            <cursor>
                               <Cursor fx:constant="HAND" />
                            </cursor>
@@ -56,18 +53,18 @@
                               <Insets right="10.0" />
                            </HBox.margin>
                         </ImageView>
-                        <ImageView fitHeight="200.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="image_lastcard" fitHeight="175.0" pickOnBounds="true" preserveRatio="true">
                            <HBox.margin>
                               <Insets left="10.0" />
                            </HBox.margin>
                            <cursor>
                               <Cursor fx:constant="HAND" />
                            </cursor>
-                           <image>
-                              <Image url="@../pictures/UnoLogo.png" />
-                           </image>
                         </ImageView>
                      </children>
+                     <GridPane.margin>
+                        <Insets />
+                     </GridPane.margin>
                   </HBox>
                   <VBox spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                      <children>
@@ -79,13 +76,13 @@
                               <Insets top="5.0" />
                            </VBox.margin>
                         </TextField>
-                        <HBox fx:id="opponent1Box" alignment="CENTER" minHeight="100.0" prefHeight="100.0" spacing="3.0" style="-fx-border-color: #ffffff;" />
+                        <HBox fx:id="userBox" alignment="CENTER" minHeight="100.0" prefHeight="100.0" spacing="3.0" />
                      </children>
                   </VBox>
                   <VBox spacing="5.0" GridPane.columnIndex="1">
                      <children>
-                        <HBox fx:id="opponent1Box1" alignment="CENTER" minHeight="100.0" prefHeight="100.0" spacing="3.0" style="-fx-border-color: #ffffff;" />
-                        <TextField fx:id="opponent4111" editable="false" promptText="Player 3" style="-fx-background-color: 000000;">
+                        <HBox fx:id="opponent1Box" alignment="CENTER" minHeight="100.0" prefHeight="100.0" spacing="3.0" />
+                        <TextField fx:id="opponent1" editable="false" promptText="Player 3" style="-fx-background-color: 000000;">
                            <font>
                               <Font name="PotatoesAndPeasRegular" size="24.0" />
                            </font>
@@ -97,8 +94,8 @@
                   </VBox>
                   <HBox prefHeight="100.0" prefWidth="200.0" spacing="5.0" GridPane.rowIndex="1">
                      <children>
-                        <VBox fx:id="opponent2Box11" alignment="CENTER" minWidth="100.0" prefWidth="100.0" spacing="3.0" style="-fx-border-color: #ffffff;" />
-                        <TextField fx:id="opponent412" editable="false" promptText="Player 2" style="-fx-background-color: 000000;">
+                        <VBox fx:id="opponent2Box" alignment="CENTER" minWidth="100.0" prefWidth="100.0" spacing="3.0" />
+                        <TextField fx:id="opponent2" editable="false" promptText="Player 2" style="-fx-background-color: 000000;" HBox.hgrow="ALWAYS">
                            <font>
                               <Font name="PotatoesAndPeasRegular" size="24.0" />
                            </font>
@@ -110,15 +107,15 @@
                   </HBox>
                   <HBox prefHeight="100.0" prefWidth="200.0" spacing="5.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
                      <children>
-                        <TextField fx:id="opponent4121" editable="false" promptText="Player 4" style="-fx-background-color: 000000;">
+                        <TextField fx:id="opponent3" editable="false" promptText="Player 4" style="-fx-background-color: 000000;" HBox.hgrow="ALWAYS">
                            <font>
                               <Font name="PotatoesAndPeasRegular" size="24.0" />
                            </font>
                            <HBox.margin>
-                              <Insets right="5.0" />
+                              <Insets left="5.0" />
                            </HBox.margin>
                         </TextField>
-                        <VBox fx:id="opponent2Box111" alignment="CENTER" minWidth="100.0" prefWidth="100.0" spacing="3.0" style="-fx-border-color: #ffffff;" />
+                        <VBox fx:id="opponent3Box" alignment="CENTER" minWidth="100.0" prefWidth="100.0" spacing="3.0" />
                      </children>
                   </HBox>
                </children>
@@ -168,7 +165,7 @@
                      <children>
                         <VBox alignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <children>
-                              <TextArea fx:id="chat" style="text-area-background: #ccddff; -fx-background-color: #ccddff;" VBox.vgrow="ALWAYS">
+                              <TextArea fx:id="chat_output" style="text-area-background: #ccddff; -fx-background-color: #ccddff;" VBox.vgrow="ALWAYS">
                                  <VBox.margin>
                                     <Insets bottom="10.0" left="10.0" top="15.0" />
                                  </VBox.margin>
