@@ -20,12 +20,19 @@ public class DrawCard extends Card implements Serializable {
 	/**
 	 * Constructor for objects of class DrawCard
 	 */
+	/**
+	 * @param colour
+	 * @param nDraw
+	 */
 	public DrawCard(int colour, int nDraw) {
 		super(colour, "PLUS2");
 		this.nDraw = nDraw;
 		this.myScore = 20;
 	}
 
+	/**
+	 * @return
+	 */
 	public int getNDraw() {
 		return nDraw;
 	}
@@ -34,6 +41,9 @@ public class DrawCard extends Card implements Serializable {
 //        return (card.myColour == myColour);
 //    }
 	// Volgende speler moet nDraw aantal kaarten trekken en beurt wordt overgeslaan.
+	/* (non-Javadoc)
+	 * @see uno.Card#play(uno.UnoGame)
+	 */
 	@Override
 	public void play(UnoGame game) {
 		try {

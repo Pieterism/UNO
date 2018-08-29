@@ -10,6 +10,12 @@ public class NewGameService extends Service<Void> {
 	private int aantal, gameTheme;
 	private serverInterface server;
 
+	/**
+	 * @param gameName
+	 * @param gameTheme
+	 * @param aantal
+	 * @param server
+	 */
 	public NewGameService(String gameName, int gameTheme, Integer aantal, serverInterface server) {
 		this.gameName = gameName;
 		this.gameTheme = gameTheme;
@@ -17,6 +23,9 @@ public class NewGameService extends Service<Void> {
 		this.aantal = aantal;
 	}
 
+	/* (non-Javadoc)
+	 * @see javafx.concurrent.Service#createTask()
+	 */
 	@Override
 	protected Task<Void> createTask() {
 		return new Task<Void>() {

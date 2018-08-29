@@ -62,6 +62,10 @@ public class LoginController {
 	}
 
 	// init, connectie naar dispatcher opzetten, connectie met vrije server starten
+	/**
+	 * @throws RemoteException
+	 * @throws NotBoundException
+	 */
 	public void initialize() throws RemoteException, NotBoundException {
 		Registry registry = LocateRegistry.getRegistry("localhost", 1099);
 		dispatcher = (dispatcherInterface) registry.lookup("UNOdispatcher");

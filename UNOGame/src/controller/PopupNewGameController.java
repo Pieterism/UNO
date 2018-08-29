@@ -19,6 +19,10 @@ public class PopupNewGameController {
 	ObservableList<Integer> themeList = FXCollections.observableArrayList(0, 1);
 	ObservableList<Integer> numberOfPlayerList = FXCollections.observableArrayList(1, 2, 3, 4);
 
+	/**
+	 * @param username
+	 * @param server
+	 */
 	public PopupNewGameController(String username, serverInterface server) {
 		this.username = username;
 		this.server = server;
@@ -42,12 +46,18 @@ public class PopupNewGameController {
 	@FXML
 	Button btn_start, btn_cancel;
 
+	/**
+	 * 
+	 */
 	@FXML
 	public void initialize() {
 		themePicker.setItems(themeList);
 		numberOfPlayersnew.setItems(numberOfPlayerList);
 	}
 
+	/**
+	 * @throws RemoteException
+	 */
 	@FXML
 	public void startGame() throws RemoteException {
 		int aantal = numberOfPlayersnew.getValue();
@@ -67,6 +77,9 @@ public class PopupNewGameController {
 		exit();
 	}
 
+	/**
+	 * @param string
+	 */
 	private void popUpAlert(String string) {
 		Alert errorAlert = new Alert(AlertType.ERROR);
 		errorAlert.setHeaderText("Input not valid");
@@ -74,11 +87,17 @@ public class PopupNewGameController {
 		errorAlert.showAndWait();
 	}
 
+	/**
+	 * 
+	 */
 	@FXML
 	public void cancel() {
 		exit();
 	}
 
+	/**
+	 * 
+	 */
 	public void exit() {
 		Stage stage = (Stage) btn_cancel.getScene().getWindow();
 		stage.close();

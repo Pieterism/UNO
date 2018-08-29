@@ -24,35 +24,62 @@ public class UnoGame {
 
 	private String name, gameId;
 
+	/**
+	 * @return
+	 */
 	public String getGameId() {
 		return gameId;
 	}
 
+	/**
+	 * @param name
+	 */
 	public void setName(String name) {
 		this.name = name;
 	}
 
+	/**
+	 * @param gameId
+	 */
 	public void setGameId(String gameId) {
 		this.gameId = gameId;
 	}
 
+	/**
+	 * @param i
+	 */
 	public void setPlayDirection(int i) {
 		this.myPlayDirection = i;
 	}
 
+	/**
+	 * 
+	 */
 	public void reversePlayDirection() {
 		this.myPlayDirection = this.myPlayDirection * (-1);
 	}
 
+	/**
+	 * @return
+	 */
 	public int connectedPlayers() {
 		return players.size();
 	}
 
+	/**
+	 * @return
+	 */
 	public int getPlayerCount() {
 		return playerCount;
 	}
 
 	// Nieuw spel starten met aantal spelers met standaard UNO-deck.
+	/**
+	 * @param nPlayers
+	 * @param name
+	 * @param gameTheme
+	 * @param db
+	 */
 	public UnoGame(int nPlayers, String name, int gameTheme, dbInterface db) {
 		deck = new ArrayList<Card>();
 		this.name = "UNO game";
@@ -72,6 +99,10 @@ public class UnoGame {
 
 	}
 
+	/**
+	 * @param skip
+	 * @return
+	 */
 	public Player getNextPlayer(int skip) {
 		int i = currentPlayer + (skip * myPlayDirection);
 		i = i % players.size();
@@ -82,10 +113,17 @@ public class UnoGame {
 		return players.get(i);
 	}
 
+	/**
+	 * 
+	 */
 	public void goToNextPlayer() {
 		currentPlayer = (currentPlayer + myPlayDirection + players.size()) % players.size();
 	}
 
+	/**
+	 * @param nCards
+	 * @return
+	 */
 	public List<Card> draw(int nCards) {
 		List<Card> cards = new ArrayList<>();
 		for (int i = 0; i < nCards; i++) {
@@ -101,6 +139,9 @@ public class UnoGame {
 		return cards;
 	}
 
+	/**
+	 * @throws RemoteException
+	 */
 	public void dealCards() throws RemoteException {
 
 		for (Player player : players) {
@@ -127,17 +168,29 @@ public class UnoGame {
 
 	}
 
+	/**
+	 * @throws RemoteException
+	 */
 	private void updateToDBServerInit() throws RemoteException {
 		for (Player player : players) {
 			db.updateHandPlayer(player.getName(), player.getCards(), gameId);
 		}
 	}
 
+	/**
+	 * @param username
+	 * @param cards
+	 * @throws RemoteException
+	 */
 	private void updateToDBServer(String username, List<Card> cards) throws RemoteException {
 		db.updateHandPlayer(username, cards, gameId);
 	}
 
 	// speel 1 beurt van het spel
+	/**
+	 * @return
+	 * @throws RemoteException
+	 */
 	public String playTurn() throws RemoteException {
 		Player player = players.get(currentPlayer);
 
@@ -177,12 +230,19 @@ public class UnoGame {
 		return null;
 	}
 
+	/**
+	 * @param player
+	 */
 	private void print(Player player) {
 		System.out.println(player.getName());
 		System.out.println(player.getCards());
 
 	}
 
+	/**
+	 * @param player
+	 * @throws RemoteException
+	 */
 	public void updateCardAmountPlayer(Player player) throws RemoteException {
 		for (Player iter : players) {
 			iter.getGameController().setCardAmountPlayer(player.getName(), player.getCards().size());
@@ -190,6 +250,11 @@ public class UnoGame {
 		}
 	}
 
+	/**
+	 * @param player
+	 * @param card
+	 * @throws RemoteException
+	 */
 	public void playCard(Player player, Card card) throws RemoteException {
 		boolean valid = false;
 		Iterator<Card> newIterator = player.getCards().iterator();
@@ -215,6 +280,11 @@ public class UnoGame {
 	}
 
 	// speel een volledig spel en geef identiteit van winnaar terug
+	/**
+	 * @return
+	 * @throws RemoteException
+	 * @throws InterruptedException
+	 */
 	public String play() throws RemoteException, InterruptedException {
 		dealCards();
 		for (Player player : players) {
@@ -246,18 +316,36 @@ public class UnoGame {
 		return winner;
 	}
 
+	/**
+	 * @return
+	 */
 	public String getId() {
 		return this.gameId;
 	}
 
+	/**
+	 * @param nextPlayer
+	 * @param nDraw
+	 * @throws RemoteException
+	 */
 	public void draw(gameControllerInterface nextPlayer, int nDraw) throws RemoteException {
 		nextPlayer.addCards(draw(nDraw));
 	}
 
+	/**
+	 * @return
+	 */
 	public String getName() {
 		return this.name;
 	}
 
+	/**
+	 * @param username
+	 * @param gameController
+	 * @throws RemoteException
+	 * @throws NumberFormatException
+	 * @throws InterruptedException
+	 */
 	public void addPlayer(String username, gameControllerInterface gameController)
 			throws RemoteException, NumberFormatException, InterruptedException {
 		Player player = new Player(username, gameController);
@@ -272,6 +360,10 @@ public class UnoGame {
 		}
 	}
 
+	/**
+	 * @param msg
+	 * @throws RemoteException
+	 */
 	public void sendMsg(String msg) throws RemoteException {
 		for (Player player : players) {
 			player.getGameController().setMsg(msg);
@@ -279,6 +371,9 @@ public class UnoGame {
 
 	}
 
+	/**
+	 * 
+	 */
 	public void newDeck() {
 		for (int c = 1; c <= 4; c++) {
 			deck.add(new Card(c, 0));
@@ -299,18 +394,30 @@ public class UnoGame {
 		Collections.shuffle(deck);
 	}
 
+	/**
+	 * @return
+	 */
 	public ArrayList<Player> getPlayers() {
 		return players;
 	}
 
+	/**
+	 * @param players
+	 */
 	public void setPlayers(ArrayList<Player> players) {
 		this.players = players;
 	}
 
+	/**
+	 * @return
+	 */
 	public int getTheme() {
 		return this.gameTheme;
 	}
 
+	/**
+	 * 
+	 */
 	public void endGame() {
 		try {
 			sendMsg("Someone has left the Game, the game has ended");

@@ -11,6 +11,9 @@ public class GUIMain extends Application {
 
 	private static String token;
 
+	/* (non-Javadoc)
+	 * @see javafx.application.Application#start(javafx.stage.Stage)
+	 */
 	@Override
 	public void start(Stage stage) throws Exception {
 		Parent root = FXMLLoader.load(getClass().getResource("/controller/Login.fxml"));
@@ -21,6 +24,9 @@ public class GUIMain extends Application {
 
 	}
 
+	/**
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		launch(args);
 	}

@@ -42,6 +42,15 @@ public class dispatcherInterfaceImpl extends UnicastRemoteObject implements disp
 	private final int dbPortnumber = 1300;
 	private final int NUMBER_OF_DATABASES = 4;
 
+	/**
+	 * @throws AlreadyBoundException
+	 * @throws SQLException
+	 * @throws UnrecoverableKeyException
+	 * @throws KeyStoreException
+	 * @throws NoSuchAlgorithmException
+	 * @throws CertificateException
+	 * @throws IOException
+	 */
 	public dispatcherInterfaceImpl() throws AlreadyBoundException, SQLException, UnrecoverableKeyException,
 			KeyStoreException, NoSuchAlgorithmException, CertificateException, IOException {
 		serverStatus = new HashMap<>();

@@ -34,6 +34,10 @@ public class Card implements Serializable {
 	public int myScore;
 
 	// Constructor om speciale kaart te maken
+	/**
+	 * @param colour
+	 * @param symbol
+	 */
 	public Card(int colour, String symbol) {
 		myColour = colour;
 		mySymbol = symbol;
@@ -41,6 +45,10 @@ public class Card implements Serializable {
 	}
 
 	// Constructor om gewone kaart te maken
+	/**
+	 * @param colour
+	 * @param number
+	 */
 	public Card(int colour, int number) {
 		myColour = colour;
 		mySymbol = String.valueOf(number);
@@ -48,38 +56,63 @@ public class Card implements Serializable {
 		myScore = number;
 	}
 
+	/**
+	 * @param selectedCard
+	 */
 	public Card(Card selectedCard) {
 		this.cardName = selectedCard.cardName;
 		this.myColour = selectedCard.myColour;
 		this.mySymbol = selectedCard.mySymbol;
 	}
 
+	/**
+	 * @return
+	 */
 	public int getColour() {
 		return myColour;
 	}
 
+	/**
+	 * @param colour
+	 */
 	public void setColour(int colour) {
 		myColour = colour;
 	}
 
+	/**
+	 * @return
+	 */
 	public String getSymbol() {
 		return mySymbol;
 	}
 
+	/**
+	 * @param symbol
+	 */
 	public void setSymbol(int symbol) {
 		this.mySymbol = String.valueOf(symbol);
 	}
 
 	// Controleert of kaart gespeeld kan worden op de kaart die er reeds ligt
+	/**
+	 * @param card
+	 * @return
+	 */
 	public boolean canPlayOn(Card card) {
 		return (card.mySymbol.equals(mySymbol) || card.myColour == myColour);
 	}
 
 	// hierin komen acties bij het spelen van een speciale kaart
+	/**
+	 * @param game
+	 */
 	public void play(UnoGame game) {
 		// Default
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
 	@Override
 	public String toString() {
 		String result;
@@ -92,6 +125,9 @@ public class Card implements Serializable {
 		return result;
 	}
 
+	/**
+	 * @return
+	 */
 	public Image getImage() {
 		return new Image(Card.class.getResourceAsStream("SEVEN_YELLOW.png"));
 

@@ -24,6 +24,10 @@ import uno.Card;
 import uno.Player;
 import uno.UnoGame;
 
+/**
+ * @author Pieter
+ *
+ */
 public class serverInterfaceImpl extends UnicastRemoteObject implements serverInterface {
 
 	private dbInterface db;
@@ -35,6 +39,11 @@ public class serverInterfaceImpl extends UnicastRemoteObject implements serverIn
 	private dispatcherInterface dispatcher;
 	private boolean first = true;
 
+	/**
+	 * @param dbPortnumber
+	 * @param portnumber
+	 * @throws RemoteException
+	 */
 	public serverInterfaceImpl(int dbPortnumber, int portnumber) throws RemoteException {
 		games = new ArrayList<>();
 		clients = new ArrayList<>();
@@ -49,6 +58,9 @@ public class serverInterfaceImpl extends UnicastRemoteObject implements serverIn
 		setdb(dbPortnumber);
 	}
 
+	/* (non-Javadoc)
+	 * @see interfaces.AuthenticationInterface#register(java.lang.String, java.lang.String)
+	 */
 	@Override
 	public boolean register(String username, String password)
 			throws RemoteException, InvalidKeyException, SignatureException {
@@ -61,6 +73,9 @@ public class serverInterfaceImpl extends UnicastRemoteObject implements serverIn
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see interfaces.AuthenticationInterface#login(java.lang.String, java.lang.String)
+	 */
 	@Override
 	public boolean login(String username, String password)
 			throws RemoteException, InvalidKeyException, SignatureException {
@@ -79,6 +94,10 @@ public class serverInterfaceImpl extends UnicastRemoteObject implements serverIn
 		}
 	}
 
+	/**
+	 * @param msg
+	 * @throws RemoteException
+	 */
 	public void tellClients(String msg) throws RemoteException {
 		for (clientInterface client : clients) {
 			client.tell(msg);
@@ -86,6 +105,9 @@ public class serverInterfaceImpl extends UnicastRemoteObject implements serverIn
 
 	}
 
+	/**
+	 * @param dbPortnumber
+	 */
 	public void setdb(int dbPortnumber) {
 		Registry registry;
 		try {
@@ -97,6 +119,9 @@ public class serverInterfaceImpl extends UnicastRemoteObject implements serverIn
 
 	}
 
+	/* (non-Javadoc)
+	 * @see interfaces.serverInterface#startNewGame(java.lang.String, int, int)
+	 */
 	@Override
 	public void startNewGame(String name, int gameTheme, int aantalSpelers) throws RemoteException {
 		UnoGame uno = new UnoGame(aantalSpelers, name, gameTheme, db);
@@ -111,6 +136,9 @@ public class serverInterfaceImpl extends UnicastRemoteObject implements serverIn
 
 	}
 	
+	/**
+	 * 
+	 */
 	public void getDispatcher() {
 		Registry registry;
 		try {
@@ -123,6 +151,9 @@ public class serverInterfaceImpl extends UnicastRemoteObject implements serverIn
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see interfaces.serverInterface#getGames()
+	 */
 	@Override
 	public List<String> getGames() throws RemoteException {
 		
@@ -139,6 +170,9 @@ public class serverInterfaceImpl extends UnicastRemoteObject implements serverIn
 		return gamesList;
 	}
 
+	/* (non-Javadoc)
+	 * @see interfaces.serverInterface#send(java.lang.String, java.lang.String)
+	 */
 	@Override
 	public void send(String s, String username) throws RemoteException {
 		String message;
@@ -150,16 +184,25 @@ public class serverInterfaceImpl extends UnicastRemoteObject implements serverIn
 
 	}
 
+	/* (non-Javadoc)
+	 * @see interfaces.serverInterface#giveLobby(interfaces.lobbyInterface)
+	 */
 	@Override
 	public void giveLobby(lobbyInterface lobbyController) throws RemoteException {
 		lobbies.add(lobbyController);
 	}
 
+	/* (non-Javadoc)
+	 * @see interfaces.serverInterface#exit(interfaces.lobbyInterface)
+	 */
 	@Override
 	public void exit(lobbyInterface lobbyController) throws RemoteException {
 		lobbies.remove(lobbyController);
 	}
 
+	/* (non-Javadoc)
+	 * @see interfaces.serverInterface#joinGame(interfaces.gameControllerInterface, int, java.lang.String)
+	 */
 	@Override
 	public void joinGame(gameControllerInterface gameController, int gameID, String username)
 			throws RemoteException, IllegalStateException {
@@ -172,11 +215,17 @@ public class serverInterfaceImpl extends UnicastRemoteObject implements serverIn
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see interfaces.serverInterface#sendGameMsg(java.lang.String, int, java.lang.String)
+	 */
 	@Override
 	public void sendGameMsg(String msg, int gameID, String username) throws RemoteException {
 		games.get(gameID).sendMsg(username + ": " + msg);
 	}
 
+	/* (non-Javadoc)
+	 * @see interfaces.serverInterface#readyToStart(int, java.lang.String, int)
+	 */
 	@Override
 	public void readyToStart(int gameId, String username, int gametheme) throws RemoteException {
 		System.out.println("ready to start executed!");
@@ -227,6 +276,9 @@ public class serverInterfaceImpl extends UnicastRemoteObject implements serverIn
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see interfaces.serverInterface#getCards(java.lang.String, int)
+	 */
 	@Override
 	public List<Card> getCards(String username, int gameID) {
 		for (Player player : games.get(gameID).getPlayers()) {
@@ -237,20 +289,32 @@ public class serverInterfaceImpl extends UnicastRemoteObject implements serverIn
 		return null;
 	}
 
+	/**
+	 * @return
+	 */
 	public dbInterface getDb() {
 		return db;
 	}
 
+	/**
+	 * @return
+	 */
 	public List<clientInterface> getClients() {
 		return clients;
 	}
 
+	/* (non-Javadoc)
+	 * @see interfaces.AuthenticationInterface#getLoginToken(java.lang.String, java.lang.String)
+	 */
 	@Override
 	public String getLoginToken(String username, String password) throws RemoteException, SQLException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+	/* (non-Javadoc)
+	 * @see interfaces.serverInterface#closeGC(interfaces.gameControllerInterface)
+	 */
 	@Override
 	public void closeGC(gameControllerInterface gci) throws RemoteException {
 		for (UnoGame game : games) {
@@ -263,15 +327,4 @@ public class serverInterfaceImpl extends UnicastRemoteObject implements serverIn
 		
 	}
 
-//	@Override
-//	public int checkActiveGame(String username) throws RemoteException {
-//		// TODO Auto-generated method stub
-//		return 0;
-//	}
-//
-//	@Override
-//	public void reconnect(int dbID, gameControllerInterface gci, String username) throws RemoteException {
-//		// TODO Auto-generated method stub
-//		
-//	}
 }

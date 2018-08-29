@@ -61,11 +61,20 @@ public class LobbyController extends UnicastRemoteObject implements lobbyInterfa
     @FXML
     private AnchorPane pn_input, pn_output;
 
+    /**
+     * @param s
+     * @param server
+     * @throws RemoteException
+     */
     public LobbyController(String s, serverInterface server) throws RemoteException{
         this.username = s;
         this.server = server;
     }
 
+    /**
+     * @throws RemoteException
+     * @throws NotBoundException
+     */
     public void initialize() throws RemoteException, NotBoundException {
         setList();
         server.giveLobby(this);
@@ -86,6 +95,9 @@ public class LobbyController extends UnicastRemoteObject implements lobbyInterfa
         lbl_username.setText(username);
     }
 
+    /**
+     * @throws RemoteException
+     */
     public void setList() throws RemoteException {
         List<String> gameslist = server.getGames();
         gameData.addAll(gameslist);
@@ -96,12 +108,18 @@ public class LobbyController extends UnicastRemoteObject implements lobbyInterfa
         games.prefHeightProperty().bind(pn_input.heightProperty());
     }
 
+    /**
+     * @throws RemoteException
+     */
     @FXML
     public void createNewGame() throws RemoteException {
     	startPopupNewGame();
     	reload();
     }
 
+    /**
+     * @throws RemoteException
+     */
     @FXML
     public void joinGame() throws RemoteException {
 		startGame();
@@ -109,6 +127,9 @@ public class LobbyController extends UnicastRemoteObject implements lobbyInterfa
 	}
  
 
+    /**
+     * @throws RemoteException
+     */
     @FXML
     public void exit() throws RemoteException {
     	server.exit(this);
@@ -116,12 +137,18 @@ public class LobbyController extends UnicastRemoteObject implements lobbyInterfa
         stage.close();
     }
 
+    /**
+     * @throws RemoteException
+     */
     @FXML
     public void send() throws RemoteException {
     	server.send(chat_input.getText(), username);
         chat_input.setText("");
     }
     
+    /**
+     * @throws RemoteException
+     */
     @FXML
     public void reload() throws RemoteException {
         List<String> gameslist = server.getGames();
@@ -131,6 +158,9 @@ public class LobbyController extends UnicastRemoteObject implements lobbyInterfa
         games.setItems(gameData);
     }
 
+    /**
+     * 
+     */
     public void startGame() {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/controller/Game.fxml"));
@@ -175,12 +205,18 @@ public class LobbyController extends UnicastRemoteObject implements lobbyInterfa
         }
     }
 
+	/* (non-Javadoc)
+	 * @see interfaces.lobbyInterface#setMsg(java.lang.String)
+	 */
 	@Override
 	public void setMsg(String msg) throws RemoteException {
 		String message = chat.getText() + msg + "\n";
         chat.setText(message);
 	}
 	
+	/**
+	 * 
+	 */
 	public void startPopupNewGame(){
 		try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/controller/PopupNewGame.fxml"));

@@ -39,6 +39,15 @@ public class Database {
 	Signature signature;
 
 	// Database aanmaken indien ze nog niet bestaat
+	/**
+	 * @param uri
+	 * @throws SQLException
+	 * @throws KeyStoreException
+	 * @throws NoSuchAlgorithmException
+	 * @throws CertificateException
+	 * @throws IOException
+	 * @throws UnrecoverableKeyException
+	 */
 	public Database(String uri) throws SQLException, KeyStoreException, NoSuchAlgorithmException, CertificateException,
 			IOException, UnrecoverableKeyException {
 		this.uri = uri;
@@ -65,6 +74,9 @@ public class Database {
 	}
 
 	// aanmaken van een table voor Users
+	/**
+	 * @throws SQLException
+	 */
 	public void createUserTable() throws SQLException {
 
 		try {
@@ -86,6 +98,10 @@ public class Database {
 	}
 
 	// aanmaken van table voor Players hun kaarten
+	/**
+	 * @param id
+	 * @throws SQLException
+	 */
 	public void createPlayerHandTable(String id) throws SQLException {
 		try {
 
@@ -105,6 +121,9 @@ public class Database {
 	}
 
 	// aanmaken van table voor elk spel bij te houden
+	/**
+	 * @throws SQLException
+	 */
 	public void createGameTable() throws SQLException {
 		try {
 
@@ -129,6 +148,9 @@ public class Database {
 	}
 	
 	// aanmaken van table voor elk spel bij te houden
+	/**
+	 * @throws SQLException
+	 */
 	public void createGameToUserTable() throws SQLException {
 		try {
 
@@ -157,6 +179,9 @@ public class Database {
 	}
 
 	// aanmaken table voor kaartvoorstellingen
+	/**
+	 * @throws SQLException
+	 */
 	public void createImagesTable() throws SQLException {
 		try {
 
@@ -177,6 +202,10 @@ public class Database {
 	}
 
 	// Controle of de username reeds aanwezig is in de databank
+	/**
+	 * @param name
+	 * @return
+	 */
 	public boolean checkUsername(String name) {
 		try {
 			connection = DriverManager.getConnection("jdbc:sqlite:" + uri);
@@ -201,6 +230,12 @@ public class Database {
 	}
 
 	// toevoegen van een user in databank
+	/**
+	 * @param username
+	 * @param password
+	 * @param token
+	 * @param timestamp
+	 */
 	public void addUser(String username, String password, String token, Timestamp timestamp) {
 		try {
 			connection = DriverManager.getConnection("jdbc:sqlite:" + uri);
@@ -222,6 +257,13 @@ public class Database {
 		System.out.println("insert user completed!");
 	}
 
+	/**
+	 * @param username
+	 * @param timestamp
+	 * @return
+	 * @throws InvalidKeyException
+	 * @throws SignatureException
+	 */
 	public String createToken(String username, Timestamp timestamp)
 			throws InvalidKeyException, SignatureException {
 
@@ -233,6 +275,11 @@ public class Database {
 		return new String(signedToken);
 	}
 
+	/**
+	 * @param username
+	 * @param signedToken
+	 * @param timestamp
+	 */
 	private void saveToken(String username, String signedToken, Timestamp timestamp) {
 		try {
 			connection = DriverManager.getConnection("jdbc:sqlite:" + uri);
@@ -255,6 +302,9 @@ public class Database {
 	}
 
 	// inhoud van databank teruggeven
+	/**
+	 * @return
+	 */
 	public String getAllUsers() {
 		try {
 			connection = DriverManager.getConnection("jdbc:sqlite:" + uri);
@@ -279,6 +329,13 @@ public class Database {
 
 	// nakijken of de user met overeenkomstig passwoord zich al in
 	// de databank bevindt
+	/**
+	 * @param username
+	 * @param password
+	 * @return
+	 * @throws InvalidKeyException
+	 * @throws SignatureException
+	 */
 	public boolean loginUser(String username, String password) throws InvalidKeyException, SignatureException {
 		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 		try {
@@ -307,6 +364,11 @@ public class Database {
 	}
 
 	// geeft alle kaarten in de hand van een speler weer
+	/**
+	 * @param user_id
+	 * @return
+	 * @throws SQLException
+	 */
 	public String getPlayerHand(int user_id) throws SQLException {
 		try {
 			connection = DriverManager.getConnection("jdbc:sqlite:" + uri);
@@ -330,6 +392,13 @@ public class Database {
 	}
 
 	// voeg nieuw spel toe aan databank
+	/**
+	 * @param game_id
+	 * @param user1
+	 * @param user2
+	 * @param user3
+	 * @param user4
+	 */
 	public void addUserToGame(int game_id, String user1, String user2, String user3, String user4) {
 		try {
 			connection = DriverManager.getConnection("jdbc:sqlite:" + uri);
@@ -354,6 +423,13 @@ public class Database {
 		System.out.println("New gameToUser added!");
 	}
 
+	/**
+	 * @param dbID
+	 * @param name
+	 * @param aantalSpelers
+	 * @param serverport
+	 * @param theme
+	 */
 	public void addGame(String dbID, String name, int aantalSpelers, int serverport, int theme) {
 		try {
 			connection = DriverManager.getConnection("jdbc:sqlite:" + uri);
@@ -379,6 +455,10 @@ public class Database {
 		System.out.println("New game added!");
 	}
 	
+	/**
+	 * @param name
+	 * @return
+	 */
 	public int getGameId(String name) {
 		try {
 			connection = DriverManager.getConnection("jdbc:sqlite:" + uri);
@@ -402,6 +482,10 @@ public class Database {
 	}
 
 	// Geeft weer welke spellen actief zijn
+	/**
+	 * @return
+	 * @throws SQLException
+	 */
 	public List<String> getActiveGames() throws SQLException {
 		try {
 			connection = DriverManager.getConnection("jdbc:sqlite:" + uri);
@@ -432,6 +516,9 @@ public class Database {
 	}
 
 	// make game inactive
+	/**
+	 * @param game_id
+	 */
 	public void StopGame(int game_id) {
 		try {
 			connection = DriverManager.getConnection("jdbc:sqlite:" + uri);
@@ -451,6 +538,11 @@ public class Database {
 	}
 
 	// gespeelde beurt toevoegen aan databank van spelverloop
+	/**
+	 * @param name
+	 * @param cards
+	 * @param gameId
+	 */
 	public void playTurn(String name, List<Card> cards, String gameId) {
 		StringBuilder sb = new StringBuilder();
 		for (Card card : cards) {
@@ -475,6 +567,11 @@ public class Database {
 	}
 
 	// geeft info over een gespeelde beurt
+	/**
+	 * @param game_id
+	 * @return
+	 * @throws SQLException
+	 */
 	public String getAllTurns(int game_id) throws SQLException {
 		try {
 			connection = DriverManager.getConnection("jdbc:sqlite:" + uri);
@@ -502,6 +599,12 @@ public class Database {
 	}
 
 	// geeft alle beurten van een gespeeld spel weer
+	/**
+	 * @param turn_id
+	 * @param game_id
+	 * @return
+	 * @throws SQLException
+	 */
 	public String getTurn(int turn_id, int game_id) throws SQLException {
 		try {
 			connection = DriverManager.getConnection("jdbc:sqlite:" + uri);
@@ -530,6 +633,13 @@ public class Database {
 	}
 
 	// geeft voorstelling van kaart terug
+	/**
+	 * @param color
+	 * @param value
+	 * @param theme
+	 * @return
+	 * @throws SQLException
+	 */
 	public String getCardImage(int color, int value, int theme) throws SQLException {
 		try {
 			connection = DriverManager.getConnection("jdbc:sqlite:" + uri);
@@ -551,6 +661,12 @@ public class Database {
 	}
 
 	// afbeelding unokaart toevoegen
+	/**
+	 * @param card_color
+	 * @param card_value
+	 * @param theme
+	 * @param image
+	 */
 	public void insertImage(int card_color, int card_value, int theme, Blob image) {
 		try {
 			connection = DriverManager.getConnection("jdbc:sqlite:" + uri);
@@ -572,6 +688,11 @@ public class Database {
 		System.out.println("Image insert card completed!");
 	}
 
+	/**
+	 * @param username
+	 * @return
+	 * @throws SQLException
+	 */
 	public String getToken(String username) throws SQLException {
 		try {
 			connection = DriverManager.getConnection("jdbc:sqlite:" + uri);
@@ -588,6 +709,10 @@ public class Database {
 		return rs.toString();
 	}
 	// voegt kaart toe aan table van de hand van een speler
+	/**
+	 * @param user_id
+	 * @param card_id
+	 */
 	public void insertCard(int user_id, int card_id) {
 		try {
 			connection = DriverManager.getConnection("jdbc:sqlite:" + uri);
@@ -608,6 +733,10 @@ public class Database {
 	}
 
 	// verwijdert kaart uit de hand van een speler
+	/**
+	 * @param user_id
+	 * @param card_id
+	 */
 	public void removeCard(int user_id, int card_id) {
 		try {
 			connection = DriverManager.getConnection("jdbc:sqlite:" + uri);

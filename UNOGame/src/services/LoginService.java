@@ -9,11 +9,18 @@ public class LoginService extends Service<Boolean> {
 	private String username, password;
 	private serverInterfaceImpl server;
 
+	/**
+	 * @param username
+	 * @param password
+	 */
 	public LoginService(String username, String password) {
 		this.username = username;
 		this.password = password;
 	}
 
+	/* (non-Javadoc)
+	 * @see javafx.concurrent.Service#createTask()
+	 */
 	@Override
 	protected Task<Boolean> createTask() {
 		return new Task<Boolean>() {

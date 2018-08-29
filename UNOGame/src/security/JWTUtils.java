@@ -15,6 +15,14 @@ import io.jsonwebtoken.SignatureException;
 
 public class JWTUtils {
 
+	/**
+	 * @param id
+	 * @param issuer
+	 * @param subject
+	 * @param ttlMillis
+	 * @param apiSecret
+	 * @return
+	 */
 	public static String createJWT(String id, String issuer, String subject, long ttlMillis, String apiSecret) {
 
 		SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
@@ -38,6 +46,11 @@ public class JWTUtils {
 		return builder.compact();
 	}
 
+	/**
+	 * @param jwt
+	 * @param apiSecret
+	 * @return
+	 */
 	public static boolean validateJWT(String jwt, String apiSecret) {
 
 		byte[] apiKeySecretBytes = apiSecret.getBytes();
@@ -54,6 +67,10 @@ public class JWTUtils {
 		}
 	}
 
+	/**
+	 * @param length
+	 * @return
+	 */
 	public static String generateApiSecret(int length) {
 		SecureRandom random = new SecureRandom();
 		byte bytes[] = new byte[length];

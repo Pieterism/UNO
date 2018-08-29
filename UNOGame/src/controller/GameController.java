@@ -91,6 +91,24 @@ public class GameController extends UnicastRemoteObject implements gameControlle
 	@FXML
 	private TextArea chat_output, text_scoreboard;
 
+	/**
+	 * @param username
+	 * @param server
+	 * @param gameID
+	 * @param gameName
+	 * @param gameTheme
+	 * @throws RemoteException
+	 * @throws FileNotFoundException
+	 */
+	/**
+	 * @param username
+	 * @param server
+	 * @param gameID
+	 * @param gameName
+	 * @param gameTheme
+	 * @throws RemoteException
+	 * @throws FileNotFoundException
+	 */
 	public GameController(String username, serverInterface server, int gameID, String gameName, int gameTheme)
 			throws RemoteException, FileNotFoundException {
 		this.username = username;
@@ -104,6 +122,12 @@ public class GameController extends UnicastRemoteObject implements gameControlle
 
 	}
 
+	/**
+	 * @param username
+	 * @param gameTheme
+	 * @throws RemoteException
+	 * @throws FileNotFoundException
+	 */
 	public GameController(String username, int gameTheme) throws RemoteException, FileNotFoundException {
 		this.username = username;
 		cardsList = new ArrayList<>();
@@ -114,6 +138,9 @@ public class GameController extends UnicastRemoteObject implements gameControlle
 
 	}
 
+	/**
+	 * @throws RemoteException
+	 */
 	public void initialize() throws RemoteException {
 		yourTurn = false;
 		this.readyToStart = false;
@@ -164,23 +191,35 @@ public class GameController extends UnicastRemoteObject implements gameControlle
 
 	}
 
+	/**
+	 * @throws RemoteException
+	 */
 	@FXML
 	public void sendMsg() throws RemoteException {
 		server.sendGameMsg(chat_input.getText(), gameID, username);
 		chat_input.setText("");
 	}
 
+	/**
+	 * 
+	 */
 	@FXML
 	public void enteredOpaque() {
 
 	}
 
+	/* (non-Javadoc)
+	 * @see interfaces.gameControllerInterface#setMsg(java.lang.String)
+	 */
 	@Override
 	public void setMsg(String msg) throws RemoteException {
 		String message = chat_output.getText() + msg + "\n";
 		chat_output.setText(message);
 	}
 
+	/* (non-Javadoc)
+	 * @see interfaces.gameControllerInterface#setScoreboard(java.util.List)
+	 */
 	@Override
 	public void setScoreboard(List<String> scoreboard) throws RemoteException {
 		text_scoreboard.clear();
@@ -191,6 +230,10 @@ public class GameController extends UnicastRemoteObject implements gameControlle
 	}
 
 	// add player in de lijst van spelers in het spel
+	/**
+	 * @param username
+	 * @param aantal
+	 */
 	public void addPlayer(String username, int aantal) {
 		Opponent opponent = new Opponent(username, aantal, 0);
 		opponents.add(opponent);
@@ -357,6 +400,9 @@ public class GameController extends UnicastRemoteObject implements gameControlle
 	}
 
 	// add cards in lijst van kaarten van de speler
+	/* (non-Javadoc)
+	 * @see interfaces.gameControllerInterface#addCards(java.util.List)
+	 */
 	@Override
 	public void addCards(List<Card> cards) throws RemoteException {
 		cardsList.addAll(cards);
@@ -375,6 +421,9 @@ public class GameController extends UnicastRemoteObject implements gameControlle
 	}
 
 	// return the selected card in GUI
+	/* (non-Javadoc)
+	 * @see interfaces.gameControllerInterface#getCard()
+	 */
 	@Override
 	public Card getCard() throws RemoteException {
 		this.setMsg("It is your turn, play a card!");
@@ -408,6 +457,9 @@ public class GameController extends UnicastRemoteObject implements gameControlle
 		return temp;
 	}
 
+	/**
+	 * @return
+	 */
 	public Card getCardRec() {
 		selectedCard = null;
 		boolDrawCard = false;
@@ -427,11 +479,17 @@ public class GameController extends UnicastRemoteObject implements gameControlle
 		return selectedCard;
 	}
 
+	/* (non-Javadoc)
+	 * @see interfaces.gameControllerInterface#setNextPlayer(java.lang.String)
+	 */
 	@Override
 	public void setNextPlayer(String username) throws RemoteException {
 		nextPlayer = username;
 	}
 
+	/* (non-Javadoc)
+	 * @see interfaces.gameControllerInterface#addPile(uno.Card)
+	 */
 	@Override
 	public void addPile(Card card) throws RemoteException {
 		System.out.println("Top card " + card.cardName);
@@ -443,6 +501,9 @@ public class GameController extends UnicastRemoteObject implements gameControlle
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see interfaces.gameControllerInterface#setCardAmountPlayer(java.lang.String, int)
+	 */
 	@Override
 	public void setCardAmountPlayer(String username, int amount) throws RemoteException {
 		Platform.runLater(new Runnable() {
@@ -458,6 +519,9 @@ public class GameController extends UnicastRemoteObject implements gameControlle
 		});
 	}
 
+	/* (non-Javadoc)
+	 * @see interfaces.gameControllerInterface#setReady(boolean)
+	 */
 	@Override
 	public void setReady(boolean b) throws RemoteException {
 		this.readyToStart = b;
@@ -485,6 +549,9 @@ public class GameController extends UnicastRemoteObject implements gameControlle
 
 	}
 
+	/* (non-Javadoc)
+	 * @see interfaces.gameControllerInterface#askColor()
+	 */
 	@Override
 	public int askColor() throws RemoteException {
 		setMsg("Chose a color!");
@@ -509,6 +576,9 @@ public class GameController extends UnicastRemoteObject implements gameControlle
 		return selectedColor;
 	}
 
+	/* (non-Javadoc)
+	 * @see interfaces.gameControllerInterface#sendPlayerInfo(java.util.ArrayList)
+	 */
 	@Override
 	public void sendPlayerInfo(ArrayList<String> info) throws RemoteException {
 		if (opponents.isEmpty()) {
@@ -532,36 +602,62 @@ class Opponent {
 	int score;
 	public int id;
 
+	/**
+	 * @param name
+	 * @param amountCards
+	 * @param score
+	 */
 	public Opponent(String name, int amountCards, int score) {
 		this.name = name;
 		this.amountCards = amountCards;
 		this.score = score;
 	}
 
+	/**
+	 * @param id
+	 */
 	public void setId(int id) {
 		this.id = id;
 	}
 
+	/**
+	 * @return
+	 */
 	public String getName() {
 		return name;
 	}
 
+	/**
+	 * @param name
+	 */
 	public void setName(String name) {
 		this.name = name;
 	}
 
+	/**
+	 * @return
+	 */
 	public int getAmountCards() {
 		return amountCards;
 	}
 
+	/**
+	 * @param amountCards
+	 */
 	public void setAmountCards(int amountCards) {
 		this.amountCards = amountCards;
 	}
 
+	/**
+	 * @return
+	 */
 	public int getScore() {
 		return score;
 	}
 
+	/**
+	 * @param score
+	 */
 	public void setScore(int score) {
 		this.score = score;
 	}

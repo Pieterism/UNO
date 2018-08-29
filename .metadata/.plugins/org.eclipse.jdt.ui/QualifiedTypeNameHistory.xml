@@ -13,16 +13,12 @@
 <fullyQualifiedTypeName name="controller.AuthenticationInterfaceImpl"/>
 <fullyQualifiedTypeName name="java.security.KeyStore"/>
 <fullyQualifiedTypeName name="java.io.FileInputStream"/>
-<fullyQualifiedTypeName name="java.security.PrivateKey"/>
 <fullyQualifiedTypeName name="java.security.Signature"/>
 <fullyQualifiedTypeName name="jdk.internal.joptsimple.ArgumentAcceptingOptionSpec"/>
 <fullyQualifiedTypeName name="security.PasswordHashing"/>
 <fullyQualifiedTypeName name="interfaces.serverInterface"/>
 <fullyQualifiedTypeName name="sun.tools.tree.ThisExpression"/>
-<fullyQualifiedTypeName name="java.util.List"/>
 <fullyQualifiedTypeName name="com.sun.deploy.util.ArrayUtil"/>
-<fullyQualifiedTypeName name="java.util.ArrayList"/>
-<fullyQualifiedTypeName name="databaseServer.dbInterfaceImpl"/>
 <fullyQualifiedTypeName name="applicationServer.serverInterfaceImpl"/>
 <fullyQualifiedTypeName name="javafx.stage.Stage"/>
 <fullyQualifiedTypeName name="java.rmi.registry.Registry"/>
@@ -43,4 +39,20 @@
 <fullyQualifiedTypeName name="services.LoginService2"/>
 <fullyQualifiedTypeName name="javafx.stage.Screen"/>
 <fullyQualifiedTypeName name="java.awt.geom.Rectangle2D"/>
+<fullyQualifiedTypeName name="databaseServer.dbInterfaceImpl"/>
+<fullyQualifiedTypeName name="javafx.scene.control.Button"/>
+<fullyQualifiedTypeName name="java.util.Observable"/>
+<fullyQualifiedTypeName name="java.lang.Integer"/>
+<fullyQualifiedTypeName name="org.omg.CORBA.INITIALIZE"/>
+<fullyQualifiedTypeName name="javafx.scene.control.ChoiceBox"/>
+<fullyQualifiedTypeName name="javafx.scene.control.TableView"/>
+<fullyQualifiedTypeName name="java.security.PrivateKey"/>
+<fullyQualifiedTypeName name="javafx.collections.ObservableList"/>
+<fullyQualifiedTypeName name="javafx.scene.control.TableColumn"/>
+<fullyQualifiedTypeName name="javafx.scene.control.cell.PropertyValueFactory"/>
+<fullyQualifiedTypeName name="javafx.collections.FXCollections"/>
+<fullyQualifiedTypeName name="controller.Opponent"/>
+<fullyQualifiedTypeName name="java.util.List"/>
+<fullyQualifiedTypeName name="java.util.ArrayList"/>
+<fullyQualifiedTypeName name="java.lang.StringBuilder"/>
 </qualifiedTypeNameHistroy>
