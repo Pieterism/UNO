@@ -239,6 +239,9 @@ public class UnoGame {
 		for (Player player : players) {
 			player.getGameController().setMsg(sBuilder.toString());
 		}
+		for (Player player : players) {
+			player.getCards().clear();
+		}
 		return winner;
 	}
 
