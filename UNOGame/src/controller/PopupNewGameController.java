@@ -57,21 +57,12 @@ public class PopupNewGameController {
 	public void startGame() throws RemoteException {
 		int aantal = numberOfPlayersnew.getValue();
 		String gameName = name.getText();
-		if (playerAmount != null) {
-			try {
-				aantal = Integer.parseInt(playerAmount.getText());
-				if (aantal >= 4)
-					aantal = 4;
-				if (aantal <= 2)
-					aantal = 2;
-			} catch (NumberFormatException nfe) {
-			}
-		}
-		if (gameName == null) {
+
+		if (gameName == "") {
 			gameName = username + "'s game";
 		}
 
-		NewGameService newGameService = new NewGameService(gameName, themePicker.getValue(), aantal, server);
+		NewGameService newGameService = new NewGameService(gameName, themePicker.getValue(), numberOfPlayersnew.getValue(), server);
 		newGameService.setOnSucceeded(Success -> {
 			System.out.println("new game started!");
 

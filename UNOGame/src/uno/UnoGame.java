@@ -19,12 +19,12 @@ public class UnoGame {
 	private ArrayList<Card> deck;
 
 	private int myPlayDirection, currentPlayer;
-	private int gameId, playerCount, gameTheme;
+	private int playerCount, gameTheme;
 	private dbInterface db;
 
-	private String name;
+	private String name, gameId;
 
-	public int getGameId() {
+	public String getGameId() {
 		return gameId;
 	}
 
@@ -32,7 +32,7 @@ public class UnoGame {
 		this.name = name;
 	}
 
-	public void setGameId(int gameId) {
+	public void setGameId(String gameId) {
 		this.gameId = gameId;
 	}
 
@@ -53,7 +53,7 @@ public class UnoGame {
 	}
 
 	// Nieuw spel starten met aantal spelers met standaard UNO-deck.
-	public UnoGame(int nPlayers, int id, String name, int gameTheme, dbInterface db) {
+	public UnoGame(int nPlayers, String name, int gameTheme, dbInterface db) {
 		deck = new ArrayList<Card>();
 		this.name = "UNO game";
 		this.name = name;
@@ -68,7 +68,6 @@ public class UnoGame {
 		pile = new ArrayList<Card>();
 		players = new ArrayList<Player>();
 
-		this.gameId = id;
 		this.playerCount = nPlayers;
 
 	}
@@ -245,7 +244,7 @@ public class UnoGame {
 		return winner;
 	}
 
-	public int getId() {
+	public String getId() {
 		return this.gameId;
 	}
 

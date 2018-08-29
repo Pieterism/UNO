@@ -12,40 +12,32 @@ import java.util.List;
 import uno.Card;
 
 public interface dbInterface extends Remote {
+	public void setDatabaseServers() throws RemoteException;
+	public void ping(int portnumber)throws RemoteException;
+	public int getPortnumber() throws RemoteException;
 
-	public void addUser(String username, String password) throws RemoteException, InvalidKeyException, SignatureException;
-	
-	public void insertUser(String username, String password, String token, Timestamp timestamp) throws RemoteException, InvalidKeyException, SignatureException;
-
-    public boolean checkUsername(String username) throws RemoteException;
-
+	public boolean checkUsername(String username) throws RemoteException;
     public boolean loginUser(String username, String password) throws RemoteException, InvalidKeyException, SignatureException;
-
-    public String getAllUsers() throws RemoteException;
-
-    public String getPlayerHand(int user_id) throws RemoteException, SQLException;
-
-    public void addGame(List<String> users, int gameTheme) throws RemoteException;
 
     public String getActiveGames() throws RemoteException, SQLException;
 
     public void StopGame(int game_id) throws RemoteException;
-
-    public String getCardImage(int color, int value, int theme) throws RemoteException, SQLException;
-
-	public void setDatabaseServers() throws RemoteException;
-
-	public void ping(int portnumber)throws RemoteException;
+    
+	public void addUser(String username, String password) throws RemoteException, InvalidKeyException, SignatureException;
+	public void duplicateAddUser(String username, String password, String token, Timestamp timestamp) throws RemoteException, InvalidKeyException, SignatureException;
 	
-	public int getPortnumber() throws RemoteException;
+	String addGame(int id, String name, int aantalSpelers, int serverport, int theme) throws RemoteException;
+	void duplicateAddGame(String id, String name, int aantalSpelers, int serverport, int theme) throws RemoteException;
+	
+	void addUsersToGame(String game_name, List<String> users) throws RemoteException;
+	void duplicateAddUsersToGame(int game_id, List<String> users) throws RemoteException;
 
-	public void duplicateGame(List<String> temp, int gameTheme)throws RemoteException;
+	public void createPlayerHandTabel(String id) throws RemoteException;
+	public void duplicateCreatePlayerHand(String id) throws RemoteException;
+	
+	public void updateHandPlayer(String name, List<Card> cards, String id) throws RemoteException;
+	public void duplicateUpdateHandPlayer(String name, List<Card> cards, String id) throws RemoteException;
 
-	public void updateHandPlayer(String name, List<Card> cards, int gameId) throws RemoteException;
+    public String getPlayerHand(int user_id) throws RemoteException, SQLException;
 
-	public void duplicateCards(String name, List<Card> cards, int gameId) throws RemoteException;
-
-	String getToken(String username) throws RemoteException, SQLException;
-
-	void insertImage(int card_color, int card_value, int theme, Blob image) throws RemoteException;
 }

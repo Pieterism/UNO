@@ -72,7 +72,7 @@ public class LobbyController extends UnicastRemoteObject implements lobbyInterfa
 			@Override
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
 				List<String> temp = Arrays.asList(newValue.split("\t"));
-				gameID = Integer.parseInt(temp.get(0));
+				gameID = Integer.parseInt(temp.get(0).substring(0, temp.get(0).length()-4));
 				gameName = temp.get(1);
 				gameTheme = Integer.parseInt(temp.get(3));
 				

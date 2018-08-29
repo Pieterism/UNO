@@ -92,9 +92,9 @@
                   </Label>
                   <AnchorPane>
                      <children>
-                        <TextField fx:id="loginUsername1" layoutX="50.0" layoutY="125.0" maxWidth="250.0" prefWidth="200.0" promptText="username" AnchorPane.bottomAnchor="90.0" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" />
-                        <PasswordField fx:id="loginPassword1" layoutX="50.0" layoutY="171.0" maxWidth="250.0" prefHeight="25.0" prefWidth="200.0" promptText="repeat password" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" />
-                        <PasswordField fx:id="loginPassword2" layoutX="50.0" layoutY="159.0" maxWidth="250.0" prefHeight="25.0" prefWidth="200.0" promptText="password" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" />
+                        <TextField fx:id="registerUsername" layoutX="50.0" layoutY="125.0" maxWidth="250.0" prefWidth="200.0" promptText="username" AnchorPane.bottomAnchor="90.0" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" />
+                        <PasswordField fx:id="password1" layoutX="50.0" layoutY="171.0" maxWidth="250.0" prefHeight="25.0" prefWidth="200.0" promptText="repeat password" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" />
+                        <PasswordField fx:id="password2" layoutX="50.0" layoutY="159.0" maxWidth="250.0" prefHeight="25.0" prefWidth="200.0" promptText="password" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" />
                      </children>
                   </AnchorPane>
                </children>
