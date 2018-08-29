@@ -33,7 +33,7 @@ import uno.WildCard;
 
 public class GameController extends UnicastRemoteObject implements gameControllerInterface {
 
-	private String path = "D:\\Google Drive\\School\\2017-2018\\1e Semester\\Gedistribueerde Systemen\\Opdracht UNO\\GIT_UNO\\UNOGame\\src\\pictures\\";
+	private String path = ".\\src\\pictures\\";
 
 	// private String path =
 	// "C:\\Users\\wouter\\Documents\\School\\geavanceerde\\UNOGame\\src\\pictures\\";
