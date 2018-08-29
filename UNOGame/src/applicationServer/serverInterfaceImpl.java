@@ -101,14 +101,15 @@ public class serverInterfaceImpl extends UnicastRemoteObject implements serverIn
 
 	@Override
 	public void startNewGame(String name, int gameTheme, int aantalSpelers) throws RemoteException {
-		games.add(new UnoGame(aantalSpelers, gameCounter, name, gameTheme, db));
-		gameCounter++;
+		UnoGame uno = new UnoGame(aantalSpelers, name, gameTheme, db);
+		games.add(uno);
 		while (dispatcher==null) {
 			getDispatcher();
 		}
-
+		uno.setGameId(db.addGame(gameCounter, name, aantalSpelers, this.portnumber, gameTheme));
 		dispatcher.updateInfo(portnumber, gameCounter);
 		System.out.println("dispatcher was notified with the new info " + gameCounter);
+		gameCounter++;
 
 	}
 	
@@ -197,17 +198,19 @@ public class serverInterfaceImpl extends UnicastRemoteObject implements serverIn
 					player.getGameController().sendPlayerInfo(info);
 					controllers.add(player.getGameController());
 				}
-				db.addGame(info, gametheme);
+				db.addUsersToGame(games.get(gameId).getName(), info);
 			}
 			Thread thread = new Thread(new Runnable() {
 				@Override
 				public void run() {
 					try {
-
+						db.createPlayerHandTabel(games.get(gameId).getId());
 						games.get(gameId).play();
 						for (Player player : games.get(gameId).getPlayers()) {
 							player.setReady(false);
 							player.getGameController().setReady(false);
+							StringBuilder sb = new StringBuilder();
+							games.get(gameId).setGameId(games.get(gameId).getId() + "0");
 						}
 					} catch (RemoteException e) {
 						e.printStackTrace();
@@ -240,6 +243,7 @@ public class serverInterfaceImpl extends UnicastRemoteObject implements serverIn
 
 	@Override
 	public String getLoginToken(String username, String password) throws RemoteException, SQLException {
-		return db.getToken(username);
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

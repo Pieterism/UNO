@@ -39,6 +39,7 @@ public class dbInterfaceImpl extends UnicastRemoteObject implements dbInterface 
 		db.createUserTable();
 		db.createGameTable();
 		db.createImagesTable();
+		db.createGameToUserTable();
 		databaseServers = new ArrayList<>();
 		this.portnumber = portnumber;
 		System.out.println("----------------------------------------------");
@@ -50,10 +51,18 @@ public class dbInterfaceImpl extends UnicastRemoteObject implements dbInterface 
 	public void addUser(String username, String password)
 			throws InvalidKeyException, SignatureException, RemoteException {
 		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-		String token = db.insertUser(username, password, timestamp);
+		String token = db.createToken(username, timestamp);
+		db.addUser(username, password, token, timestamp);
 		for (dbInterface database : databaseServers) {
-			database.insertUser(username, password, token, timestamp);
+			database.duplicateAddUser(username, password, token, timestamp);
 		}
+	}
+	
+	@Override
+	public void duplicateAddUser(String username, String password, String token, Timestamp timestamp)
+			throws RemoteException, InvalidKeyException, SignatureException {
+		this.db.addUser(username, password, token, timestamp);
+		
 	}
 
 	// methode om te checken of een bepaalde username reeds bestaat in databank
@@ -70,31 +79,46 @@ public class dbInterfaceImpl extends UnicastRemoteObject implements dbInterface 
 	}
 
 	@Override
-	public String getAllUsers() {
-		return db.getAllUsers();
-	}
-
-	@Override
 	public String getPlayerHand(int user_id) throws RemoteException, SQLException {
 		return db.getPlayerHand(user_id);
 	}
 
 	@Override
-	public void addGame(List<String> users, int gameTheme) throws RemoteException {
+	public void addUsersToGame(String game_name, List<String> users) throws RemoteException {
 		List<String> temp = new ArrayList<>();
 		temp.addAll(users);
 		for (int i = 0; i < 4 - users.size(); i++) {
 			temp.add(new String(""));
 		}
-
-		db.addGame(temp.get(0), temp.get(1), temp.get(2), temp.get(3), gameTheme);
+		int game_id = db.getGameId(game_name);
+		db.addUserToGame(game_id, temp.get(0), temp.get(1), temp.get(2), temp.get(3));
 		for (dbInterface database : databaseServers) {
-			database.duplicateGame(temp, gameTheme);
+			database.duplicateAddUsersToGame(game_id, temp);
 		}
 	}
-
-	public void duplicateGame(List<String> users, int gameTheme) {
-		db.addGame(users.get(0), users.get(1), users.get(2), users.get(3), gameTheme);
+	
+	@Override
+	public void duplicateAddUsersToGame(int game_id, List<String> users) throws RemoteException {
+		db.addUserToGame(game_id, users.get(0), users.get(1), users.get(2), users.get(3));
+	}
+	
+	@Override
+	public String addGame(int id, String name, int aantalSpelers, int serverport, int theme) {
+		String dbID = id + "" + this.portnumber;
+		db.addGame(dbID, name, aantalSpelers, serverport, theme);
+		for (dbInterface iter : databaseServers) {
+			try {
+				iter.duplicateAddGame(dbID, name, aantalSpelers, serverport, theme);
+			} catch (RemoteException e) {
+				e.printStackTrace();
+			}
+		}
+		return dbID;
+	}
+	
+	@Override
+	public void duplicateAddGame(String id, String name, int aantalSpelers, int serverport, int theme) {
+		db.addGame(id, name, aantalSpelers, serverport, theme);
 	}
 
 	@Override
@@ -105,22 +129,6 @@ public class dbInterfaceImpl extends UnicastRemoteObject implements dbInterface 
 	@Override
 	public void StopGame(int game_id) throws RemoteException {
 		db.StopGame(game_id);
-	}
-
-	@Override
-	public String getCardImage(int color, int value, int theme) throws RemoteException, SQLException {
-		return db.getCardImage(color, value, theme);
-	}
-
-	@Override
-	public void insertImage(int card_color, int card_value, int theme, Blob image) throws RemoteException {
-		db.insertImage(card_color, card_value, theme, image);
-	}
-
-	@Override
-	public String getToken(String username) throws RemoteException, SQLException {
-		return this.db.getToken(username);
-
 	}
 
 	public Database getDb() {
@@ -162,12 +170,6 @@ public class dbInterfaceImpl extends UnicastRemoteObject implements dbInterface 
 	}
 
 	@Override
-	public void insertUser(String username, String password, String token, Timestamp timestamp)
-			throws RemoteException, InvalidKeyException, SignatureException {
-		db.duplicateUser(username, password, token, timestamp);
-	}
-
-	@Override
 	public void ping(int portnumber) throws RemoteException {
 		System.out.println("server " + portnumber + " has pinged server " + this.portnumber);
 
@@ -179,16 +181,36 @@ public class dbInterfaceImpl extends UnicastRemoteObject implements dbInterface 
 	}
 
 	@Override
-	public void updateHandPlayer(String name, List<Card> cards, int gameId) throws RemoteException {
-		db.playTurn(name, cards, gameId);
+	public void updateHandPlayer(String name, List<Card> cards, String dbID) throws RemoteException {
+		db.playTurn(name, cards, dbID);
 		for (dbInterface databaseInterface : databaseServers) {
-			databaseInterface.duplicateCards(name, cards, gameId);
+			databaseInterface.duplicateUpdateHandPlayer(name, cards, dbID);
 		}
 	}
 
 	@Override
-	public void duplicateCards(String name, List<Card> cards, int gameId) throws RemoteException {
-		db.playTurn(name, cards, gameId);
+	public void duplicateUpdateHandPlayer(String name, List<Card> cards, String dbID) throws RemoteException {
+		db.playTurn(name, cards, dbID);
 	}
-
+	
+	@Override
+	public void createPlayerHandTabel(String id) throws RemoteException {
+		try {
+			db.createPlayerHandTable(id);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		for (dbInterface iter : databaseServers) {
+			iter.duplicateCreatePlayerHand(id);
+		}
+	}
+	
+	@Override
+	public void duplicateCreatePlayerHand(String id) throws RemoteException {
+		try {
+			db.createPlayerHandTable(id);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}		
+	}
 }

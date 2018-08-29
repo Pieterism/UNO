@@ -32,8 +32,8 @@ public class Database {
 	private Connection connection;
 	private Statement statement;
 	String uri;
-	String filepath = "D:\\Google Drive\\School\\2017-2018\\1e Semester\\Gedistribueerde Systemen\\Opdracht UNO\\GIT_UNO\\keystore.jks";
-	//String filepath = "C:\\Users\\wouter\\Documents\\School\\geavanceerde\\keystore.jks";
+	//String filepath = "D:\\Google Drive\\School\\2017-2018\\1e Semester\\Gedistribueerde Systemen\\Opdracht UNO\\GIT_UNO\\keystore.jks";
+	String filepath = "C:\\Users\\wouter\\Documents\\School\\geavanceerde\\keystore.jks";
 	PublicKey publicKey;
 	PrivateKey privateKey;
 	Signature signature;
@@ -86,7 +86,7 @@ public class Database {
 	}
 
 	// aanmaken van table voor Players hun kaarten
-	public void createPlayerHandTable(int id) throws SQLException {
+	public void createPlayerHandTable(String id) throws SQLException {
 		try {
 
 			String sql = "CREATE TABLE IF NOT EXISTS PlayerHand" + id + " (\n"
@@ -108,11 +108,38 @@ public class Database {
 	public void createGameTable() throws SQLException {
 		try {
 
-			String sql = "CREATE TABLE IF NOT EXISTS Game (\n"
-					+ "	game_id     INTEGER     PRIMARY KEY     AUTOINCREMENT,\n"
-					+ "	user1       INTEGER     NOT NULL,\n" + "	user2       INTEGER     NOT NULL, \n"
-					+ " user3       INTEGER     NOT NULL, \n" + " user4       INTEGER     NOT NULL, \n"
-					+ " game_theme, \n" + " active      BOOLEAN ,   \n  "
+			String sql = "CREATE TABLE IF NOT EXISTS Game (\n" 
+					+ "	game_id     	INTEGER     PRIMARY KEY   AUTOINCREMENT,\n"
+					+ "	game_name       VARCHAR     NOT NULL,\n" 
+					+ " players       	INTEGER     NOT NULL,\n" 
+					+ " active       	BOOLEAN     NOT NULL, \n"
+					+ " serverport		INTEGER		NOT NULL, \n"
+					+ " game_theme		INTEGER, \n"
+					+ "FOREIGN KEY(game_id) REFERENCES Game(game_id)\n" + ");";
+
+			connection = DriverManager.getConnection("jdbc:sqlite:" + uri);
+			statement = connection.createStatement();
+			statement.execute(sql);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.exit(0);
+		}
+		System.out.println("Game table created successfully");
+	}
+	
+	// aanmaken van table voor elk spel bij te houden
+	public void createGameToUserTable() throws SQLException {
+		try {
+
+			String sql = "CREATE TABLE IF NOT EXISTS GameToUSer (\n"
+					+ "	game_id     INTEGER     NOT NULL,\n"
+					+ "	user1       INTEGER     NOT NULL,\n" 
+					+ "	user2       INTEGER     NOT NULL, \n"
+					+ " user3       INTEGER     NOT NULL,\n" 
+					+ " user4       INTEGER     NOT NULL, \n"
+					+ " game_theme, \n" 
+					+ "FOREIGN KEY(game_id) REFERENCES Game(game_id),\n"
 					+ "FOREIGN KEY(user1) REFERENCES Users(username),\n"
 					+ "FOREIGN KEY(user2) REFERENCES Users(username),\n"
 					+ "FOREIGN KEY(user3) REFERENCES Users(username),\n"
@@ -174,11 +201,7 @@ public class Database {
 	}
 
 	// toevoegen van een user in databank
-	public String insertUser(String username, String password, Timestamp timestamp) throws InvalidKeyException, SignatureException {
-		return createToken(username, timestamp);
-	}
-
-	private void createUser(String username, String password, String token, Timestamp timestamp) {
+	public void addUser(String username, String password, String token, Timestamp timestamp) {
 		try {
 			connection = DriverManager.getConnection("jdbc:sqlite:" + uri);
 		} catch (SQLException e1) {
@@ -199,11 +222,7 @@ public class Database {
 		System.out.println("insert user completed!");
 	}
 
-	public void duplicateUser(String username, String password, String token, Timestamp timestamp) {
-		createUser(username, password, token, timestamp);
-	}
-
-	private String createToken(String username, Timestamp timestamp)
+	public String createToken(String username, Timestamp timestamp)
 			throws InvalidKeyException, SignatureException {
 
 		String token = (username + timestamp);
@@ -311,48 +330,67 @@ public class Database {
 	}
 
 	// voeg nieuw spel toe aan databank
-	public void addGame(String user1, String user2, String user3, String user4, int gameTheme) {
+	public void addUserToGame(int game_id, String user1, String user2, String user3, String user4) {
 		try {
 			connection = DriverManager.getConnection("jdbc:sqlite:" + uri);
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}
 
-		String sql = "INSERT INTO Game(user1, user2, user3, user4,game_theme, active) VALUES(?,?,?,?,?,?)";
+		String sql = "INSERT INTO GameToUSer(game_id, user1, user2, user3, user4) VALUES(?,?,?,?,?)";
 
 		try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-			pstmt.setString(1, user1);
-			pstmt.setString(2, user2);
-			pstmt.setString(3, user3);
-			pstmt.setString(4, user4);
-			pstmt.setInt(5, gameTheme);
-			pstmt.setBoolean(6, true);
+			pstmt.setInt(1, game_id);
+			pstmt.setString(2, user1);
+			pstmt.setString(3, user2);
+			pstmt.setString(4, user3);
+			pstmt.setString(5, user4);
 
 			pstmt.executeUpdate();
 
-			createPlayerHandTable(getGameId(user1, user2, user3, user4));
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		System.out.println("New gameToUser added!");
+	}
+
+	public void addGame(String dbID, String name, int aantalSpelers, int serverport, int theme) {
+		try {
+			connection = DriverManager.getConnection("jdbc:sqlite:" + uri);
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+
+		String sql = "INSERT INTO Game(game_id, game_name, players, active ,serverport, game_theme) VALUES(?,?,?,?,?,?)";
+
+		try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+			pstmt.setString(1, dbID);
+			pstmt.setString(2, name);
+			pstmt.setInt(3, aantalSpelers);
+			pstmt.setBoolean(4, false);
+			pstmt.setInt(5, serverport);
+			pstmt.setInt(6, theme);
+
+			pstmt.executeUpdate();
 
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 		}
 		System.out.println("New game added!");
 	}
-
-	public int getGameId(String user1, String user2, String user3, String user4) {
+	
+	public int getGameId(String name) {
 		try {
 			connection = DriverManager.getConnection("jdbc:sqlite:" + uri);
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}
 
-		String sql = "SELECT game_id FROM Game WHERE user1 = ? AND user2 = ? AND user3 = ? AND user4 = ? AND active = ?";
+		String sql = "SELECT game_id FROM Game WHERE game_name = ?";
 
 		try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-			pstmt.setString(1, user1);
-			pstmt.setString(2, user2);
-			pstmt.setString(3, user3);
-			pstmt.setString(4, user4);
-			pstmt.setBoolean(5, true);
+			pstmt.setString(1, name);
+			
 			ResultSet rs = pstmt.executeQuery();
 			if (rs.next()) {
 				return rs.getInt(0);
@@ -404,7 +442,7 @@ public class Database {
 	}
 
 	// gespeelde beurt toevoegen aan databank van spelverloop
-	public void playTurn(String name, List<Card> cards, int gameId) {
+	public void playTurn(String name, List<Card> cards, String gameId) {
 		StringBuilder sb = new StringBuilder();
 		for (Card card : cards) {
 			sb.append(card.toString() + "\'");
