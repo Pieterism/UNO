@@ -130,7 +130,7 @@ public class LobbyController extends UnicastRemoteObject implements lobbyInterfa
 
     public void startGame() {
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/controller/Game.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/controller/Game2.fxml"));
             
             GameController controller = new GameController(username, server, gameID, gameName, gameTheme);
 

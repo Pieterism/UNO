@@ -33,9 +33,9 @@ import uno.WildCard;
 
 public class GameController extends UnicastRemoteObject implements gameControllerInterface {
 
-	//private String path = "D:\\Google Drive\\School\\2017-2018\\1e Semester\\Gedistribueerde Systemen\\Opdracht UNO\\GIT_UNO\\UNOGame\\src\\pictures\\";
+	private String path = "D:\\Google Drive\\School\\2017-2018\\1e Semester\\Gedistribueerde Systemen\\Opdracht UNO\\GIT_UNO\\UNOGame\\src\\pictures\\";
 
-	private String path = "C:\\Users\\wouter\\Documents\\School\\geavanceerde\\UNOGame\\src\\pictures\\";
+	//private String path = "C:\\Users\\wouter\\Documents\\School\\geavanceerde\\UNOGame\\src\\pictures\\";
 
 	// class variables
 	private String username;
@@ -66,7 +66,7 @@ public class GameController extends UnicastRemoteObject implements gameControlle
 	private Label title;
 
 	@FXML
-	private Button btn_red, btn_green, btn_blue, btn_yellow, btn_drawCard;
+	private Button btn_red, btn_green, btn_blue, btn_yellow;
 
 	@FXML
 	private TextField opponent1, opponent2, opponent3;
@@ -81,7 +81,7 @@ public class GameController extends UnicastRemoteObject implements gameControlle
 	private HBox opponent1Box, userBox;
 
 	@FXML
-	private ImageView itopCard;
+	private ImageView btn_drawCard;
 
 	// chat variables
 	@FXML
@@ -117,9 +117,9 @@ public class GameController extends UnicastRemoteObject implements gameControlle
 		yourTurn = false;
 		this.readyToStart = false;
 		title.setText(gameName);
-		itopCard.setImage(backImage);
-		itopCard.setFocusTraversable(true);
-		itopCard.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+		btn_drawCard.setImage(backImage);
+		btn_drawCard.setFocusTraversable(true);
+		btn_drawCard.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
 			try {
 				System.out.println("pressed!");
 				if (!readyToStart) {
@@ -165,8 +165,8 @@ public class GameController extends UnicastRemoteObject implements gameControlle
 
 	@FXML
 	public void sendMsg() throws RemoteException {
-		server.sendGameMsg(chat_input.getText(), gameID, username);
-		chat_input.setText("");
+		server.sendGameMsg(chat_input.getText(),gameID, username);
+        chat_input.setText("");
 	}
 
 	@FXML
@@ -434,7 +434,7 @@ public class GameController extends UnicastRemoteObject implements gameControlle
 		System.out.println("Top card " + card.cardName);
 		topCard = card;
 		try {
-			itopCard.setImage(new Image(new FileInputStream(path + gameTheme + "\\" + card.cardName)));
+			image_lastcard.setImage(new Image(new FileInputStream(path + gameTheme + "\\" + card.cardName)));
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
@@ -465,7 +465,7 @@ public class GameController extends UnicastRemoteObject implements gameControlle
 			public void run() {
 				userBox.getChildren().clear();
 				try {
-					itopCard.setImage(new Image(new FileInputStream(path + gameTheme + "\\" + "UNO-Back.png")));
+					btn_drawCard.setImage(new Image(new FileInputStream(path + gameTheme + "\\" + "UNO-Back.png")));
 					if (!b) {
 						opponent1Box.getChildren().clear();
 						opponent2Box.getChildren().clear();
@@ -485,10 +485,10 @@ public class GameController extends UnicastRemoteObject implements gameControlle
 	@Override
 	public int askColor() throws RemoteException {
 		setMsg("Chose a color!");
-		btn_blue.setOpacity(0.7);
-		btn_green.setOpacity(0.7);
-		btn_red.setOpacity(0.7);
-		btn_yellow.setOpacity(0.7);
+		btn_blue.setOpacity(1);
+		btn_green.setOpacity(1);
+		btn_red.setOpacity(1);
+		btn_yellow.setOpacity(1);
 		this.selectedColor = Card.COLOUR_BLUE;
 		this.colourSelected = false;
 		while (!colourSelected) {
@@ -498,10 +498,10 @@ public class GameController extends UnicastRemoteObject implements gameControlle
 			}
 		}
 
-		btn_blue.setOpacity(0.4);
-		btn_green.setOpacity(0.4);
-		btn_red.setOpacity(0.4);
-		btn_yellow.setOpacity(0.4);
+		btn_blue.setOpacity(0.7);
+		btn_green.setOpacity(0.7);
+		btn_red.setOpacity(0.7);
+		btn_yellow.setOpacity(0.7);
 
 		return selectedColor;
 	}
