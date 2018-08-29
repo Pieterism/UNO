@@ -39,7 +39,7 @@
                         <Insets bottom="3.0" left="25.0" right="25.0" top="3.0" />
                      </padding>
                      <font>
-                        <Font name="BigNoodleTitling" size="20.0" />
+                        <Font name="PotatoesAndPeasRegular" size="24.0" />
                      </font>
                   </Button>
                   <Label fx:id="errorLogin" contentDisplay="CENTER" prefHeight="17.0" prefWidth="211.0" textFill="#e80a0a" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
@@ -76,7 +76,7 @@
                <children>
                   <Button fx:id="btn_Register" alignment="CENTER" mnemonicParsing="false" onAction="#Register" style="-fx-border-color: #488db0; -fx-border-width: 2;" text="Register" textAlignment="CENTER" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="TOP">
                      <font>
-                        <Font name="BigNoodleTitling" size="20.0" />
+                        <Font name="PotatoesAndPeasRegular" size="24.0" />
                      </font>
                      <padding>
                         <Insets bottom="3.0" left="25.0" right="25.0" top="3.0" />
@@ -116,7 +116,7 @@
                         <Insets bottom="25.0" left="3.0" right="3.0" />
                      </GridPane.margin>
                      <font>
-                        <Font name="BigNoodleTitling" size="20.0" />
+                        <Font name="PotatoesAndPeasRegular" size="24.0" />
                      </font>
                      <padding>
                         <Insets bottom="3.0" top="3.0" />
@@ -126,14 +126,14 @@
                         <Insets left="3.0" right="3.0" top="25.0" />
                      </GridPane.margin>
                      <font>
-                        <Font name="BigNoodleTitling" size="20.0" />
+                        <Font name="PotatoesAndPeasRegular" size="24.0" />
                      </font>
                      <padding>
                         <Insets bottom="3.0" top="3.0" />
                      </padding></Button>
                </children>
             </GridPane>
-            <GridPane style="-fx-background-color: #005A7C;" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+            <GridPane style="-fx-background-color: #006080;" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
               <columnConstraints>
                 <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
               </columnConstraints>

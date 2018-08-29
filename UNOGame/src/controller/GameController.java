@@ -66,7 +66,7 @@ public class GameController extends UnicastRemoteObject implements gameControlle
 	private Label title;
 
 	@FXML
-	private Button btn_red, btn_green, btn_blue, btn_yellow;
+	private Button btn_red, btn_green, btn_blue, btn_yellow, btn_exit;
 
 	@FXML
 	private TextField opponent1, opponent2, opponent3;
@@ -264,16 +264,16 @@ public class GameController extends UnicastRemoteObject implements gameControlle
 		ImageView imageView3 = new ImageView(image3);
 		ImageView imageView4 = new ImageView(image4);
 
-		imageView1.setFitHeight(125);
+		imageView1.setFitHeight(100);
 		imageView1.setPreserveRatio(true);
 
-		imageView2.setFitHeight(125);
+		imageView2.setFitHeight(100);
 		imageView2.setPreserveRatio(true);
 
-		imageView3.setFitHeight(125);
+		imageView3.setFitHeight(100);
 		imageView3.setPreserveRatio(true);
 
-		imageView4.setFitHeight(125);
+		imageView4.setFitHeight(100);
 		imageView4.setPreserveRatio(true);
 
 		userBox.getChildren().add(imageView1);
@@ -327,7 +327,7 @@ public class GameController extends UnicastRemoteObject implements gameControlle
 		try {
 			for (Card card : cardsList) {
 
-				image = new Image(new FileInputStream(path + gameTheme + "\\" + card.cardName));
+				image = new Image(new FileInputStream(path + gameTheme + "\\" + card.cardName),0,100,true,true);
 				imageView = new ImageView(image);
 				imageView.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
 					for (int i = 0; i < userBox.getChildren().size(); i++) {
