@@ -22,6 +22,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
 import security.PasswordHashing;
@@ -386,7 +387,7 @@ public class Database {
 			e1.printStackTrace();
 		}
 
-		String sql = "SELECT game_id FROM Game WHERE game_name = ?";
+		String sql = "SELECT game_id  FROM Game WHERE game_name = ?";
 
 		try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
 			pstmt.setString(1, name);
@@ -402,24 +403,33 @@ public class Database {
 	}
 
 	// Geeft weer welke spellen actief zijn
-	public String getActiveGames() throws SQLException {
+	public List<String> getActiveGames() throws SQLException {
 		try {
 			connection = DriverManager.getConnection("jdbc:sqlite:" + uri);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 
-		String sql = "SELECT game_id FROM Game WHERE active= 1";
+		String sql = "SELECT game_id, game_name, players, serverport, game_theme FROM Game WHERE active= 1";
 
 		PreparedStatement pstmt = connection.prepareStatement(sql);
 		ResultSet rs = pstmt.executeQuery();
-
-		StringBuilder sb = new StringBuilder();
+		List<String> games = new ArrayList<>();
 		while (rs.next()) {
+			StringBuilder sb = new StringBuilder();
 			sb.append(rs.getString("game_id"));
-			sb.append("\n");
+			sb.append("\t");
+			sb.append(rs.getString("game_name"));
+			sb.append("\t");
+			sb.append(rs.getInt("players"));
+			sb.append("\t");
+			sb.append(rs.getInt("serverPort"));
+			sb.append("\t");
+			sb.append(rs.getInt("game_theme"));
+			sb.append("\t");
+			games.add(sb.toString());
 		}
-		return sb.toString();
+		return games;
 	}
 
 	// make game inactive

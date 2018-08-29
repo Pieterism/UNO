@@ -127,7 +127,13 @@ public class serverInterfaceImpl extends UnicastRemoteObject implements serverIn
 
 	@Override
 	public List<String> getGames() throws RemoteException {
+		
 		List<String> gamesList = new ArrayList<>();
+		try {
+			gamesList = db.getActiveGames();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		for (UnoGame game : games) {
 			gamesList.add(new String(game.getId() + "\t" + game.getName() + "\t" + game.connectedPlayers() + "/"
 					+ game.getPlayerCount() + "\t" + game.getTheme()));
@@ -246,4 +252,28 @@ public class serverInterfaceImpl extends UnicastRemoteObject implements serverIn
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public void closeGC(gameControllerInterface gci) throws RemoteException {
+		for (UnoGame game : games) {
+			for (Player player : game.getPlayers()) {
+				if (gci.hashCode()==player.getGameController().hashCode()) {
+					game.endGame();
+				}
+			}
+		}
+		
+	}
+
+//	@Override
+//	public int checkActiveGame(String username) throws RemoteException {
+//		// TODO Auto-generated method stub
+//		return 0;
+//	}
+//
+//	@Override
+//	public void reconnect(int dbID, gameControllerInterface gci, String username) throws RemoteException {
+//		// TODO Auto-generated method stub
+//		
+//	}
 }

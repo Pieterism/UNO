@@ -19,7 +19,7 @@ public interface dbInterface extends Remote {
 	public boolean checkUsername(String username) throws RemoteException;
     public boolean loginUser(String username, String password) throws RemoteException, InvalidKeyException, SignatureException;
 
-    public String getActiveGames() throws RemoteException, SQLException;
+    public List<String> getActiveGames() throws RemoteException, SQLException;
 
     public void StopGame(int game_id) throws RemoteException;
     

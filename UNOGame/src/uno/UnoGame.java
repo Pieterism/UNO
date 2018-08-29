@@ -308,4 +308,12 @@ public class UnoGame {
 	public int getTheme() {
 		return this.gameTheme;
 	}
+
+	public void endGame() {
+		try {
+			sendMsg("Someone has left the Game, the game has ended");
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		}
+	}
 }

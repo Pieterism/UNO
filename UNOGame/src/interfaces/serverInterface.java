@@ -25,5 +25,6 @@ public interface serverInterface extends Remote, AuthenticationInterface {
 
 	public void sendGameMsg(String msg, int gameID, String username) throws RemoteException;
 	public List<Card> getCards(String username, int gameID) throws RemoteException;
+	public void closeGC(gameControllerInterface gci) throws RemoteException;
 
 }

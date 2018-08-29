@@ -122,7 +122,7 @@ public class dbInterfaceImpl extends UnicastRemoteObject implements dbInterface 
 	}
 
 	@Override
-	public String getActiveGames() throws RemoteException, SQLException {
+	public List<String> getActiveGames() throws RemoteException, SQLException {
 		return db.getActiveGames();
 	}
 
@@ -183,9 +183,20 @@ public class dbInterfaceImpl extends UnicastRemoteObject implements dbInterface 
 	@Override
 	public void updateHandPlayer(String name, List<Card> cards, String dbID) throws RemoteException {
 		db.playTurn(name, cards, dbID);
-		for (dbInterface databaseInterface : databaseServers) {
-			databaseInterface.duplicateUpdateHandPlayer(name, cards, dbID);
-		}
+		Thread thread = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				for (dbInterface databaseInterface : databaseServers) {
+					try {
+						databaseInterface.duplicateUpdateHandPlayer(name, cards, dbID);
+					} catch (RemoteException e) {
+						e.printStackTrace();
+					}
+				}				
+			}
+		});
+		thread.start();
+
 	}
 
 	@Override

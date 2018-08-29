@@ -1,6 +1,7 @@
 package controller;
 
 
+import java.io.IOException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -13,6 +14,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -24,6 +26,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import uno.Player;
 
 public class LobbyController extends UnicastRemoteObject implements lobbyInterface{
@@ -145,6 +148,27 @@ public class LobbyController extends UnicastRemoteObject implements lobbyInterfa
             stage.setTitle("Game");
             stage.setScene(new Scene(root1));
             stage.show();
+            stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+				@Override
+				public void handle(WindowEvent event) {
+					try {
+						server.closeGC(controller);
+						LobbyController lobby = new LobbyController(username, server);
+			            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/controller/Lobby.fxml"));
+			            fxmlLoader.setController(lobby);
+
+			            Parent root1 = (Parent) fxmlLoader.load();
+
+			            Stage stage = new Stage();
+			            stage.setTitle("Game");
+			            stage.setScene(new Scene(root1));
+			            stage.show();
+			            
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+			});
             server.joinGame(controller, gameID, username);
         } catch (Exception e) {
             e.printStackTrace();
