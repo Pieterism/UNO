@@ -33,9 +33,9 @@ import uno.WildCard;
 
 public class GameController extends UnicastRemoteObject implements gameControllerInterface {
 
-	//private String path = "D:\\Google Drive\\School\\2017-2018\\1e Semester\\Gedistribueerde Systemen\\Opdracht UNO\\GIT_UNO\\UNOGame\\src\\pictures\\";
+	private String path = "D:\\Google Drive\\School\\2017-2018\\1e Semester\\Gedistribueerde Systemen\\Opdracht UNO\\GIT_UNO\\UNOGame\\src\\pictures\\";
 
-	private String path = "C:\\Users\\wouter\\Documents\\School\\geavanceerde\\UNOGame\\src\\pictures\\";
+	//private String path = "C:\\Users\\wouter\\Documents\\School\\geavanceerde\\UNOGame\\src\\pictures\\";
 
 	// class variables
 	private String username;
@@ -88,7 +88,7 @@ public class GameController extends UnicastRemoteObject implements gameControlle
 	private TextField chat_input;
 
 	@FXML
-	private TextArea chat_output;
+	private TextArea chat_output, text_scoreboard;
 
 	public GameController(String username, serverInterface server, int gameID, String gameName, int gameTheme)
 			throws RemoteException, FileNotFoundException {
@@ -182,9 +182,11 @@ public class GameController extends UnicastRemoteObject implements gameControlle
 
 	@Override
 	public void setScoreboard(List<String> scoreboard) throws RemoteException {
-		data.clear();
-		data.addAll(scoreboard);
-		scoreBoard.setItems(data);
+		text_scoreboard.clear();
+		for(String string : scoreboard) {
+			text_scoreboard.setText(string+ "\n");
+		}
+		
 	}
 
 	// add player in de lijst van spelers in het spel
