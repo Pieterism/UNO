@@ -35,6 +35,7 @@ public class serverInterfaceImpl extends UnicastRemoteObject implements serverIn
 	private List<lobbyInterface> lobbies;
 	public String secret;
 	private dispatcherInterface dispatcher;
+	private boolean first = true;
 
 	public serverInterfaceImpl(int dbPortnumber, int portnumber) throws RemoteException {
 		games = new ArrayList<>();
@@ -185,21 +186,24 @@ public class serverInterfaceImpl extends UnicastRemoteObject implements serverIn
 			}
 		}
 		if (start) {
+			if (first) {
+				first = false;
+				ArrayList<String> info = new ArrayList<>();
+				for (Player player : games.get(gameId).getPlayers()) {
+					info.add(player.getName());
+				}
+				List<gameControllerInterface> controllers = new ArrayList<>();
+				for (Player player : games.get(gameId).getPlayers()) {
+					player.getGameController().sendPlayerInfo(info);
+					controllers.add(player.getGameController());
+				}
+				db.addGame(info, gametheme);
+			}
 			Thread thread = new Thread(new Runnable() {
-
 				@Override
 				public void run() {
 					try {
-						ArrayList<String> info = new ArrayList<>();
-						for (Player player : games.get(gameId).getPlayers()) {
-							info.add(player.getName());
-						}
-						List<gameControllerInterface> controllers = new ArrayList<>();
-						for (Player player : games.get(gameId).getPlayers()) {
-							player.getGameController().sendPlayerInfo(info);
-							controllers.add(player.getGameController());
-						}
-						db.addGame(info, gametheme);
+
 						games.get(gameId).play();
 						for (Player player : games.get(gameId).getPlayers()) {
 							player.setReady(false);
