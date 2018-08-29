@@ -40,12 +40,15 @@
                       <RowConstraints minHeight="30.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <Label prefHeight="17.0" prefWidth="115.0" text="name:" />
-                        <Label prefHeight="30.0" prefWidth="115.0" text="amount of players:" GridPane.rowIndex="2" />
-                        <Label prefHeight="30.0" prefWidth="115.0" text="description:" textAlignment="CENTER" GridPane.rowIndex="1" />
-                        <TextField fx:id="name" promptText="Game name" style="-fx-background-color: #00394d; -fx-text-fill: white;" GridPane.columnIndex="1" />
-                        <TextField fx:id="description" promptText="Game description" style="-fx-background-color: #00394d; -fx-text-fill: white;" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                        <TextField fx:id="playerAmount" promptText="Amount of players" style="-fx-background-color: #00394d; -fx-text-fill: white;" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <Label prefHeight="17.0" prefWidth="115.0" text="Name:" textFill="WHITE" />
+                        <Label prefHeight="30.0" prefWidth="115.0" text="Number of players: " textFill="WHITE" GridPane.rowIndex="2" />
+                        <Label prefHeight="30.0" prefWidth="115.0" text="Card style:" textAlignment="CENTER" textFill="WHITE" GridPane.rowIndex="1" />
+                        <TextField fx:id="name" maxWidth="150.0" prefWidth="150.0" promptText="Game name" style="-fx-background-color: #00394d; -fx-text-fill: white;" GridPane.columnIndex="1" GridPane.halignment="CENTER">
+                           <GridPane.margin>
+                              <Insets left="10.0" right="10.0" />
+                           </GridPane.margin></TextField>
+                        <ChoiceBox fx:id="themePicker" maxWidth="150.0" prefWidth="150.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+                        <ChoiceBox fx:id="numberOfPlayersnew" maxWidth="150.0" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                      </children>
                   </GridPane>
                </children>
