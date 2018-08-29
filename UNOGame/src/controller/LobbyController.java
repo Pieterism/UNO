@@ -163,6 +163,7 @@ public class LobbyController extends UnicastRemoteObject implements lobbyInterfa
             PopupNewGameController controller = new PopupNewGameController(username, server);
             fxmlLoader.setController(controller);
 
+            
             Parent root1 = (Parent) fxmlLoader.load();
 
             Stage stage = new Stage();
