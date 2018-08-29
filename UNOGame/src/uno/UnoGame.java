@@ -227,16 +227,18 @@ public class UnoGame {
 			winner = playTurn();
 		}
 
+		List<String> score = new ArrayList<>();
 		// count the score
-		StringBuilder sBuilder = new StringBuilder();
 		for (Player player : players) {
+			StringBuilder sBuilder = new StringBuilder();
 			player.setScore();
 			sBuilder.append(player.getName() + ": \t " + player.getScore() + "\n");
+			score.add(sBuilder.toString());
 		}
 
 		// send the score to the players
 		for (Player player : players) {
-			player.getGameController().setMsg(sBuilder.toString());
+			player.getGameController().setScoreboard(score);
 		}
 		for (Player player : players) {
 			player.getCards().clear();
