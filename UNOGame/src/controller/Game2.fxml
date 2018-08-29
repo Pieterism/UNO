@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.effect.*?>
 <?import javafx.scene.*?>
 <?import javafx.geometry.*?>
 <?import java.lang.*?>
@@ -21,108 +22,192 @@
    <children>
       <VBox alignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Label fx:id="title" text="TITEL" textAlignment="CENTER" textFill="WHITE">
+            <Label fx:id="title" alignment="CENTER" contentDisplay="CENTER" text="TITEL" textAlignment="CENTER" textFill="WHITE">
                <font>
                   <Font name="BigNoodleTitling" size="36.0" />
                </font>
                <VBox.margin>
-                  <Insets left="10.0" right="10.0" />
+                  <Insets left="10.0" right="10.0" top="10.0" />
                </VBox.margin>
             </Label>
-            <GridPane alignment="CENTER" hgap="5.0" vgap="5.0" VBox.vgrow="ALWAYS">
+            <GridPane alignment="CENTER" hgap="10.0" vgap="10.0" VBox.vgrow="SOMETIMES">
               <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="150.0" minWidth="150.0" prefWidth="150.0" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="874.0" minWidth="10.0" prefWidth="874.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="150.0" minWidth="150.0" prefWidth="150.0" />
+                <ColumnConstraints halignment="CENTER" minWidth="150.0" />
+                <ColumnConstraints />
+                  <ColumnConstraints halignment="CENTER" minWidth="150.0" />
               </columnConstraints>
               <rowConstraints>
-                <RowConstraints maxHeight="150.0" minHeight="150.0" prefHeight="150.0" valignment="CENTER" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="150.0" minHeight="150.0" prefHeight="150.0" vgrow="SOMETIMES" />
+                <RowConstraints valignment="CENTER" />
+                <RowConstraints minHeight="200.0" valignment="CENTER" />
+                <RowConstraints valignment="CENTER" />
+                  <RowConstraints />
               </rowConstraints>
                <children>
-                  <AnchorPane prefHeight="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                  <AnchorPane GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
                      <children>
-                        <VBox prefHeight="200.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <VBox prefHeight="200.0" prefWidth="100.0" spacing="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <children>
-                              <AnchorPane prefHeight="170.0" prefWidth="800.0">
-                                 <children>
-                                    <ImageView fx:id="itopCard" fitHeight="170.0" fitWidth="100.0" layoutX="350.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="350.0" AnchorPane.rightAnchor="350.0" AnchorPane.topAnchor="0.0" />
-                                 </children>
-                              </AnchorPane>
-                              <HBox fx:id="buttonBox" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="50.0">
-                                 <children>
-                                    <Button fx:id="btn_drawCard" mnemonicParsing="false" opacity="0.3" text="Draw Card" />
-                                    <Button fx:id="btn_red" mnemonicParsing="false" opacity="0.3" text="Red" />
-                                    <Button fx:id="btn_blue" mnemonicParsing="false" opacity="0.3" text="Blue" />
-                                    <Button fx:id="btn_yellow" mnemonicParsing="false" opacity="0.3" text="Yellow" />
-                                    <Button fx:id="btn_green" mnemonicParsing="false" opacity="0.3" text="Green" />
-                                 </children>
-                              </HBox>
+                              <TextField fx:id="opponent411" alignment="TOP_LEFT" editable="false" style="-fx-background-color: 000000;">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets top="5.0" />
+                                 </VBox.margin>
+                              </TextField>
+                              <HBox fx:id="opponent1Box" alignment="CENTER" minHeight="150.0" prefHeight="150.0" spacing="3.0" style="-fx-border-color: #ffffff;" />
                            </children>
                         </VBox>
                      </children>
+                     <GridPane.margin>
+                        <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
+                     </GridPane.margin>
                   </AnchorPane>
-                  <AnchorPane prefHeight="170.0" style="-fx-border-color: #ffffff;" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                  <AnchorPane GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                      <children>
-                        <HBox fx:id="opponent1Box" alignment="CENTER" prefHeight="150.0" prefWidth="1000.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0" />
-                        <TextField fx:id="opponent1" alignment="CENTER" editable="false" layoutX="10.0" layoutY="10.0" style="-fx-background-color: transparent;" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="0.0">
-                           <font>
-                              <Font size="20.0" />
-                           </font>
-                        </TextField>
+                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <children>
+                              <HBox fx:id="opponent1Box1" alignment="CENTER" minHeight="150.0" prefHeight="150.0" spacing="3.0" style="-fx-border-color: #ffffff;" />
+                              <TextField fx:id="opponent3" alignment="CENTER" editable="false" style="-fx-background-color: transparent;">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets bottom="5.0" />
+                                 </VBox.margin>
+                              </TextField>
+                           </children>
+                        </VBox>
+                     </children>
+                     <GridPane.margin>
+                        <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
+                     </GridPane.margin>
+                  </AnchorPane>
+                  <AnchorPane GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+                     <children>
+                        <HBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="200.0" spacing="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <children>
+                              <VBox fx:id="opponent2Box" alignment="CENTER" minWidth="150.0" prefWidth="150.0" spacing="3.0" style="-fx-border-color: #ffffff;" />
+                              <TextField fx:id="opponent4" alignment="TOP_LEFT" editable="false" style="-fx-background-color: 000000;">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets right="5.0" />
+                                 </HBox.margin>
+                              </TextField>
+                           </children>
+                        </HBox>
+                     </children>
+                     <GridPane.margin>
+                        <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
+                     </GridPane.margin>
+                  </AnchorPane>
+                  <AnchorPane GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+                     <GridPane.margin>
+                        <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
+                     </GridPane.margin>
+                     <children>
+                        <HBox layoutX="20.0" layoutY="-20.0" prefHeight="100.0" prefWidth="200.0" spacing="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <children>
+                              <TextField fx:id="opponent41" alignment="TOP_RIGHT" editable="false" style="-fx-background-color: 000000;">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="5.0" />
+                                 </HBox.margin>
+                              </TextField>
+                              <VBox fx:id="opponent2Box1" alignment="CENTER" minWidth="150.0" prefWidth="150.0" spacing="3.0" style="-fx-border-color: #ffffff;" />
+                           </children>
+                        </HBox>
                      </children>
                   </AnchorPane>
-                  <AnchorPane prefHeight="170.0" style="-fx-border-color: #ffffff;" GridPane.columnIndex="1">
+                  <HBox fx:id="buttonBox" alignment="CENTER" spacing="50.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
                      <children>
-                        <HBox fx:id="opponent1Box1" alignment="CENTER" prefHeight="150.0" prefWidth="1000.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0" />
-                        <TextField fx:id="opponent11" alignment="CENTER" editable="false" layoutX="10.0" layoutY="10.0" style="-fx-background-color: transparent;" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="0.0">
+                        <Button fx:id="btn_red" alignment="CENTER" mnemonicParsing="false" opacity="0.75" style="-fx-background-color: #FF5555;" text="Red" textAlignment="CENTER" textFill="WHITE">
                            <font>
-                              <Font size="20.0" />
+                              <Font name="BigNoodleTitling" size="18.0" />
                            </font>
-                        </TextField>
+                           <HBox.margin>
+                              <Insets bottom="3.0" top="3.0" />
+                           </HBox.margin>
+                        </Button>
+                        <Button fx:id="btn_blue" alignment="CENTER" mnemonicParsing="false" opacity="0.75" style="-fx-background-color: #5654FF;" text="Blue" textAlignment="CENTER" textFill="WHITE">
+                           <font>
+                              <Font name="BigNoodleTitling" size="18.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets bottom="3.0" top="3.0" />
+                           </HBox.margin>
+                        </Button>
+                        <Button fx:id="btn_yellow" alignment="CENTER" mnemonicParsing="false" opacity="0.75" style="-fx-background-color: #FFAA01;" text="Yellow" textAlignment="CENTER" textFill="WHITE">
+                           <font>
+                              <Font name="BigNoodleTitling" size="18.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets bottom="3.0" top="3.0" />
+                           </HBox.margin>
+                        </Button>
+                        <Button fx:id="btn_green" alignment="CENTER" mnemonicParsing="false" opacity="0.75" style="-fx-background-color: #00AA01;" text="Green" textAlignment="CENTER" textFill="WHITE">
+                           <font>
+                              <Font name="BigNoodleTitling" size="18.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets bottom="3.0" top="3.0" />
+                           </HBox.margin>
+                        </Button>
                      </children>
-                  </AnchorPane>
-                  <AnchorPane maxWidth="200.0" prefHeight="540.0" prefWidth="200.0" GridPane.rowIndex="1">
+                     <GridPane.margin>
+                        <Insets top="25.0" />
+                     </GridPane.margin>
+                  </HBox>
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                      <children>
-                        <VBox fx:id="opponent2Box" alignment="CENTER" prefHeight="500.0" prefWidth="200.0" style="-fx-border-color: #ffffff;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0" />
-                        <TextField fx:id="opponent2" alignment="CENTER" editable="false" style="-fx-background-color: 000000;" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="0.0">
-                           <font>
-                              <Font size="20.0" />
-                           </font>
-                        </TextField>
+                        <ImageView fx:id="btn_drawCard" fitHeight="200.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../pictures/1/UNO-Back.png" />
+                           </image>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                           <HBox.margin>
+                              <Insets right="10.0" />
+                           </HBox.margin>
+                        </ImageView>
+                        <ImageView fitHeight="200.0" pickOnBounds="true" preserveRatio="true">
+                           <HBox.margin>
+                              <Insets left="10.0" />
+                           </HBox.margin>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                           <image>
+                              <Image url="@../pictures/UnoLogo.png" />
+                           </image>
+                        </ImageView>
                      </children>
-                  </AnchorPane>
-                  <AnchorPane maxWidth="200.0" prefHeight="540.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
-                     <children>
-                        <VBox fx:id="opponent2Box1" alignment="CENTER" prefHeight="500.0" prefWidth="200.0" style="-fx-border-color: #ffffff;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0" />
-                        <TextField fx:id="opponent21" alignment="CENTER" editable="false" style="-fx-background-color: 000000;" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="0.0">
-                           <font>
-                              <Font size="20.0" />
-                           </font>
-                        </TextField>
-                     </children>
-                  </AnchorPane>
+                  </HBox>
                </children>
                <VBox.margin>
-                  <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </VBox.margin>
             </GridPane>
             <HBox alignment="CENTER_LEFT" spacing="20.0">
                <children>
                   <AnchorPane HBox.hgrow="SOMETIMES">
                      <children>
-                        <VBox nodeOrientation="LEFT_TO_RIGHT" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <VBox alignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <children>
                               <TextArea fx:id="chat" style="text-area-background: #ccddff; -fx-background-color: #ccddff;" VBox.vgrow="ALWAYS">
                                  <VBox.margin>
-                                    <Insets left="10.0" />
+                                    <Insets bottom="10.0" left="10.0" top="15.0" />
                                  </VBox.margin>
                               </TextArea>
                               <HBox alignment="CENTER_LEFT" spacing="25.0" VBox.vgrow="SOMETIMES">
                                  <children>
                                     <TextField fx:id="chat_input" HBox.hgrow="SOMETIMES" />
-                                    <Button fx:id="btn_send" alignment="CENTER" mnemonicParsing="false" onAction="#send" style="-fx-background-color: #e2e2e2;" text="Send" textAlignment="CENTER" HBox.hgrow="ALWAYS">
+                                    <Button fx:id="btn_send" alignment="CENTER" mnemonicParsing="false" onAction="#sendMsg" style="-fx-background-color: #e2e2e2;" text="Send" textAlignment="CENTER" HBox.hgrow="ALWAYS">
                                        <cursor>
                                           <Cursor fx:constant="HAND" />
                                        </cursor>
@@ -135,14 +220,14 @@
                                     </Button>
                                  </children>
                                  <VBox.margin>
-                                    <Insets bottom="5.0" left="10.0" top="10.0" />
+                                    <Insets bottom="5.0" left="10.0" />
                                  </VBox.margin>
                               </HBox>
                            </children>
                         </VBox>
                      </children>
                      <HBox.margin>
-                        <Insets bottom="5.0" />
+                        <Insets />
                      </HBox.margin>
                   </AnchorPane>
                   <VBox alignment="CENTER">
@@ -158,10 +243,13 @@
                            </VBox.margin>
                         </TextArea>
                      </children>
+                     <HBox.margin>
+                        <Insets bottom="5.0" />
+                     </HBox.margin>
                   </VBox>
                </children>
                <VBox.margin>
-                  <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
+                  <Insets left="10.0" right="10.0" />
                </VBox.margin>
             </HBox>
          </children>

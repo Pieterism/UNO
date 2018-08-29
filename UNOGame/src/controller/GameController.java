@@ -67,13 +67,13 @@ public class GameController extends UnicastRemoteObject implements gameControlle
 	private Label title;
 
 	@FXML
-	private Button btn_red, btn_green, btn_blue, btn_yellow, btn_drawCard;
+	private Button btn_red, btn_green, btn_blue, btn_yellow;
 
 	@FXML
 	private TextField opponent1, opponent2, opponent3;
 
 	@FXML
-	private ImageView image_lastcard;
+	private ImageView image_lastcard, btn_drawCard;
 
 	@FXML
 	private VBox opponent2Box, opponent3Box;
@@ -166,8 +166,8 @@ public class GameController extends UnicastRemoteObject implements gameControlle
 
 	@FXML
 	public void sendMsg() throws RemoteException {
-		server.sendGameMsg(chat_input.getText(), gameID, username);
-		chat_input.setText("");
+		server.send(chat_input.getText(), username);
+        chat_input.setText("");
 	}
 
 	@FXML
@@ -477,10 +477,10 @@ public class GameController extends UnicastRemoteObject implements gameControlle
 	@Override
 	public int askColor() throws RemoteException {
 		setMsg("Chose a color!");
-		btn_blue.setOpacity(0.7);
-		btn_green.setOpacity(0.7);
-		btn_red.setOpacity(0.7);
-		btn_yellow.setOpacity(0.7);
+		btn_blue.setOpacity(1);
+		btn_green.setOpacity(1);
+		btn_red.setOpacity(1);
+		btn_yellow.setOpacity(1);
 		this.selectedColor = Card.COLOUR_BLUE;
 		this.colourSelected = false;
 		while (!colourSelected) {
@@ -490,10 +490,10 @@ public class GameController extends UnicastRemoteObject implements gameControlle
 			}
 		}
 
-		btn_blue.setOpacity(0.4);
-		btn_green.setOpacity(0.4);
-		btn_red.setOpacity(0.4);
-		btn_yellow.setOpacity(0.4);
+		btn_blue.setOpacity(0.7);
+		btn_green.setOpacity(0.7);
+		btn_red.setOpacity(0.7);
+		btn_yellow.setOpacity(0.7);
 
 		return selectedColor;
 	}
