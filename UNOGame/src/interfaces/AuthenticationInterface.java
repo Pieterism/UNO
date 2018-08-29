@@ -8,9 +8,11 @@ import java.sql.SQLException;
 
 public interface AuthenticationInterface extends Remote {
 
-	public boolean register(String username, String password) throws RemoteException, InvalidKeyException, SignatureException;
+	public boolean register(String username, String password)
+			throws RemoteException, InvalidKeyException, SignatureException;
 
-	public boolean login(String username, String password) throws RemoteException, InvalidKeyException, SignatureException;
+	public boolean login(String username, String password)
+			throws RemoteException, InvalidKeyException, SignatureException;
 
 	public String getLoginToken(String username, String password) throws RemoteException, SQLException;
 

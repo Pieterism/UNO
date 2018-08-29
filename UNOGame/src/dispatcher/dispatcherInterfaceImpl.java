@@ -1,21 +1,17 @@
 package dispatcher;
 
-
 import java.io.IOException;
 import java.rmi.AlreadyBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
-import java.security.InvalidKeyException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
-import java.security.SignatureException;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -36,7 +32,8 @@ public class dispatcherInterfaceImpl extends UnicastRemoteObject implements disp
 	private List<dbInterface> databaseServers;
 	private int serverPort;
 
-	//private String uri ="C:\\Users\\wouter\\Documents\\School\\geavanceerde\\UNO\\uno.db";
+	// private String uri
+	// ="C:\\Users\\wouter\\Documents\\School\\geavanceerde\\UNO\\uno.db";
 	private String uri = "D:\\Google Drive\\School\\2017-2018\\1e Semester\\Gedistribueerde Systemen\\Opdracht UNO\\GIT_UNO\\uno";
 
 	private Map<Integer, Integer> serverToDB;
@@ -58,12 +55,12 @@ public class dispatcherInterfaceImpl extends UnicastRemoteObject implements disp
 		// auto create dbserver
 		createDbServers(1300);
 
-		//connect to all the db
+		// connect to all the db
 		connectToDb();
-		
-		//make All dbservers to connect to eachother
+
+		// make All dbservers to connect to eachother
 		makeConnect();
-		
+
 		// auto create 1 server
 		createServer();
 		createServer();
@@ -80,21 +77,21 @@ public class dispatcherInterfaceImpl extends UnicastRemoteObject implements disp
 				e.printStackTrace();
 			}
 		}
-		
+
 	}
 
 	private void connectToDb() {
-		for (int i = dbPortnumber; i<dbPortnumber+NUMBER_OF_DATABASES; i++) {
+		for (int i = dbPortnumber; i < dbPortnumber + NUMBER_OF_DATABASES; i++) {
 			try {
 				Registry registry = LocateRegistry.getRegistry("localhost", i);
-				dbInterface tempDB = (dbInterface) registry.lookup("UNOdatabase"+ i);
+				dbInterface tempDB = (dbInterface) registry.lookup("UNOdatabase" + i);
 				databaseServers.add(tempDB);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
-		
-		//check connection
+
+		// check connection
 		for (dbInterface databaseInterface : this.databaseServers) {
 			try {
 				System.out.println("check connection!");
@@ -103,7 +100,7 @@ public class dispatcherInterfaceImpl extends UnicastRemoteObject implements disp
 				e.printStackTrace();
 			}
 		}
-		
+
 	}
 
 	private void createServer() {
@@ -123,7 +120,6 @@ public class dispatcherInterfaceImpl extends UnicastRemoteObject implements disp
 		} catch (AlreadyBoundException e) {
 			e.printStackTrace();
 		}
-		
 
 	}
 
@@ -134,10 +130,10 @@ public class dispatcherInterfaceImpl extends UnicastRemoteObject implements disp
 
 			try {
 				Registry registry = LocateRegistry.createRegistry(portnumber + i);
-				dbInterfaceImpl db = new dbInterfaceImpl(uri + (portnumber + i) + ".db", portnumber+i);
+				dbInterfaceImpl db = new dbInterfaceImpl(uri + (portnumber + i) + ".db", portnumber + i);
 				registry.bind("UNOdatabase" + (portnumber + i), db);
 
-				dbServerStatus.put(portnumber+i, 0);
+				dbServerStatus.put(portnumber + i, 0);
 				System.out.println("check databaseServersList");
 
 			} catch (RemoteException e) {
@@ -150,7 +146,6 @@ public class dispatcherInterfaceImpl extends UnicastRemoteObject implements disp
 		}
 	}
 
-
 	private int getLeastLoadedDB() throws RemoteException {
 		int highestLoad = Integer.MAX_VALUE;
 		int portnumber = 1300;
@@ -160,14 +155,14 @@ public class dispatcherInterfaceImpl extends UnicastRemoteObject implements disp
 				portnumber = i;
 			}
 		}
-		dbServerStatus.put(portnumber, highestLoad+1);
+		dbServerStatus.put(portnumber, highestLoad + 1);
 		return portnumber;
 	}
 
 	@Override
 	public int getPort() throws RemoteException {
 		int leastLoaded = Integer.MAX_VALUE;
-		int portnumber = 1200; 
+		int portnumber = 1200;
 		for (Integer iter : serverStatus.keySet()) {
 			if (serverStatus.get(iter) < leastLoaded) {
 				leastLoaded = serverStatus.get(iter);
@@ -181,23 +176,22 @@ public class dispatcherInterfaceImpl extends UnicastRemoteObject implements disp
 	@Override
 	public void updateInfo(int serverPort, int load) throws RemoteException {
 		serverStatus.put(serverPort, load);
-		if (load>=MAXLOAD) {
+		if (load >= MAXLOAD) {
 			try {
 				unfilledServers.remove(serverPort);
 				fullServers.add(serverPort);
 			} catch (IndexOutOfBoundsException e) {
 			}
-		}
-		else {
+		} else {
 			try {
 				unfilledServers.add(serverPort);
 				fullServers.remove(serverPort);
 			} catch (IndexOutOfBoundsException e) {
-				
+
 			}
 		}
 		if (unfilledServers.isEmpty()) {
-			Thread newServerThread = new Thread(new Runnable() {		
+			Thread newServerThread = new Thread(new Runnable() {
 				@Override
 				public void run() {
 					createServer();

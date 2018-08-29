@@ -12,25 +12,25 @@ import java.io.Serializable;
  *
  * @author Pieter Vanderhaegen
  */
-public class ReverseCard extends Card implements Serializable{
+public class ReverseCard extends Card implements Serializable {
 
-    /**
+	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 5745108777726812406L;
 
 	public ReverseCard(int colour) {
-        super(colour, "REVERSE");
-        this.myScore = 20;
-    }
+		super(colour, "REVERSE");
+		this.myScore = 20;
+	}
 
-    @Override
+	@Override
 	public boolean canPlayOn(Card card) {
-        return (card.getColour() == this.getColour() || card.getSymbol().equals(this.getSymbol()));
-    }
+		return (card.getColour() == this.getColour() || card.getSymbol().equals(this.getSymbol()));
+	}
 
-    @Override
+	@Override
 	public void play(UnoGame game) {
-        game.reversePlayDirection();
-    }
+		game.reversePlayDirection();
+	}
 }

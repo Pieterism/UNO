@@ -4,12 +4,12 @@ import interfaces.serverInterface;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 
-public class NewGameService extends Service<Void>{
+public class NewGameService extends Service<Void> {
 
 	private String gameName;
 	private int aantal, gameTheme;
 	private serverInterface server;
-	
+
 	public NewGameService(String gameName, int gameTheme, Integer aantal, serverInterface server) {
 		this.gameName = gameName;
 		this.gameTheme = gameTheme;
@@ -27,6 +27,5 @@ public class NewGameService extends Service<Void>{
 			}
 		};
 	}
-	
 
 }

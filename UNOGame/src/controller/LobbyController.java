@@ -142,7 +142,7 @@ public class LobbyController extends UnicastRemoteObject implements lobbyInterfa
             System.out.println(gameID);
             System.out.println(username);
             System.out.println(gameName);
-            Parent root1 = (Parent) fxmlLoader.load();
+			Parent root1 = (Parent) fxmlLoader.load();
 
             Stage stage = new Stage();
             stage.setTitle("Game");

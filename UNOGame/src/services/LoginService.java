@@ -4,11 +4,11 @@ import applicationServer.serverInterfaceImpl;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 
-public class LoginService extends Service<Boolean>{
+public class LoginService extends Service<Boolean> {
 
 	private String username, password;
 	private serverInterfaceImpl server;
-	
+
 	public LoginService(String username, String password) {
 		this.username = username;
 		this.password = password;
@@ -22,7 +22,7 @@ public class LoginService extends Service<Boolean>{
 			protected Boolean call() throws Exception {
 				return server.login(username, password);
 			}
-			
+
 		};
 	}
 //	@Override
@@ -64,6 +64,5 @@ public class LoginService extends Service<Boolean>{
 //	            }
 //		};
 //	}
-	
 
 }

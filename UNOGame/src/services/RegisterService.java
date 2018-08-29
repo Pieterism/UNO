@@ -1,10 +1,5 @@
 package services;
 
-import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
-
-import client.GUIMain;
-import interfaces.AuthenticationInterface;
 import interfaces.serverInterface;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;

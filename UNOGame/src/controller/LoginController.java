@@ -22,7 +22,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import services.LoginService;
 import services.LoginService2;
 import services.RegisterService;
 
@@ -61,7 +60,6 @@ public class LoginController {
 		pn_Login.setVisible(true);
 		pn_Register.setVisible(false);
 	}
-	
 
 	// init, connectie naar dispatcher opzetten, connectie met vrije server starten
 	public void initialize() throws RemoteException, NotBoundException {

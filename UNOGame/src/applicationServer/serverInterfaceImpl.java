@@ -11,10 +11,8 @@ import java.security.InvalidKeyException;
 import java.security.SignatureException;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
-import interfaces.AuthenticationInterface;
 import interfaces.clientInterface;
 import interfaces.dbInterface;
 import interfaces.dispatcherInterface;

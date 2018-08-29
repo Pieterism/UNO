@@ -1,10 +1,6 @@
 package controller;
 
 import java.rmi.RemoteException;
-import java.util.Observable;
-
-import org.omg.CORBA.INITIALIZE;
-
 import interfaces.serverInterface;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -20,17 +16,17 @@ import services.NewGameService;
 public class PopupNewGameController {
 	private String username;
 	private serverInterface server;
-	ObservableList<Integer> themeList = FXCollections.observableArrayList(0,1);
-	ObservableList<Integer> numberOfPlayerList = FXCollections.observableArrayList(1,2,3,4);
+	ObservableList<Integer> themeList = FXCollections.observableArrayList(0, 1);
+	ObservableList<Integer> numberOfPlayerList = FXCollections.observableArrayList(1, 2, 3, 4);
 
-	public PopupNewGameController(String username, serverInterface server ) {
+	public PopupNewGameController(String username, serverInterface server) {
 		this.username = username;
 		this.server = server;
 		themePicker.setItems(themeList);
 		numberOfPlayersnew.setItems(numberOfPlayerList);
 
 	}
-	
+
 	@FXML
 	TextField name;
 
@@ -45,13 +41,12 @@ public class PopupNewGameController {
 
 	@FXML
 	Button btn_start, btn_cancel;
-	
+
 	@FXML
 	public void initialize() {
 		themePicker.setItems(themeList);
 		numberOfPlayersnew.setItems(numberOfPlayerList);
 	}
-	
 
 	@FXML
 	public void startGame() throws RemoteException {
@@ -62,7 +57,8 @@ public class PopupNewGameController {
 			gameName = username + "'s game";
 		}
 
-		NewGameService newGameService = new NewGameService(gameName, themePicker.getValue(), numberOfPlayersnew.getValue(), server);
+		NewGameService newGameService = new NewGameService(gameName, themePicker.getValue(),
+				numberOfPlayersnew.getValue(), server);
 		newGameService.setOnSucceeded(Success -> {
 			System.out.println("new game started!");
 

@@ -4,11 +4,11 @@ import interfaces.serverInterface;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 
-public class LoginService2 extends Service<Boolean>{
+public class LoginService2 extends Service<Boolean> {
 
 	private String username, password;
 	private serverInterface server;
-	
+
 	public LoginService2(String username, String password, serverInterface server) {
 		this.username = username;
 		this.password = password;
@@ -24,7 +24,7 @@ public class LoginService2 extends Service<Boolean>{
 				System.out.println("LogginService is executed!");
 				return server.login(username, password);
 			}
-			
+
 		};
 	}
 //	@Override
@@ -66,6 +66,5 @@ public class LoginService2 extends Service<Boolean>{
 //	            }
 //		};
 //	}
-	
 
 }

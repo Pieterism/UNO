@@ -4,7 +4,6 @@ import java.io.Serializable;
 
 import javafx.scene.image.Image;
 
-
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -15,87 +14,87 @@ import javafx.scene.image.Image;
  *
  * @author Pieter Vanderhaegen
  */
-public class Card  implements Serializable{
+public class Card implements Serializable {
 
-    /**
+	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -467804728581745981L;
 	// Constanten voor de kleuren
-    public static final int COLOUR_NONE = 0;
-    public static final int COLOUR_GREEN = 1;
-    public static final int COLOUR_BLUE = 2;
-    public static final int COLOUR_RED = 3;
-    public static final int COLOUR_YELLOW = 4;
-    public static final String[] COLOUR_NAMES = {"", "GREEN", "BLUE", "RED", "YELLOW"};
-   
-    public int myColour;
-    public String mySymbol;
-    public String cardName;
-    public int myScore;
+	public static final int COLOUR_NONE = 0;
+	public static final int COLOUR_GREEN = 1;
+	public static final int COLOUR_BLUE = 2;
+	public static final int COLOUR_RED = 3;
+	public static final int COLOUR_YELLOW = 4;
+	public static final String[] COLOUR_NAMES = { "", "GREEN", "BLUE", "RED", "YELLOW" };
 
-    //Constructor om speciale kaart te maken
-    public Card(int colour, String symbol) {
-        myColour = colour;
-        mySymbol = symbol;
-        cardName = mySymbol + "_" + COLOUR_NAMES[colour] + ".png";
-    }
+	public int myColour;
+	public String mySymbol;
+	public String cardName;
+	public int myScore;
 
-    //Constructor om gewone kaart te maken
-    public Card(int colour, int number) {
-        myColour = colour;
-        mySymbol = String.valueOf(number);
-        cardName = mySymbol + "_" + COLOUR_NAMES[colour] + ".png";
-        myScore = number;
-    }
+	// Constructor om speciale kaart te maken
+	public Card(int colour, String symbol) {
+		myColour = colour;
+		mySymbol = symbol;
+		cardName = mySymbol + "_" + COLOUR_NAMES[colour] + ".png";
+	}
 
-    public Card(Card selectedCard) {
+	// Constructor om gewone kaart te maken
+	public Card(int colour, int number) {
+		myColour = colour;
+		mySymbol = String.valueOf(number);
+		cardName = mySymbol + "_" + COLOUR_NAMES[colour] + ".png";
+		myScore = number;
+	}
+
+	public Card(Card selectedCard) {
 		this.cardName = selectedCard.cardName;
 		this.myColour = selectedCard.myColour;
 		this.mySymbol = selectedCard.mySymbol;
 	}
 
 	public int getColour() {
-        return myColour;
-    }
+		return myColour;
+	}
 
-    public void setColour(int colour) {
-        myColour = colour;
-    }
+	public void setColour(int colour) {
+		myColour = colour;
+	}
 
-    public String getSymbol() {
-        return mySymbol;
-    }
-    
-    public void setSymbol(int symbol) {
-        this.mySymbol = String.valueOf(symbol);
-    }
+	public String getSymbol() {
+		return mySymbol;
+	}
 
-    //Controleert of kaart gespeeld kan worden op de kaart die er reeds ligt
-    public boolean canPlayOn(Card card) {
-        return (card.mySymbol.equals(mySymbol) || card.myColour == myColour);
-    }
+	public void setSymbol(int symbol) {
+		this.mySymbol = String.valueOf(symbol);
+	}
 
-    //hierin komen acties bij het spelen van een speciale kaart
-    public void play(UnoGame game) {
-        // Default
-    }
+	// Controleert of kaart gespeeld kan worden op de kaart die er reeds ligt
+	public boolean canPlayOn(Card card) {
+		return (card.mySymbol.equals(mySymbol) || card.myColour == myColour);
+	}
 
-    @Override
+	// hierin komen acties bij het spelen van een speciale kaart
+	public void play(UnoGame game) {
+		// Default
+	}
+
+	@Override
 	public String toString() {
-        String result;
+		String result;
 
-        result = COLOUR_NAMES[myColour];
-        if (!result.isEmpty()) {
-            result += " ";
-        }
-        result += mySymbol;
-        return result;
-    }
-    
-    public Image getImage() {
-        return new Image(Card.class.getResourceAsStream("SEVEN_YELLOW.png"));
+		result = COLOUR_NAMES[myColour];
+		if (!result.isEmpty()) {
+			result += " ";
+		}
+		result += mySymbol;
+		return result;
+	}
 
-    }
-    
+	public Image getImage() {
+		return new Image(Card.class.getResourceAsStream("SEVEN_YELLOW.png"));
+
+	}
+
 }

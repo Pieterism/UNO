@@ -35,7 +35,8 @@ public class GameController extends UnicastRemoteObject implements gameControlle
 
 	private String path = "D:\\Google Drive\\School\\2017-2018\\1e Semester\\Gedistribueerde Systemen\\Opdracht UNO\\GIT_UNO\\UNOGame\\src\\pictures\\";
 
-	//private String path = "C:\\Users\\wouter\\Documents\\School\\geavanceerde\\UNOGame\\src\\pictures\\";
+	// private String path =
+	// "C:\\Users\\wouter\\Documents\\School\\geavanceerde\\UNOGame\\src\\pictures\\";
 
 	// class variables
 	private String username;
@@ -165,8 +166,8 @@ public class GameController extends UnicastRemoteObject implements gameControlle
 
 	@FXML
 	public void sendMsg() throws RemoteException {
-		server.sendGameMsg(chat_input.getText(),gameID, username);
-        chat_input.setText("");
+		server.sendGameMsg(chat_input.getText(), gameID, username);
+		chat_input.setText("");
 	}
 
 	@FXML
@@ -183,10 +184,10 @@ public class GameController extends UnicastRemoteObject implements gameControlle
 	@Override
 	public void setScoreboard(List<String> scoreboard) throws RemoteException {
 		text_scoreboard.clear();
-		for(String string : scoreboard) {
-			text_scoreboard.setText(string+ "\n");
+		for (String string : scoreboard) {
+			text_scoreboard.setText(string + "\n");
 		}
-		
+
 	}
 
 	// add player in de lijst van spelers in het spel
@@ -329,7 +330,7 @@ public class GameController extends UnicastRemoteObject implements gameControlle
 		try {
 			for (Card card : cardsList) {
 
-				image = new Image(new FileInputStream(path + gameTheme + "\\" + card.cardName),0,100,true,true);
+				image = new Image(new FileInputStream(path + gameTheme + "\\" + card.cardName), 0, 100, true, true);
 				imageView = new ImageView(image);
 				imageView.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
 					for (int i = 0; i < userBox.getChildren().size(); i++) {
@@ -478,10 +479,10 @@ public class GameController extends UnicastRemoteObject implements gameControlle
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-				
+
 			}
 		});
-		
+
 	}
 
 	@Override

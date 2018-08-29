@@ -7,7 +7,7 @@ import java.security.SignatureException;
 
 public interface LoginInterface extends Remote {
 
-	String getToken(String username, String password)throws RemoteException, InvalidKeyException, SignatureException;
+	String getToken(String username, String password) throws RemoteException, InvalidKeyException, SignatureException;
 
-	boolean loginToken(String token)throws RemoteException;
+	boolean loginToken(String token) throws RemoteException;
 }
