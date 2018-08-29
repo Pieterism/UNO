@@ -33,8 +33,7 @@ public class dispatcherInterfaceImpl extends UnicastRemoteObject implements disp
 	private int serverPort;
 
 	// private String uri
-	// ="C:\\Users\\wouter\\Documents\\School\\geavanceerde\\UNO\\uno.db";
-	private String uri = "D:\\Google Drive\\School\\2017-2018\\1e Semester\\Gedistribueerde Systemen\\Opdracht UNO\\GIT_UNO\\uno";
+	private String uri = ".\\uno.db";
 
 	private Map<Integer, Integer> serverToDB;
 
