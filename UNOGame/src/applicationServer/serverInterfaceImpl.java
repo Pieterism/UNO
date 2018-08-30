@@ -78,7 +78,7 @@ public class serverInterfaceImpl extends UnicastRemoteObject implements serverIn
 	 */
 	@Override
 	public boolean login(String username, String password)
-			throws RemoteException, InvalidKeyException, SignatureException {
+			throws RemoteException, InvalidKeyException, SignatureException, SQLException {
 		System.out.println("login is executed on server");
 		if (!db.checkUsername(username)) {
 			System.out.println("checkUsername");
@@ -304,15 +304,6 @@ public class serverInterfaceImpl extends UnicastRemoteObject implements serverIn
 	}
 
 	/* (non-Javadoc)
-	 * @see interfaces.AuthenticationInterface#getLoginToken(java.lang.String, java.lang.String)
-	 */
-	@Override
-	public String getLoginToken(String username, String password) throws RemoteException, SQLException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/* (non-Javadoc)
 	 * @see interfaces.serverInterface#closeGC(interfaces.gameControllerInterface)
 	 */
 	@Override
@@ -325,6 +316,12 @@ public class serverInterfaceImpl extends UnicastRemoteObject implements serverIn
 			}
 		}
 		
+	}
+
+	@Override
+	public String getLoginToken(String usernamed) throws RemoteException, SQLException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

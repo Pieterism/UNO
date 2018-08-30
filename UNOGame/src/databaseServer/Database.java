@@ -24,6 +24,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
+import security.BCrypt;
 import security.PasswordHashing;
 import uno.Card;
 
@@ -32,7 +33,8 @@ public class Database {
 	private Connection connection;
 	private Statement statement;
 	String uri;
-	//String filepath = "D:\\Google Drive\\School\\2017-2018\\1e Semester\\Gedistribueerde Systemen\\Opdracht UNO\\GIT_UNO\\keystore.jks";
+	// String filepath = "D:\\Google Drive\\School\\2017-2018\\1e
+	// Semester\\Gedistribueerde Systemen\\Opdracht UNO\\GIT_UNO\\keystore.jks";
 	String filepath = "..\\keystore.jks";
 	PublicKey publicKey;
 	PrivateKey privateKey;
@@ -127,14 +129,11 @@ public class Database {
 	public void createGameTable() throws SQLException {
 		try {
 
-			String sql = "CREATE TABLE IF NOT EXISTS Game (\n" 
+			String sql = "CREATE TABLE IF NOT EXISTS Game (\n"
 					+ "	game_id     	INTEGER     PRIMARY KEY   AUTOINCREMENT,\n"
-					+ "	game_name       VARCHAR     NOT NULL,\n" 
-					+ " players       	INTEGER     NOT NULL,\n" 
-					+ " active       	BOOLEAN     NOT NULL, \n"
-					+ " serverport		INTEGER		NOT NULL, \n"
-					+ " game_theme		INTEGER, \n"
-					+ "FOREIGN KEY(game_id) REFERENCES Game(game_id)\n" + ");";
+					+ "	game_name       VARCHAR     NOT NULL,\n" + " players       	INTEGER     NOT NULL,\n"
+					+ " active       	BOOLEAN     NOT NULL, \n" + " serverport		INTEGER		NOT NULL, \n"
+					+ " game_theme		INTEGER, \n" + "FOREIGN KEY(game_id) REFERENCES Game(game_id)\n" + ");";
 
 			connection = DriverManager.getConnection("jdbc:sqlite:" + uri);
 			statement = connection.createStatement();
@@ -146,7 +145,7 @@ public class Database {
 		}
 		System.out.println("Game table created successfully");
 	}
-	
+
 	// aanmaken van table voor elk spel bij te houden
 	/**
 	 * @throws SQLException
@@ -154,14 +153,10 @@ public class Database {
 	public void createGameToUserTable() throws SQLException {
 		try {
 
-			String sql = "CREATE TABLE IF NOT EXISTS GameToUSer (\n"
-					+ "	game_id     INTEGER     NOT NULL,\n"
-					+ "	user1       INTEGER     NOT NULL,\n" 
-					+ "	user2       INTEGER     NOT NULL, \n"
-					+ " user3       INTEGER     NOT NULL,\n" 
-					+ " user4       INTEGER     NOT NULL, \n"
-					+ " game_theme, \n" 
-					+ "FOREIGN KEY(game_id) REFERENCES Game(game_id),\n"
+			String sql = "CREATE TABLE IF NOT EXISTS GameToUSer (\n" + "	game_id     INTEGER     NOT NULL,\n"
+					+ "	user1       INTEGER     NOT NULL,\n" + "	user2       INTEGER     NOT NULL, \n"
+					+ " user3       INTEGER     NOT NULL,\n" + " user4       INTEGER     NOT NULL, \n"
+					+ " game_theme, \n" + "FOREIGN KEY(game_id) REFERENCES Game(game_id),\n"
 					+ "FOREIGN KEY(user1) REFERENCES Users(username),\n"
 					+ "FOREIGN KEY(user2) REFERENCES Users(username),\n"
 					+ "FOREIGN KEY(user3) REFERENCES Users(username),\n"
@@ -247,7 +242,7 @@ public class Database {
 
 		try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
 			pstmt.setString(1, username);
-			pstmt.setString(2, PasswordHashing.hashPassword(password));
+			pstmt.setString(2, BCrypt.hashpw(password, BCrypt.gensalt()));
 			pstmt.setString(3, token);
 			pstmt.setTimestamp(4, timestamp);
 			pstmt.executeUpdate();
@@ -264,8 +259,7 @@ public class Database {
 	 * @throws InvalidKeyException
 	 * @throws SignatureException
 	 */
-	public String createToken(String username, Timestamp timestamp)
-			throws InvalidKeyException, SignatureException {
+	public String createToken(String username, Timestamp timestamp) throws InvalidKeyException, SignatureException {
 
 		String token = (username + timestamp);
 		signature.initSign(privateKey);
@@ -335,8 +329,9 @@ public class Database {
 	 * @return
 	 * @throws InvalidKeyException
 	 * @throws SignatureException
+	 * @throws SQLException 
 	 */
-	public boolean loginUser(String username, String password) throws InvalidKeyException, SignatureException {
+	public boolean loginUser(String username, String password) throws InvalidKeyException, SignatureException, SQLException {
 		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 		try {
 			connection = DriverManager.getConnection("jdbc:sqlite:" + uri);
@@ -344,23 +339,18 @@ public class Database {
 			e1.printStackTrace();
 		}
 
-		String sql = "SELECT USERNAME FROM USERS WHERE USERNAME = ? AND PASSWORD = ?;";
-		try {
+		String sql = "SELECT PASSWORD FROM USERS WHERE USERNAME = ?";
+
 			PreparedStatement pstmt = connection.prepareStatement(sql);
 			pstmt.setString(1, username);
-			pstmt.setString(2, password);
 			ResultSet rs = pstmt.executeQuery();
-			if (rs.next()) {
-				System.out.println("LOGGED IN");
-				createToken(username, timestamp);
-				return true;
-			} else {
-				return false;
-			}
-		} catch (SQLException ex) {
-			ex.printStackTrace();
-		}
-		return false;
+			
+			System.out.println(rs.getString("password"));
+			
+			String hashed_pw = rs.getString("password");
+			createToken(username, timestamp);
+			return BCrypt.checkpw(password, hashed_pw);
+
 	}
 
 	// geeft alle kaarten in de hand van een speler weer
@@ -454,7 +444,7 @@ public class Database {
 		}
 		System.out.println("New game added!");
 	}
-	
+
 	/**
 	 * @param name
 	 * @return
@@ -470,7 +460,7 @@ public class Database {
 
 		try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
 			pstmt.setString(1, name);
-			
+
 			ResultSet rs = pstmt.executeQuery();
 			if (rs.next()) {
 				return rs.getInt(0);
@@ -708,6 +698,7 @@ public class Database {
 
 		return rs.toString();
 	}
+
 	// voegt kaart toe aan table van de hand van een speler
 	/**
 	 * @param user_id

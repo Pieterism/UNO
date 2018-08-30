@@ -40,8 +40,7 @@ public class dbInterfaceImpl extends UnicastRemoteObject implements dbInterface 
 	 * @throws IOException
 	 * @throws UnrecoverableKeyException
 	 */
-	public dbInterfaceImpl(String uri, int portnumber) throws SQLException, KeyStoreException, NoSuchAlgorithmException,
-			CertificateException, IOException, UnrecoverableKeyException {
+	public dbInterfaceImpl(String uri, int portnumber) throws SQLException, UnrecoverableKeyException, KeyStoreException, NoSuchAlgorithmException, CertificateException, IOException  {
 		db = new Database(uri);
 		db.createUserTable();
 		db.createGameTable();
@@ -93,7 +92,7 @@ public class dbInterfaceImpl extends UnicastRemoteObject implements dbInterface 
 	 */
 	@Override
 	public boolean loginUser(String username, String password)
-			throws RemoteException, InvalidKeyException, SignatureException {
+			throws RemoteException, InvalidKeyException, SignatureException, SQLException {
 		return db.loginUser(username, password);
 	}
 
@@ -296,5 +295,9 @@ public class dbInterfaceImpl extends UnicastRemoteObject implements dbInterface 
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}		
+	}
+
+	public String getLoginToken(String username) throws SQLException, RemoteException {
+		return db.getToken(username);
 	}
 }

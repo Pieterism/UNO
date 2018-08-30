@@ -26,9 +26,10 @@ public interface AuthenticationInterface extends Remote {
 	 * @throws RemoteException
 	 * @throws InvalidKeyException
 	 * @throws SignatureException
+	 * @throws SQLException 
 	 */
 	public boolean login(String username, String password)
-			throws RemoteException, InvalidKeyException, SignatureException;
+			throws RemoteException, InvalidKeyException, SignatureException, SQLException;
 
 	/**
 	 * @param username
@@ -37,6 +38,7 @@ public interface AuthenticationInterface extends Remote {
 	 * @throws RemoteException
 	 * @throws SQLException
 	 */
-	public String getLoginToken(String username, String password) throws RemoteException, SQLException;
+	public String getLoginToken(String usernamed) throws RemoteException, SQLException;
+
 
 }
